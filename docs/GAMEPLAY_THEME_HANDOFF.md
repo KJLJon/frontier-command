@@ -14,8 +14,9 @@ Theme pack currently offers static unit poses and unrigged proxy glTF models. Co
 
 ## Verification
 
-26 simulation regressions cover deterministic maps, combat counters, queues, AI, campaigns, save continuity, destination resumption, building approach, capture ownership, commander respawn and finite deposits. Browser checks should use PORT=4181 for this worktree so port 4180 remains the user's main preview. Run all desktop/mobile checks after the theme presentation is connected.
+27 simulation regressions cover deterministic maps, combat counters, queues, AI, campaigns, save continuity, destination resumption, building approach, capture ownership, commander respawn and finite deposits. Browser checks should use PORT=4181 for this worktree so port 4180 remains the user's main preview. Run all desktop/mobile checks after the theme presentation is connected.
 
 ## Day/night presentation
 
 src/daylight.ts supplies daylight(sim.time): hour, phase (Day/Dusk/Night/Dawn), night (0..1). Cycle is four minutes, starting at morning. Use this clock for theme-specific lighting, lamps or ambient effects. Combat/vision rules stay identical across themes and time of day. Current renderer gently shades terrain, keeps troops readable and glows completed buildings. Resource bars/amounts and exhausted site markers are presentation affordances to preserve during theme integration.
+

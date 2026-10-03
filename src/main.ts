@@ -522,9 +522,14 @@ async function savesMenu() {
   const entries = await list<{ title: string; time: string; world: string }>(
     "saves",
   );
+  entries.sort(
+    (a, b) =>
+      (Date.parse(b.value.time) || 0) - (Date.parse(a.value.time) || 0) ||
+      Number(b.key === "manual") - Number(a.key === "manual"),
+  );
   screen(
     "Continue your command",
-    "Resume a local battle. Saves are preserved across application updates.",
+    "Newest saves appear first. Saves are preserved across application updates.",
     entries.length
       ? `<div class="missions">${entries.map((e) => `<div class="card mission"><div class="copy"><h3>${escape(e.value.title)}</h3><p>${e.key === "autosave" ? "Autosave" : "Manual save"} · ${new Date(e.value.time).toLocaleString()}</p></div>${button("Resume", `load:${e.key}`)}${button("Delete", `delete:${e.key}`, "small")}</div>`).join("")}</div>`
       : '<p class="muted">No saved battles yet. Start a skirmish or campaign.</p>' +

@@ -40,6 +40,7 @@ test("day-night HUD, deposit depletion feedback and saved quantities", async ({
   });
   await page.getByRole("button", { name: "Menu", exact: true }).click();
   await page.getByRole("button", { name: "Save battle", exact: true }).click();
+  await expect(page.locator("#toast")).toContainText("Battle saved");
   await page.getByRole("button", { name: "Load a save" }).click();
   await page
     .getByRole("button", { name: "Resume", exact: true })

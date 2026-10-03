@@ -16,7 +16,7 @@ Canvas is currently selected explicitly for predictable generated-art rendering.
 
 ## Economy and battle
 
-All players receive equal base income and capture income, faction modifiers excepted. Capture requires uncontested presence within 2.6 tiles for approximately six seconds. Owned resource points grant continuous gold/wood; a depot within seven tiles multiplies point income. Houses raise the capped population. Recruitment reserves population while queued. Construction ramps structure health over a definition's duration and grants capacity only at completion.
+All players receive equal base income and capture income, faction modifiers excepted. Capture requires uncontested presence within 2.6 tiles for approximately six seconds. Owned resource points automatically harvest finite gold/wood reserves; a depot within seven tiles increases throughput. Exhausted deposits stop yielding and remain exhausted after save/load. Keeps retain modest base income to prevent economy deadlocks. Houses raise the capped population. Recruitment reserves population while queued. Construction ramps structure health over a definition's duration and grants capacity only at completion.
 
 Counter multipliers are 1.3–1.8 for unit counters, 2.6 for siege against buildings. Upgrades and Rally multiply final damage. Support units heal wounded allies before attacking. Abilities have explicit cooldown state in entities. Commanders return at their spawn after 30 seconds while their team retains a keep.
 
@@ -31,3 +31,4 @@ Map randomness is seeded integer PRNG and stable settings serialization. Simulat
 Four-neighbor BFS considers water/rock/building occupancy. Paths are generated on orders and throttled pursuit updates, not every render frame. Group orders use offset destinations. Rendering caps particles at 100, audio caps voices at 15 and combat sound rate at ~13/s. Graphics Low removes high-density combat effects. Reduced motion removes bobbing/rings. Simulation correctness remains identical.
 
 Current targeting and path requests still scale with entity count; large-army work should introduce spatial hash buckets, shared destination flow fields and deterministic separation. Huge/Epic supports 160 population by configuration, but this is an architectural ceiling rather than a claim of smooth performance on every phone. The battle result adjudication at 1.5× configured minutes prevents perpetual stalemates; it is visible in objective text after midgame.
+

@@ -27,6 +27,8 @@ Open the displayed address. Load once online, then the production PWA can reload
 - Five authored campaign missions, a campaign registry, structured triggers/actions, and a branching five-stage expedition with persistent rewards.
 - Visual map editor with terrain/entities/spawns/resources/relics/camps, save/load/clone/import/export/validation/playtest.
 - 24 achievements, renown, expedition relic choices, campaign progress, statistics, manual saves and 30-second autosaves.
+- Finite gold mines and timber groves with reserve bars, depletion notices and persistent exhausted sites. Captured deposits harvest automatically; nearby depots speed harvesting. Keeps retain modest income so an exhausted deposit cannot permanently strand a player.
+- A four-minute day/night lighting cycle with readable troops, building lights and a phase indicator. Lighting follows simulation time and freezes during tactical pause.
 - Fog of war, minimap, hit/projectile/spell feedback, synthesized adaptive music/SFX, touch controls and accessibility settings.
 - Offline PWA, explicit safe updates, versioned data, `/frontier-command/` build, GitHub Actions deployment.
 
