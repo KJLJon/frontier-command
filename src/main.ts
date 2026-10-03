@@ -1,4 +1,5 @@
 import "./style.css";
+import { daylight } from "./daylight";
 import { Renderer } from "./renderer";
 import { Simulation, type Settings, type Order } from "./simulation";
 import { AudioSystem, defaultAudio, type AudioSettings } from "./audio";
@@ -591,7 +592,10 @@ function updateHUD() {
     "population",
     `${sim.population(0)} / ${sim.capacity(0)}<span>Population</span>`,
   );
-  update("time", `${clock(sim.time)}<span>${sim.settings.scale}</span>`);
+  update(
+    "time",
+    `${clock(sim.time)}<span>${daylight(sim.time).phase} · ${sim.settings.scale}</span>`,
+  );
   update("objective", escape(sim.objective));
   update(
     "score",
@@ -943,7 +947,12 @@ renderer.onFrame = (dt) => {
     steps++;
     renderer.events(sim.events);
     for (const e of sim.events) {
-      if (["notice", "dialogue"].includes(e.type) && e.text) toast(e.text);
+      if (
+        ["notice", "dialogue", "depleted"].includes(e.type) &&
+        e.text &&
+        (e.team === undefined || e.team === 0)
+      )
+        toast(e.text);
       if (e.team === 0 && ["capture", "research"].includes(e.type))
         toast(e.text ?? "Territory captured. Income increased.");
       if (

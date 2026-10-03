@@ -1,4 +1,5 @@
 import test from "node:test";
+import { daylight } from "../src/daylight";
 import assert from "node:assert/strict";
 import { generateMap, defaults, validateMap, path, passable } from "../src/map";
 import {
@@ -378,4 +379,21 @@ test("commander respawn clears pursuit, steering, and hostile effects", () => {
   assert.equal(hero.steer, undefined);
   assert.equal(hero.destination, undefined);
   assert.equal(hero.slow, 0);
+});
+
+test("day-night lighting is cyclic, bounded and follows saved simulation time", () => {
+  assert.equal(daylight(0).phase, "Day");
+  assert.equal(daylight(120).phase, "Night");
+  assert.ok(daylight(120).night > 0.4);
+  assert.deepEqual(daylight(240), daylight(0));
+  for (let t = 0; t < 480; t++)
+    assert.ok(daylight(t).night >= 0 && daylight(t).night <= 1);
+  const s = new Simulation(settings);
+  s.time = 120;
+  s.paused = true;
+  s.step();
+  assert.deepEqual(
+    daylight(Simulation.restore(s.serialize()).time),
+    daylight(s.time),
+  );
 });

@@ -43,7 +43,11 @@ test("menu, skirmish, commander, recruitment, pause, save/load and base path", a
     const s = (window as any).frontier.sim;
     s.settings.speed = 8;
   });
-  await expect.poll(() => page.evaluate(() => (window as any).frontier.sim.stats.recruited)).toBeGreaterThan(0);
+  await expect
+    .poll(() =>
+      page.evaluate(() => (window as any).frontier.sim.stats.recruited),
+    )
+    .toBeGreaterThan(0);
   await page.getByRole("button", { name: "Menu", exact: true }).click();
   await page.getByRole("button", { name: "Save battle", exact: true }).click();
   await expect(page.locator("#toast")).toContainText("Battle saved");

@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { daylight } from "./daylight";
 import { biomes, commanders, factions, buildings, units } from "./content";
 import { type Simulation, type Entity, type Event } from "./simulation";
 import { type MapData, type Point, index, dist } from "./map";
@@ -303,6 +304,15 @@ export class Renderer {
         !s?.explored[0][index(map, point.x, point.y)]
       )
         continue;
+      if (point.remaining === 0 && !this.editor) {
+        this.diamond(p.x, p.y, 13 * z, 6 * z, "#766b55", "#b5a58a");
+        c.fillStyle = "#eee2cb";
+        c.font = `${10 * z}px sans-serif`;
+        c.textAlign = "center";
+        c.fillText("Exhausted", p.x, p.y - 10 * z);
+        c.textAlign = "start";
+        continue;
+      }
       const color =
         point.owner < 0 ? "#e6cd89" : point.owner === 0 ? "#65d7f4" : "#ffad7d";
       this.diamond(p.x, p.y, 18 * z, 9 * z, "#173b36aa", color);
@@ -344,6 +354,27 @@ export class Renderer {
         c.arc(p.x, p.y, 23 * z, 0, (Math.PI * 2 * point.progress) / 6);
         c.stroke();
       }
+      if (point.remaining !== undefined && point.capacity && !this.editor) {
+        c.fillStyle = "#102b35";
+        c.fillRect(p.x - 19 * z, p.y + 10 * z, 38 * z, 4 * z);
+        c.fillStyle = point.kind === "gold" ? "#efc95f" : "#9bc567";
+        c.fillRect(
+          p.x - 19 * z,
+          p.y + 10 * z,
+          38 * z * Math.min(1, point.remaining / point.capacity),
+          4 * z,
+        );
+        c.font = `${10 * z}px sans-serif`;
+        c.fillStyle = "#fff3d3";
+        c.textAlign = "center";
+        c.fillText(`${Math.ceil(point.remaining)}`, p.x, p.y + 26 * z);
+        c.textAlign = "start";
+      }
+    }
+    const night = this.editor ? 0 : daylight(s?.time ?? 0).night;
+    if (night > 0) {
+      c.fillStyle = `rgba(15, 24, 68, ${night * 0.3})`;
+      c.fillRect(0, 0, this.width, this.height);
     }
     const entities = (
       this.editor ? this.editorEntities(map) : (s?.entities ?? [])
@@ -367,6 +398,23 @@ export class Renderer {
       )
         continue;
       this.entity(e, p, z);
+      if (night > 0 && e.building && e.build === 0) {
+        c.save();
+        c.globalAlpha = night * 0.8;
+        const glow = c.createRadialGradient(
+          p.x,
+          p.y - 12 * z,
+          0,
+          p.x,
+          p.y - 12 * z,
+          19 * z,
+        );
+        glow.addColorStop(0, "#ffdc8788");
+        glow.addColorStop(1, "#ffdc8700");
+        c.fillStyle = glow;
+        c.fillRect(p.x - 19 * z, p.y - 31 * z, 38 * z, 38 * z);
+        c.restore();
+      }
     }
     for (const particle of this.particles) {
       particle.life -= 0.025;
