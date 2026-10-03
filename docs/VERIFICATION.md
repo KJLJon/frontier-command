@@ -24,3 +24,11 @@ First-ever service-worker activation could reload during navigation; reload is n
 ## Practical limits
 
 GitHub Actions is configured for `https://kjljon.github.io/frontier-command/`; actual remote publication was not performed because no GitHub account/repository connection is available in this workspace. The exact production base path was tested locally. Physical Android/iOS devices and Safari were not available for testing. Pacing remains a tuning concern, particularly the 15–20 minute Standard target; early rushes can end games sooner. Competitive >2-player fairness, high-density collision avoidance and full mission campaign playthroughs by a human remain valuable next work. All requested expansion gaps are documented in README and the system guides.
+
+## Gameplay polish verification — October 3, 2026
+
+- Production build and content validation passed.
+- 27 simulation tests passed, including attack-move resumption after combat/save, melee building approach, invalid ability slots, duplicate lethal hits, commander respawn reset, claimant-specific capture progress, finite deposit depletion/save persistence and cyclic day/night lighting.
+- 18 browser tests passed across desktop and mobile on isolated port 4181. These include all previous play/recovery/offline checks plus resource depletion notices, day/night HUD, tactical-pause clock stability, newest-first save ordering and preserved exhausted quantities after loading.
+- Reviewed desktop night screenshot: terrain remains readable, troops retain contrast and resource reserve labels stay visible.
+- Theme asset integration is pending. The external asset pack is being authored in a separate repository; these checks do not claim that any of its five themes are applied to the game yet.
