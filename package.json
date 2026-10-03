@@ -1,0 +1,29 @@
+{
+  "name": "frontier-command",
+  "version": "1.0.0",
+  "private": true,
+  "type": "module",
+  "scripts": {
+    "dev": "vite --host 127.0.0.1",
+    "build": "tsc --noEmit && tsx scripts/validate.ts && vite build && node scripts/sw.mjs",
+    "typecheck": "tsc --noEmit",
+    "lint": "prettier --check src scripts tests *.ts *.json index.html && tsc --noEmit",
+    "format": "prettier --write src scripts tests *.ts *.json index.html",
+    "profile": "tsx scripts/profile.ts",
+    "test": "tsx --test tests/core.test.ts",
+    "test:browser": "playwright test",
+    "balance": "tsx scripts/balance.ts",
+    "preview": "vite preview --host 127.0.0.1"
+  },
+  "dependencies": {
+    "phaser": "^3.90.0"
+  },
+  "devDependencies": {
+    "@playwright/test": "^1.56.0",
+    "@types/node": "^24.0.0",
+    "prettier": "3.8.1",
+    "tsx": "^4.20.0",
+    "typescript": "^5.9.0",
+    "vite": "^7.1.0"
+  }
+}

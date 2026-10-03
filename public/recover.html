@@ -1,0 +1,89 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width,initial-scale=1" />
+    <title>Repair Frontier Command</title>
+    <style>
+      body {
+        margin: 0;
+        background: #142c35;
+        color: #edf3de;
+        font: 18px system-ui;
+        padding: 32px;
+      }
+      main {
+        max-width: 580px;
+        margin: 10vh auto;
+      }
+      button {
+        font: inherit;
+        background: #e7c57b;
+        color: #142c35;
+        border: 0;
+        border-radius: 6px;
+        padding: 16px;
+        cursor: pointer;
+      }
+      p {
+        line-height: 1.6;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Restore the frontier</h1>
+      <p>
+        The old offline page can point to files replaced by an update. This
+        repairs the application shell. Your battles, maps, achievements, and
+        settings stay saved.
+      </p>
+      <button id="repair">Repair &amp; open game</button>
+      <p id="status" role="status"></p>
+    </main>
+    <script>
+      document.querySelector("#repair").onclick = async () => {
+        const status = document.querySelector("#status"),
+          button = document.querySelector("#repair");
+        button.disabled = true;
+        status.textContent = "Preparing the current game version…";
+        try {
+          const r = await navigator.serviceWorker.register(
+            "/frontier-command/sw.js",
+            { scope: "/frontier-command/" },
+          );
+          if (r) {
+            await r.update();
+            if (!r.waiting && r.installing)
+              await new Promise((resolve, reject) => {
+                const w = r.installing;
+                w.addEventListener("statechange", () => {
+                  if (w.state === "installed") resolve();
+                  if (w.state === "redundant")
+                    reject(Error("The new shell could not install."));
+                });
+              });
+            if (r.waiting) {
+              const changed = new Promise((resolve) =>
+                navigator.serviceWorker.addEventListener(
+                  "controllerchange",
+                  resolve,
+                  { once: true },
+                ),
+              );
+              r.waiting.postMessage({ type: "APPLY_UPDATE" });
+              await Promise.race([
+                changed,
+                new Promise((resolve) => setTimeout(resolve, 4000)),
+              ]);
+            }
+          }
+          location.replace("/frontier-command/");
+        } catch (e) {
+          status.textContent = "Repair could not finish: " + e.message;
+          button.disabled = false;
+        }
+      };
+    </script>
+  </body>
+</html>
