@@ -42,7 +42,7 @@ test("recover a legacy blank cached shell without losing a saved battle", async 
     await expect(
       page.getByRole("button", { name: "New skirmish", exact: true }),
     ).toHaveCount(0);
-    await page.goto("http://127.0.0.1:4180/frontier-command-recovery/");
+    await page.goto("/frontier-command-recovery/");
     await page
       .getByRole("button", { name: "Repair & open game", exact: true })
       .click();
