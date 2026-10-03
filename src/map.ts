@@ -22,6 +22,9 @@ export type MapData = {
     kind: "gold" | "wood" | "relic" | "camp";
     owner: number;
     progress: number;
+    remaining?: number;
+    capacity?: number;
+    claimant?: number;
   })[];
   placements?: {
     x: number;

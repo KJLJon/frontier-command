@@ -74,6 +74,8 @@ export type Entity = Point & {
   order: string;
   target?: number;
   buff: number;
+  destination?: Point;
+  pursuing?: boolean;
   slow: number;
   abilities: number[];
   rally?: Point;
@@ -103,6 +105,9 @@ export type Event = {
   text?: string;
   team?: number;
   target?: number;
+  damage?: number;
+  sourceKind?: string;
+  targetKind?: string;
 };
 export type Stats = {
   kills: number;
@@ -158,6 +163,12 @@ export class Simulation {
     }
     this.settings = structuredClone(settings);
     this.map = map ? structuredClone(map) : generateMap(settings);
+    for (const point of this.map.points) {
+      if (point.kind !== "gold" && point.kind !== "wood") continue;
+      point.capacity ??=
+        (point.kind === "gold" ? 1200 : 1600) * settings.resources;
+      point.remaining ??= point.capacity;
+    }
     this.random = rng(hash(settings.seed));
     this.objective =
       settings.mission?.objective ??
@@ -381,6 +392,7 @@ export class Simulation {
       );
       if (!e) return;
       const slot = o.slot ?? 0;
+      if (!Number.isInteger(slot) || slot < 0 || slot > 2) return;
       if (e.abilities[slot] > 0)
         return this.reject("Ability is recharging.", o.team);
       e.abilities[slot] =
@@ -458,11 +470,16 @@ export class Simulation {
         e.steer = { dx: o.dx, dy: o.dy, remaining: 0.22 };
         e.route = [];
         e.order = "Guard";
+        e.destination = undefined;
+        e.pursuing = false;
+        e.target = undefined;
         return;
       }
       e.steer = undefined;
       e.order = o.type;
       e.target = o.target;
+      e.destination = undefined;
+      e.pursuing = false;
       e.route = [];
       if (["Move", "AttackMove", "Capture"].includes(o.type)) {
         const dest = {
@@ -479,6 +496,7 @@ export class Simulation {
           ),
         };
         e.route = path(this.map, e, dest, blocked);
+        e.destination = dest;
       }
     });
   }
@@ -499,6 +517,7 @@ export class Simulation {
     return true;
   }
   hit(a: Entity, b: Entity, base?: number) {
+    if (a.hp <= 0 || b.hp <= 0) return;
     const amount = base ?? combatDamage(a, b, this.players);
     b.hp -= amount;
     this.events.push({
@@ -512,6 +531,9 @@ export class Simulation {
       x: a.x,
       y: a.y,
       target: b.id,
+      damage: amount,
+      sourceKind: a.kind,
+      targetKind: b.kind,
       team: a.team,
     });
     if (b.hp <= 0) {
@@ -527,6 +549,7 @@ export class Simulation {
     }
   }
   step(dt = 0.1) {
+    if (!Number.isFinite(dt) || dt <= 0) return;
     if (this.paused || this.winner !== null) return;
     this.events = [];
     this.commands.splice(0).forEach((o) => this.execute(o));
@@ -546,6 +569,13 @@ export class Simulation {
             e.hp = e.maxHp;
             e.respawn = undefined;
             e.route = [];
+            e.order = "Hold";
+            e.target = undefined;
+            e.destination = undefined;
+            e.pursuing = false;
+            e.steer = undefined;
+            e.buff = 0;
+            e.slow = 0;
           }
         }
         continue;
@@ -575,6 +605,7 @@ export class Simulation {
           if (e.rally) {
             v.route = path(this.map, v, e.rally, blocked);
             v.order = "AttackMove";
+            v.destination = { ...e.rally };
           }
           if (e.team === 0) {
             this.stats.recruited++;
@@ -663,6 +694,10 @@ export class Simulation {
           }
         }
       }
+      if (!target && e.pursuing && e.destination) {
+        e.route = path(this.map, e, e.destination, blocked);
+        e.pursuing = false;
+      }
       if (target && dist(e, target) <= range) {
         if (e.cooldown === 0) {
           this.hit(e, target);
@@ -683,8 +718,11 @@ export class Simulation {
         e.team !== -1 &&
         this.tick % 15 === e.id % 15
       ) {
-        const dest = { x: target.x, y: target.y };
+        const dest = target.building
+          ? this.freeNear(target)
+          : { x: target.x, y: target.y };
         e.route = path(this.map, e, dest, blocked);
+        e.pursuing = true;
       }
       if (!e.building && e.route.length) {
         const next = e.route[0];
@@ -692,7 +730,9 @@ export class Simulation {
           blocked.has(index(this.map, next.x, next.y)) &&
           dist(next, e) > 0.8
         ) {
-          e.route = [];
+          e.route = e.destination
+            ? path(this.map, e, e.destination, blocked)
+            : [];
           continue;
         }
         const delta = dist(e, next);
@@ -722,6 +762,11 @@ export class Simulation {
       if (!p.alive) continue;
       let g = 1.4,
         w = 1.2;
+      const factor =
+        scale.income *
+        factions[p.faction].income *
+        biomes[this.map.settings.biome].resource *
+        (p.tech.includes("economy") ? 1.3 : 1);
       for (const point of this.map.points) {
         if (point.owner !== t) continue;
         const depot = this.entities.some(
@@ -734,8 +779,24 @@ export class Simulation {
         )
           ? 1.4
           : 1;
-        if (point.kind === "gold") g += 2.1 * depot;
-        if (point.kind === "wood") w += 2.1 * depot;
+        if (point.kind === "gold" || point.kind === "wood") {
+          const yieldAmount = Math.min(
+            point.remaining ?? 0,
+            2.1 * depot * dt * factor,
+          );
+          point.remaining = Math.max(0, (point.remaining ?? 0) - yieldAmount);
+          if (point.kind === "gold") g += yieldAmount / (dt * factor);
+          else w += yieldAmount / (dt * factor);
+          if (yieldAmount > 0 && point.remaining === 0) {
+            this.events.push({
+              type: "depleted",
+              x: point.x,
+              y: point.y,
+              team: t,
+              text: `${point.kind === "gold" ? "Gold mine" : "Timber grove"} depleted. Scout for another deposit.`,
+            });
+          }
+        }
         if (
           point.kind === "relic" &&
           ["Domination", "Relic Hunt"].includes(this.settings.mode)
@@ -745,11 +806,6 @@ export class Simulation {
             (this.settings.mode === "Relic Hunt" ? 1.25 : 1) *
             (this.time > scale.minutes * 30 ? 2 : 1);
       }
-      const factor =
-        scale.income *
-        factions[p.faction].income *
-        biomes[this.map.settings.biome].resource *
-        (p.tech.includes("economy") ? 1.3 : 1);
       p.gold += g * dt * factor;
       p.wood += w * dt * factor;
       if (t === 0) {
@@ -758,16 +814,19 @@ export class Simulation {
       }
     }
     for (const point of this.map.points) {
-      if (point.kind === "camp") continue;
+      if (point.kind === "camp" || point.remaining === 0) continue;
       const nearby = this.entities.filter(
         (e) => !e.building && e.hp > 0 && e.team >= 0 && dist(e, point) < 2.6,
       );
       const teams = [...new Set(nearby.map((e) => e.team))];
       if (teams.length === 1 && teams[0] !== point.owner) {
+        if (point.claimant !== teams[0]) point.progress = 0;
+        point.claimant = teams[0];
         point.progress += dt * (nearby.length * 0.3 + 0.7);
         if (point.progress >= 6) {
           point.owner = teams[0];
           point.progress = 0;
+          point.claimant = undefined;
           this.events.push({
             type: "capture",
             x: point.x,
@@ -993,7 +1052,7 @@ export class Simulation {
         visibleEnemy.find((e) => e.kind === "keep") ??
         p.memory.find((e) => e.kind === "keep");
       const destinations = this.map.points
-        .filter((q) => q.kind !== "camp" && q.owner !== t)
+        .filter((q) => q.kind !== "camp" && q.remaining !== 0 && q.owner !== t)
         .sort((a, b) => dist(a, base) - dist(b, base));
       const capture = destinations[0];
       const attackSize =

@@ -273,3 +273,109 @@ test("survival waves escalate and the final timer produces a win", () => {
   assert.equal(s.wave, 12);
   assert.equal(s.winner, 0);
 });
+
+test("invalid ability slots and repeated lethal hits do not corrupt state", () => {
+  const s = new Simulation(settings);
+  const hero = s.entities.find((e) => e.team === 0 && e.kind === "warlord")!;
+  const target = s.spawn("swordsman", 1, hero.x + 1, hero.y);
+  s.execute({ type: "UseAbility", team: 0, slot: 9 });
+  assert.equal(hero.abilities.length, 3);
+  const before = s.stats.kills;
+  s.hit(hero, target, 10000);
+  s.hit(hero, target, 10000);
+  assert.equal(s.stats.kills, before + 1);
+  assert.ok(s.events.find((e) => e.type === "hit" && e.damage === 10000));
+});
+
+test("attack-move resumes its saved destination after an engagement", () => {
+  const s = new Simulation(settings);
+  s.players.forEach((p) => (p.ai = false));
+  s.map.tiles.fill(0);
+  const hero = s.entities.find((e) => e.team === 0 && e.kind === "warlord")!;
+  hero.x = 8.5;
+  hero.y = 8.5;
+  s.execute({ type: "AttackMove", team: 0, ids: [hero.id], x: 13.5, y: 8.5 });
+  hero.pursuing = true;
+  hero.route = [];
+  const restored = Simulation.restore(s.serialize());
+  for (let i = 0; i < 50; i++) restored.step();
+  const moved = restored.entities.find((e) => e.id === hero.id)!;
+  assert.ok(moved.x > 12);
+  assert.deepEqual(moved.destination, { x: 13.5, y: 8.5 });
+});
+
+test("melee attackers approach and damage buildings rather than their blocked tile", () => {
+  const s = new Simulation(settings);
+  s.players.forEach((p) => (p.ai = false));
+  s.map.tiles.fill(0);
+  const hero = s.entities.find((e) => e.team === 0 && e.kind === "warlord")!;
+  hero.x = 8.5;
+  hero.y = 8.5;
+  const tower = s.spawn("house", 1, 12.5, 8.5, true);
+  const before = tower.hp;
+  s.execute({ type: "Attack", team: 0, ids: [hero.id], target: tower.id });
+  for (let i = 0; i < 90; i++) s.step();
+  assert.ok(tower.hp < before);
+});
+
+test("finite deposits award exactly the remainder and stay depleted after saving", () => {
+  const s = new Simulation(settings);
+  s.players.forEach((p) => (p.ai = false));
+  const mine = s.map.points.find((p) => p.kind === "gold" && p.owner === 0)!;
+  s.map.points
+    .filter((p) => p.owner === 0 && p.kind === "gold")
+    .forEach((p) => (p.remaining = 0));
+  mine.remaining = 0.01;
+  s.step();
+  assert.equal(mine.remaining, 0);
+  assert.equal(s.events.filter((e) => e.type === "depleted").length, 1);
+  const restored = Simulation.restore(s.serialize());
+  assert.equal(
+    restored.map.points.find((p) => p.x === mine.x && p.y === mine.y)!
+      .remaining,
+    0,
+  );
+  restored.step();
+  assert.equal(restored.events.filter((e) => e.type === "depleted").length, 0);
+});
+
+test("capture progress belongs to its claimant and cannot be stolen by a new team", () => {
+  const s = new Simulation(settings);
+  s.players.forEach((p) => (p.ai = false));
+  const point = s.map.points.find((p) => p.kind === "relic")!;
+  s.entities
+    .filter((e) => !e.building)
+    .forEach((e) => {
+      e.x = 1;
+      e.y = 1;
+    });
+  const unit = s.spawn("spearman", 0, point.x, point.y);
+  point.owner = -1;
+  point.progress = 5.9;
+  point.claimant = 1;
+  s.step();
+  assert.equal(point.owner, -1);
+  assert.equal(point.claimant, 0);
+  assert.ok(point.progress < 1);
+  assert.equal(unit.hp > 0, true);
+});
+
+test("commander respawn clears pursuit, steering, and hostile effects", () => {
+  const s = new Simulation(settings);
+  s.players.forEach((p) => (p.ai = false));
+  const hero = s.entities.find((e) => e.team === 0 && e.kind === "warlord")!;
+  hero.hp = 0;
+  hero.respawn = 0.05;
+  hero.order = "Attack";
+  hero.target = 999;
+  hero.slow = 30;
+  hero.steer = { dx: 1, dy: 0, remaining: 5 };
+  hero.destination = { x: 20, y: 20 };
+  s.step();
+  assert.equal(hero.hp, hero.maxHp);
+  assert.equal(hero.order, "Hold");
+  assert.equal(hero.target, undefined);
+  assert.equal(hero.steer, undefined);
+  assert.equal(hero.destination, undefined);
+  assert.equal(hero.slow, 0);
+});
