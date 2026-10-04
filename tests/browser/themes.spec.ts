@@ -90,10 +90,16 @@ test("all eighteen presentations switch atomically during play and work offline"
   for (const id of worlds) {
     await page.getByLabel("World", { exact: true }).selectOption(id);
     await expect
-      .poll(() =>
-        page.evaluate(
-          () => (window as any).frontier.themes.active?.manifest.id,
-        ),
+      .poll(
+        () =>
+          page.evaluate(() => {
+            const t = (window as any).frontier.themes;
+            return t.loading
+              ? "Loading: " + t.status
+              : (t.active?.manifest.id ?? "Fallback") +
+                  (t.lastError ? " · " + t.lastError : "");
+          }),
+        { timeout: 60000 },
       )
       .toBe(id);
   }

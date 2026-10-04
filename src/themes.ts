@@ -274,6 +274,10 @@ export class ThemeManager {
   lastError = "";
   private sequence = 0;
   private cacheFailed = false;
+  private coreCache?: Promise<Cache>;
+  private detailCache?: Promise<Cache>;
+  private coreWrites: Promise<void> = Promise.resolve();
+  private detailWrites: Promise<void> = Promise.resolve();
   targets = new Map<number, { x: number; y: number }>();
   private positions = new Map<
     number,
@@ -283,25 +287,29 @@ export class ThemeManager {
   private motions = new Map<number, { kind: string; time: number }>();
   private bytes = new Map<string, Promise<ArrayBuffer>>();
   onChange?: () => void;
-  private async cacheOperation<T>(operation: Promise<T>): Promise<T> {
+  private async cacheOperation<T>(
+    operation: Promise<T>,
+    timeout = 10000,
+  ): Promise<T> {
     let timer: ReturnType<typeof setTimeout> | undefined;
     try {
       return await Promise.race([
         operation,
         new Promise<never>((_, reject) => {
-          timer = setTimeout(() => reject(Error("Theme cache busy")), 2000);
+          timer = setTimeout(() => reject(Error("Theme cache busy")), timeout);
         }),
       ]);
     } finally {
       clearTimeout(timer);
     }
   }
-  private async fetchBytes(url: string) {
+  private async fetchBytes(url: string, optional = false) {
     let cache: Cache | undefined;
     try {
-      cache = await this.cacheOperation(
-        caches.open("frontier-theme-assets:v1"),
-      );
+      const opened = optional
+        ? (this.detailCache ??= caches.open("frontier-theme-detail:v1"))
+        : (this.coreCache ??= caches.open("frontier-theme-core:v1"));
+      cache = await this.cacheOperation(opened);
       const cached = await this.cacheOperation(cache.match(url));
       if (cached) return await this.cacheOperation(cached.arrayBuffer());
     } catch {
@@ -311,19 +319,32 @@ export class ThemeManager {
     if (!response.ok)
       throw Error("Asset unavailable: " + new URL(url).pathname);
     const bytes = await response.arrayBuffer();
+    // Store an independent body; a network response clone retains its download stream.
+    const copy = new Response(bytes, {
+      headers: {
+        "Content-Type":
+          response.headers.get("Content-Type") ?? "application/octet-stream",
+      },
+    });
     try {
-      await this.cacheOperation(
-        cache?.put(url, new Response(bytes)) ?? Promise.resolve(),
-      );
+      if (cache) {
+        const store = cache;
+        const write = (optional ? this.detailWrites : this.coreWrites).then(
+          () => store.put(url, copy),
+        );
+        if (optional) this.detailWrites = write.catch(() => {});
+        else this.coreWrites = write.catch(() => {});
+        await this.cacheOperation(write, 2000);
+      }
     } catch {
       this.cacheFailed = true;
     }
     return bytes;
   }
-  async data(url: string) {
+  async data(url: string, optional = false) {
     let existing = this.bytes.get(url);
     if (!existing) {
-      existing = this.fetchBytes(url);
+      existing = this.fetchBytes(url, optional);
       this.bytes.set(url, existing);
       existing.catch(() => this.bytes.delete(url));
     }
@@ -353,8 +374,8 @@ export class ThemeManager {
     url.searchParams.set("v", this.catalog!.snapshot);
     return url.href;
   }
-  private async image(url: string) {
-    const data = await this.data(url),
+  private async image(url: string, optional = false) {
+    const data = await this.data(url, optional),
       blobUrl = URL.createObjectURL(
         new Blob([data], {
           type: new URL(url).pathname.endsWith(".svg")
@@ -655,7 +676,7 @@ export class ThemeManager {
       if (!frame?.file || seen.has(this.key(frame))) return;
       seen.add(this.key(frame));
       jobs.push(async () => {
-        const image = await this.image(url(frame.file));
+        const image = await this.image(url(frame.file), true);
         try {
           const sprite = crop(
             image,
@@ -691,7 +712,7 @@ export class ThemeManager {
         jobs.push(async () => {
           theme.terrain.set(
             biome + ":" + category,
-            await this.image(url(frame.file)),
+            await this.image(url(frame.file), true),
           );
         });
       }
@@ -702,7 +723,7 @@ export class ThemeManager {
       entry.variants.forEach((sound, i) =>
         jobs.push(async () => {
           const name = category + ":" + i;
-          theme.audio[name] = await this.data(url(sound.file));
+          theme.audio[name] = await this.data(url(sound.file), true);
           theme.audioVariants[category].push(name);
         }),
       );
@@ -710,7 +731,7 @@ export class ThemeManager {
     for (const [name, frame] of Object.entries(extra.icons ?? {}))
       jobs.push(async () => {
         if (theme.icons[name]) return;
-        const bytes = await this.data(url(frame.file));
+        const bytes = await this.data(url(frame.file), true);
         theme.icons[name] = URL.createObjectURL(
           new Blob([bytes], { type: "image/svg+xml" }),
         );

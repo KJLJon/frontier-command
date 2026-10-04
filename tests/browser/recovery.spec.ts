@@ -25,6 +25,7 @@ test("recover a legacy blank cached shell without losing a saved battle", async 
       .click();
     await expect(page.locator("#toast")).toContainText("Battle saved");
     await page.evaluate(async (filename) => {
+      await navigator.serviceWorker.ready;
       const change = new Promise<void>((resolve) =>
         navigator.serviceWorker.addEventListener(
           "controllerchange",
