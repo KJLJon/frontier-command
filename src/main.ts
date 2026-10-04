@@ -1698,8 +1698,13 @@ async function pwa() {
     import.meta.env.BASE_URL + "sw.js",
     { scope: import.meta.env.BASE_URL },
   );
-  if (!registration) return;
   let applying = false;
+  let retryUpdate: ReturnType<typeof setInterval> | undefined;
+  const restart = () => {
+    if (!applying) return;
+    clearInterval(retryUpdate);
+    location.reload();
+  };
   const show = () => {
     if (registration.waiting) {
       document.querySelector<HTMLElement>("#update")!.hidden = false;
@@ -1713,17 +1718,51 @@ async function pwa() {
   document
     .querySelector("#apply-update")!
     .addEventListener("click", async () => {
-      if (sim && (await save("autosave", false)) === false) return;
+      if (applying) return;
+      const button =
+        document.querySelector<HTMLButtonElement>("#apply-update")!;
+      const offered = registration.waiting;
+      button.disabled = true;
+      button.textContent = "Saving and restarting…";
+      if (sim && (await save("autosave", false)) === false) {
+        button.disabled = false;
+        button.textContent = "Update & Restart";
+        return;
+      }
       applying = true;
-      registration.waiting?.postMessage({ type: "APPLY_UPDATE" });
+      button.textContent = "Applying update…";
+      const worker = registration.waiting ?? offered;
+      if (!worker || worker.state === "activated") {
+        restart();
+        return;
+      }
+      const repair = () => {
+        clearInterval(retryUpdate);
+        // Leave the old controlled page after committing the battle. The recovery page
+        // loads outside the worker's scope and can finish installation without stale HTML.
+        location.replace(
+          "/frontier-command-recovery/?restart=1&return=" +
+            encodeURIComponent(location.pathname + location.search),
+        );
+      };
+      worker.addEventListener("statechange", () => {
+        if (worker.state === "activated") restart();
+      });
+      if (worker.state === "installed")
+        worker.postMessage({ type: "APPLY_UPDATE" });
+      let attempts = 0;
+      retryUpdate = setInterval(() => {
+        if (worker.state === "activated") restart();
+        else if (worker.state === "redundant" || attempts++ >= 2) repair();
+        else if (worker.state === "installed")
+          worker.postMessage({ type: "APPLY_UPDATE" });
+      }, 1000);
     });
   document.querySelector("#dismiss-update")!.addEventListener("click", () => {
     document.querySelector<HTMLElement>("#update")!.hidden = true;
     document.body.classList.remove("has-update");
   });
-  navigator.serviceWorker.addEventListener("controllerchange", () => {
-    if (applying) location.reload();
-  });
+  navigator.serviceWorker.addEventListener("controllerchange", restart);
 }
 async function boot() {
   try {

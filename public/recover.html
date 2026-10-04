@@ -42,7 +42,7 @@
       <p id="status" role="status"></p>
     </main>
     <script>
-      document.querySelector("#repair").onclick = async () => {
+      const repair = async () => {
         const status = document.querySelector("#status"),
           button = document.querySelector("#repair");
         button.disabled = true;
@@ -78,12 +78,29 @@
               ]);
             }
           }
-          location.replace("/frontier-command/");
+          if (r.waiting || (r.installing && r.installing.state !== "activated"))
+            throw Error(
+              "Keep this page open, close other Frontier Command tabs, then retry.",
+            );
+          const destination = new URL(
+            new URLSearchParams(location.search).get("return") ??
+              "/frontier-command/",
+            location.origin,
+          );
+          location.replace(
+            destination.origin === location.origin &&
+              destination.pathname.startsWith("/frontier-command/")
+              ? destination.href
+              : "/frontier-command/",
+          );
         } catch (e) {
           status.textContent = "Repair could not finish: " + e.message;
           button.disabled = false;
         }
       };
+      document.querySelector("#repair").onclick = repair;
+      if (new URLSearchParams(location.search).get("restart") === "1")
+        void repair();
     </script>
   </body>
 </html>

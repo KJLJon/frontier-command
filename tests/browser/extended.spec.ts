@@ -155,6 +155,9 @@ test("waiting PWA update leaves a match running and saves before explicit restar
     await expect(
       page.getByRole("button", { name: "Continue", exact: true }),
     ).toBeVisible();
+    expect(
+      await page.evaluate(() => navigator.serviceWorker.controller?.scriptURL),
+    ).toMatch(new RegExp("/(?:" + filename.replace(".", "\\.") + "|sw\\.js)$"));
     await page.getByRole("button", { name: "Continue", exact: true }).click();
     await page
       .getByRole("button", { name: "Resume", exact: true })
@@ -164,6 +167,108 @@ test("waiting PWA update leaves a match running and saves before explicit restar
     expect(
       await page.evaluate(() => (window as any).frontier.sim.time),
     ).toBeGreaterThanOrEqual(before);
+  } finally {
+    await unlink(file);
+  }
+});
+
+test("an unresponsive waiting worker recovers after saving and later updates still wait", async ({
+  page,
+}, info) => {
+  const filename = `sw-idle-${info.project.name}.js`,
+    file = "dist/" + filename;
+  const source = await readFile("dist/sw.js", "utf8");
+  const variant = (version: number) =>
+    source.replace(
+      /const CACHE='([^']+)'/,
+      `const CACHE='frontier-command:idle-${info.project.name}-${version}'`,
+    );
+  await writeFile(file, variant(1));
+  try {
+    await page.goto("./?test=1");
+    await page.evaluate(async () => await navigator.serviceWorker.ready);
+    await page.reload();
+    await page
+      .getByRole("button", { name: "New skirmish", exact: true })
+      .click();
+    await page
+      .getByRole("button", { name: "Begin battle", exact: true })
+      .click();
+    await page.evaluate(async (filename) => {
+      await navigator.serviceWorker.register("/frontier-command/" + filename, {
+        scope: "/frontier-command/",
+      });
+      // Reproduce the observed idle-worker failure without altering storage or gameplay.
+      const post = ServiceWorker.prototype.postMessage;
+      ServiceWorker.prototype.postMessage = function (
+        message: any,
+        ...rest: any[]
+      ) {
+        if (message?.type === "APPLY_UPDATE") return;
+        return (post as any).call(this, message, ...rest);
+      };
+    }, filename);
+    await expect(
+      page.getByRole("button", { name: "Update & Restart" }),
+    ).toBeVisible();
+    const before = await page.evaluate(() => (window as any).frontier.sim.time);
+    await page.getByRole("button", { name: "Update & Restart" }).click();
+    await expect(
+      page.getByRole("button", { name: "Continue", exact: true }),
+    ).toBeVisible({ timeout: 30000 });
+    const applied = await page.evaluate(
+      () => navigator.serviceWorker.controller?.scriptURL,
+    );
+    expect(applied).toContain("/frontier-command/sw.js");
+    await page.getByRole("button", { name: "Continue", exact: true }).click();
+    await page
+      .getByRole("button", { name: "Resume", exact: true })
+      .first()
+      .click();
+    await expect(page.locator("#gold")).toBeVisible();
+    expect(
+      await page.evaluate(() => (window as any).frontier.sim.time),
+    ).toBeGreaterThanOrEqual(before);
+    // A later background update must still wait for a new explicit restart.
+    await page.evaluate(() => {
+      (window as any).automaticControllerChanges = 0;
+      navigator.serviceWorker.addEventListener(
+        "controllerchange",
+        () => (window as any).automaticControllerChanges++,
+      );
+    });
+    await writeFile(file, variant(2));
+    await page.evaluate(
+      async (filename) =>
+        await navigator.serviceWorker.register(
+          "/frontier-command/" + filename,
+          {
+            scope: "/frontier-command/",
+            updateViaCache: "none",
+          },
+        ),
+      filename,
+    );
+    await expect
+      .poll(
+        () =>
+          page.evaluate(async (filename) => {
+            const r = await navigator.serviceWorker.getRegistration();
+            return (
+              r?.waiting?.scriptURL.endsWith(filename) &&
+              r?.waiting?.state === "installed"
+            );
+          }, filename),
+        { timeout: 30000 },
+      )
+      .toBe(true);
+    const time = await page.evaluate(() => (window as any).frontier.sim.time);
+    await expect
+      .poll(() => page.evaluate(() => (window as any).frontier.sim.time))
+      .toBeGreaterThan(time);
+    expect(
+      await page.evaluate(() => (window as any).automaticControllerChanges),
+    ).toBe(0);
   } finally {
     await unlink(file);
   }
