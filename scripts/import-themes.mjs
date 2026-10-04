@@ -5,6 +5,7 @@ import {
   mkdir,
   readdir,
   copyFile,
+  access,
 } from "node:fs/promises";
 import path from "node:path";
 import { createHash } from "node:crypto";
@@ -40,6 +41,25 @@ for (const theme of catalog.themes) {
   )
     throw Error("Incomplete theme: " + theme.id);
   files.add(theme.manifest);
+  const extra = theme.id + "/game-assets.json";
+  try {
+    await access(path.join(source, extra));
+    const data = JSON.parse(await readFile(path.join(source, extra), "utf8"));
+    if (data.schemaVersion === 1 && data.units && data.resourceSites) {
+      files.add(extra);
+      theme.gameAssets = extra;
+    }
+  } catch {
+    /* This theme's expanded roster is still being authored. */
+  }
+  try {
+    const arena = theme.id + "/arena-assets.json";
+    await access(path.join(source, arena));
+    files.add(arena);
+    theme.arenaAssets = arena;
+  } catch {
+    /* Arena art is optional. */
+  }
   for (const directory of ["graphics", "audio", "models"])
     await collect(theme.id + "/" + directory);
 }

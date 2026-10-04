@@ -1,0 +1,2433 @@
+{
+  "schemaVersion": 1,
+  "state": "static",
+  "authoredAnimation": false,
+  "units": {
+    "swordsman": {
+      "displayName": "Armored knight",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/swordsman/idle.png",
+          "width": 374,
+          "height": 365,
+          "dimensions": {
+            "width": 374,
+            "height": 365
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 374,
+            "height": 365
+          },
+          "pivot": [
+            0.5,
+            0.9561643835616438
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/swordsman/idle.png",
+          "width": 388,
+          "height": 418,
+          "dimensions": {
+            "width": 388,
+            "height": 418
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 388,
+            "height": 418
+          },
+          "pivot": [
+            0.5,
+            0.9617224880382775
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/swordsman/idle.png",
+          "width": 269,
+          "height": 307,
+          "dimensions": {
+            "width": 269,
+            "height": 307
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 269,
+            "height": 307
+          },
+          "pivot": [
+            0.5,
+            0.9478827361563518
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "spearman": {
+      "displayName": "Spear guard",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/spearman/idle.png",
+          "width": 256,
+          "height": 428,
+          "dimensions": {
+            "width": 256,
+            "height": 428
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 256,
+            "height": 428
+          },
+          "pivot": [
+            0.5,
+            0.9626168224299065
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/spearman/idle.png",
+          "width": 288,
+          "height": 440,
+          "dimensions": {
+            "width": 288,
+            "height": 440
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 288,
+            "height": 440
+          },
+          "pivot": [
+            0.5,
+            0.9636363636363636
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/spearman/idle.png",
+          "width": 238,
+          "height": 363,
+          "dimensions": {
+            "width": 238,
+            "height": 363
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 238,
+            "height": 363
+          },
+          "pivot": [
+            0.5,
+            0.9559228650137741
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "archer": {
+      "displayName": "Bow ranger",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/archer/idle.png",
+          "width": 302,
+          "height": 348,
+          "dimensions": {
+            "width": 302,
+            "height": 348
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 302,
+            "height": 348
+          },
+          "pivot": [
+            0.5,
+            0.9540229885057471
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/archer/idle.png",
+          "width": 354,
+          "height": 400,
+          "dimensions": {
+            "width": 354,
+            "height": 400
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 354,
+            "height": 400
+          },
+          "pivot": [
+            0.5,
+            0.96
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/archer/idle.png",
+          "width": 253,
+          "height": 306,
+          "dimensions": {
+            "width": 253,
+            "height": 306
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 253,
+            "height": 306
+          },
+          "pivot": [
+            0.5,
+            0.9477124183006536
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "cavalry": {
+      "displayName": "Mounted rider",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/cavalry/idle.png",
+          "width": 464,
+          "height": 444,
+          "dimensions": {
+            "width": 464,
+            "height": 444
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 464,
+            "height": 444
+          },
+          "pivot": [
+            0.5,
+            0.963963963963964
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/cavalry/idle.png",
+          "width": 464,
+          "height": 448,
+          "dimensions": {
+            "width": 464,
+            "height": 448
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 464,
+            "height": 448
+          },
+          "pivot": [
+            0.5,
+            0.9642857142857143
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/cavalry/idle.png",
+          "width": 324,
+          "height": 366,
+          "dimensions": {
+            "width": 324,
+            "height": 366
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 324,
+            "height": 366
+          },
+          "pivot": [
+            0.5,
+            0.9562841530054644
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "siege": {
+      "displayName": "Rune catapult",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/siege/idle.png",
+          "width": 499,
+          "height": 431,
+          "dimensions": {
+            "width": 499,
+            "height": 431
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 499,
+            "height": 431
+          },
+          "pivot": [
+            0.5,
+            0.962877030162413
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/siege/idle.png",
+          "width": 508,
+          "height": 461,
+          "dimensions": {
+            "width": 508,
+            "height": 461
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 508,
+            "height": 461
+          },
+          "pivot": [
+            0.5,
+            0.96529284164859
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/siege/idle.png",
+          "width": 355,
+          "height": 342,
+          "dimensions": {
+            "width": 355,
+            "height": 342
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 355,
+            "height": 342
+          },
+          "pivot": [
+            0.5,
+            0.9532163742690059
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "support": {
+      "displayName": "Grove healer",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/support/idle.png",
+          "width": 323,
+          "height": 402,
+          "dimensions": {
+            "width": 323,
+            "height": 402
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 323,
+            "height": 402
+          },
+          "pivot": [
+            0.5,
+            0.9601990049751243
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/support/idle.png",
+          "width": 273,
+          "height": 432,
+          "dimensions": {
+            "width": 273,
+            "height": 432
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 273,
+            "height": 432
+          },
+          "pivot": [
+            0.5,
+            0.9629629629629629
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/support/idle.png",
+          "width": 266,
+          "height": 329,
+          "dimensions": {
+            "width": 266,
+            "height": 329
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 266,
+            "height": 329
+          },
+          "pivot": [
+            0.5,
+            0.9513677811550152
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "warlord": {
+      "displayName": "Crowned warlord",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/warlord/idle.png",
+          "width": 390,
+          "height": 452,
+          "dimensions": {
+            "width": 390,
+            "height": 452
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 452
+          },
+          "pivot": [
+            0.5,
+            0.9646017699115044
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/warlord/idle.png",
+          "width": 496,
+          "height": 472,
+          "dimensions": {
+            "width": 496,
+            "height": 472
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 496,
+            "height": 472
+          },
+          "pivot": [
+            0.5,
+            0.9661016949152542
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/warlord/idle.png",
+          "width": 359,
+          "height": 328,
+          "dimensions": {
+            "width": 359,
+            "height": 328
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 359,
+            "height": 328
+          },
+          "pivot": [
+            0.5,
+            0.9512195121951219
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "ranger": {
+      "displayName": "Forest huntress",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/ranger/idle.png",
+          "width": 367,
+          "height": 431,
+          "dimensions": {
+            "width": 367,
+            "height": 431
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 367,
+            "height": 431
+          },
+          "pivot": [
+            0.5,
+            0.962877030162413
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/ranger/idle.png",
+          "width": 362,
+          "height": 450,
+          "dimensions": {
+            "width": 362,
+            "height": 450
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 362,
+            "height": 450
+          },
+          "pivot": [
+            0.5,
+            0.9644444444444444
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/ranger/idle.png",
+          "width": 304,
+          "height": 350,
+          "dimensions": {
+            "width": 304,
+            "height": 350
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 304,
+            "height": 350
+          },
+          "pivot": [
+            0.5,
+            0.9542857142857143
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "engineer": {
+      "displayName": "Rune engineer",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/engineer/idle.png",
+          "width": 337,
+          "height": 388,
+          "dimensions": {
+            "width": 337,
+            "height": 388
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 337,
+            "height": 388
+          },
+          "pivot": [
+            0.5,
+            0.9587628865979382
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/engineer/idle.png",
+          "width": 365,
+          "height": 417,
+          "dimensions": {
+            "width": 365,
+            "height": 417
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 365,
+            "height": 417
+          },
+          "pivot": [
+            0.5,
+            0.9616306954436451
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/engineer/idle.png",
+          "width": 312,
+          "height": 259,
+          "dimensions": {
+            "width": 312,
+            "height": 259
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 312,
+            "height": 259
+          },
+          "pivot": [
+            0.5,
+            0.9382239382239382
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    }
+  },
+  "buildings": {
+    "keep": {
+      "displayName": "keep",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/keep-complete.png",
+          "width": 412,
+          "height": 482,
+          "dimensions": {
+            "width": 412,
+            "height": 482
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 412,
+            "height": 482
+          },
+          "pivot": [
+            0.5,
+            0.966804979253112
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/keep-complete.png",
+          "width": 381,
+          "height": 469,
+          "dimensions": {
+            "width": 381,
+            "height": 469
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 381,
+            "height": 469
+          },
+          "pivot": [
+            0.5,
+            0.9658848614072495
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/keep-complete.png",
+          "width": 355,
+          "height": 396,
+          "dimensions": {
+            "width": 355,
+            "height": 396
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 355,
+            "height": 396
+          },
+          "pivot": [
+            0.5,
+            0.9595959595959596
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "house": {
+      "displayName": "house",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/house-complete.png",
+          "width": 297,
+          "height": 327,
+          "dimensions": {
+            "width": 297,
+            "height": 327
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 297,
+            "height": 327
+          },
+          "pivot": [
+            0.5,
+            0.9510703363914373
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/house-complete.png",
+          "width": 276,
+          "height": 301,
+          "dimensions": {
+            "width": 276,
+            "height": 301
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 276,
+            "height": 301
+          },
+          "pivot": [
+            0.5,
+            0.946843853820598
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/house-complete.png",
+          "width": 284,
+          "height": 289,
+          "dimensions": {
+            "width": 284,
+            "height": 289
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 284,
+            "height": 289
+          },
+          "pivot": [
+            0.5,
+            0.9446366782006921
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "barracks": {
+      "displayName": "barracks",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/barracks-complete.png",
+          "width": 357,
+          "height": 343,
+          "dimensions": {
+            "width": 357,
+            "height": 343
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 357,
+            "height": 343
+          },
+          "pivot": [
+            0.5,
+            0.9533527696793003
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/barracks-complete.png",
+          "width": 352,
+          "height": 361,
+          "dimensions": {
+            "width": 352,
+            "height": 361
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 352,
+            "height": 361
+          },
+          "pivot": [
+            0.5,
+            0.9556786703601108
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/barracks-complete.png",
+          "width": 314,
+          "height": 296,
+          "dimensions": {
+            "width": 314,
+            "height": 296
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 314,
+            "height": 296
+          },
+          "pivot": [
+            0.5,
+            0.9459459459459459
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "range": {
+      "displayName": "range",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/range-complete.png",
+          "width": 319,
+          "height": 348,
+          "dimensions": {
+            "width": 319,
+            "height": 348
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 319,
+            "height": 348
+          },
+          "pivot": [
+            0.5,
+            0.9540229885057471
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/range-complete.png",
+          "width": 330,
+          "height": 358,
+          "dimensions": {
+            "width": 330,
+            "height": 358
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 330,
+            "height": 358
+          },
+          "pivot": [
+            0.5,
+            0.9553072625698324
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/range-complete.png",
+          "width": 324,
+          "height": 318,
+          "dimensions": {
+            "width": 324,
+            "height": 318
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 324,
+            "height": 318
+          },
+          "pivot": [
+            0.5,
+            0.949685534591195
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "stable": {
+      "displayName": "stable",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/stable-complete.png",
+          "width": 406,
+          "height": 380,
+          "dimensions": {
+            "width": 406,
+            "height": 380
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 406,
+            "height": 380
+          },
+          "pivot": [
+            0.5,
+            0.9578947368421052
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/stable-complete.png",
+          "width": 397,
+          "height": 378,
+          "dimensions": {
+            "width": 397,
+            "height": 378
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 397,
+            "height": 378
+          },
+          "pivot": [
+            0.5,
+            0.9576719576719577
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/stable-complete.png",
+          "width": 347,
+          "height": 292,
+          "dimensions": {
+            "width": 347,
+            "height": 292
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 347,
+            "height": 292
+          },
+          "pivot": [
+            0.5,
+            0.9452054794520548
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "workshop": {
+      "displayName": "workshop",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/workshop-complete.png",
+          "width": 346,
+          "height": 394,
+          "dimensions": {
+            "width": 346,
+            "height": 394
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 346,
+            "height": 394
+          },
+          "pivot": [
+            0.5,
+            0.9593908629441624
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/workshop-complete.png",
+          "width": 365,
+          "height": 398,
+          "dimensions": {
+            "width": 365,
+            "height": 398
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 365,
+            "height": 398
+          },
+          "pivot": [
+            0.5,
+            0.9597989949748744
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/workshop-complete.png",
+          "width": 345,
+          "height": 330,
+          "dimensions": {
+            "width": 345,
+            "height": 330
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 345,
+            "height": 330
+          },
+          "pivot": [
+            0.5,
+            0.9515151515151515
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "tower": {
+      "displayName": "tower",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/tower-complete.png",
+          "width": 259,
+          "height": 426,
+          "dimensions": {
+            "width": 259,
+            "height": 426
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 259,
+            "height": 426
+          },
+          "pivot": [
+            0.5,
+            0.9624413145539906
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/tower-complete.png",
+          "width": 198,
+          "height": 417,
+          "dimensions": {
+            "width": 198,
+            "height": 417
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 198,
+            "height": 417
+          },
+          "pivot": [
+            0.5,
+            0.9616306954436451
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/tower-complete.png",
+          "width": 224,
+          "height": 363,
+          "dimensions": {
+            "width": 224,
+            "height": 363
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 224,
+            "height": 363
+          },
+          "pivot": [
+            0.5,
+            0.9559228650137741
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "depot": {
+      "displayName": "depot",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/depot-complete.png",
+          "width": 370,
+          "height": 338,
+          "dimensions": {
+            "width": 370,
+            "height": 338
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 370,
+            "height": 338
+          },
+          "pivot": [
+            0.5,
+            0.9526627218934911
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/depot-complete.png",
+          "width": 374,
+          "height": 326,
+          "dimensions": {
+            "width": 374,
+            "height": 326
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 374,
+            "height": 326
+          },
+          "pivot": [
+            0.5,
+            0.950920245398773
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/depot-complete.png",
+          "width": 345,
+          "height": 282,
+          "dimensions": {
+            "width": 345,
+            "height": 282
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 345,
+            "height": 282
+          },
+          "pivot": [
+            0.5,
+            0.9432624113475178
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "blacksmith": {
+      "displayName": "blacksmith",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/blacksmith-complete.png",
+          "width": 377,
+          "height": 401,
+          "dimensions": {
+            "width": 377,
+            "height": 401
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 377,
+            "height": 401
+          },
+          "pivot": [
+            0.5,
+            0.9600997506234414
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/blacksmith-complete.png",
+          "width": 378,
+          "height": 422,
+          "dimensions": {
+            "width": 378,
+            "height": 422
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 378,
+            "height": 422
+          },
+          "pivot": [
+            0.5,
+            0.9620853080568721
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/blacksmith-complete.png",
+          "width": 332,
+          "height": 316,
+          "dimensions": {
+            "width": 332,
+            "height": 316
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 332,
+            "height": 316
+          },
+          "pivot": [
+            0.5,
+            0.9493670886075949
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "arcane": {
+      "displayName": "arcane",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/arcane-complete.png",
+          "width": 347,
+          "height": 414,
+          "dimensions": {
+            "width": 347,
+            "height": 414
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 347,
+            "height": 414
+          },
+          "pivot": [
+            0.5,
+            0.961352657004831
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/arcane-complete.png",
+          "width": 323,
+          "height": 381,
+          "dimensions": {
+            "width": 323,
+            "height": 381
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 323,
+            "height": 381
+          },
+          "pivot": [
+            0.5,
+            0.958005249343832
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/arcane-complete.png",
+          "width": 324,
+          "height": 365,
+          "dimensions": {
+            "width": 324,
+            "height": 365
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 324,
+            "height": 365
+          },
+          "pivot": [
+            0.5,
+            0.9561643835616438
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "wall": {
+      "displayName": "wall",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/wall-complete.png",
+          "width": 313,
+          "height": 327,
+          "dimensions": {
+            "width": 313,
+            "height": 327
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 313,
+            "height": 327
+          },
+          "pivot": [
+            0.5,
+            0.9510703363914373
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/wall-complete.png",
+          "width": 323,
+          "height": 331,
+          "dimensions": {
+            "width": 323,
+            "height": 331
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 323,
+            "height": 331
+          },
+          "pivot": [
+            0.5,
+            0.9516616314199395
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/wall-complete.png",
+          "width": 288,
+          "height": 287,
+          "dimensions": {
+            "width": 288,
+            "height": 287
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 288,
+            "height": 287
+          },
+          "pivot": [
+            0.5,
+            0.9442508710801394
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    }
+  },
+  "resourceSites": {
+    "gold": {
+      "displayName": "Rocky gold mine (Gold)",
+      "styles": {
+        "toon": {
+          "full": {
+            "file": "graphics/resources/toon/gold-full.png",
+            "width": 343,
+            "height": 351,
+            "dimensions": {
+              "width": 343,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 343,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/toon/gold-half.png",
+            "width": 343,
+            "height": 351,
+            "dimensions": {
+              "width": 343,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 343,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/toon/gold-sparse.png",
+            "width": 343,
+            "height": 351,
+            "dimensions": {
+              "width": 343,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 343,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/toon/gold-empty.png",
+            "width": 343,
+            "height": 351,
+            "dimensions": {
+              "width": 343,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 343,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "full": {
+            "file": "graphics/resources/realistic/gold-full.png",
+            "width": 357,
+            "height": 334,
+            "dimensions": {
+              "width": 357,
+              "height": 334
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 357,
+              "height": 334
+            },
+            "pivot": [
+              0.5,
+              0.9520958083832335
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/realistic/gold-half.png",
+            "width": 357,
+            "height": 334,
+            "dimensions": {
+              "width": 357,
+              "height": 334
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 357,
+              "height": 334
+            },
+            "pivot": [
+              0.5,
+              0.9520958083832335
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/realistic/gold-sparse.png",
+            "width": 357,
+            "height": 334,
+            "dimensions": {
+              "width": 357,
+              "height": 334
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 357,
+              "height": 334
+            },
+            "pivot": [
+              0.5,
+              0.9520958083832335
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/realistic/gold-empty.png",
+            "width": 357,
+            "height": 334,
+            "dimensions": {
+              "width": 357,
+              "height": 334
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 357,
+              "height": 334
+            },
+            "pivot": [
+              0.5,
+              0.9520958083832335
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "full": {
+            "file": "graphics/resources/sticker/gold-full.png",
+            "width": 290,
+            "height": 258,
+            "dimensions": {
+              "width": 290,
+              "height": 258
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 290,
+              "height": 258
+            },
+            "pivot": [
+              0.5,
+              0.937984496124031
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/sticker/gold-half.png",
+            "width": 290,
+            "height": 258,
+            "dimensions": {
+              "width": 290,
+              "height": 258
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 290,
+              "height": 258
+            },
+            "pivot": [
+              0.5,
+              0.937984496124031
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/sticker/gold-sparse.png",
+            "width": 290,
+            "height": 258,
+            "dimensions": {
+              "width": 290,
+              "height": 258
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 290,
+              "height": 258
+            },
+            "pivot": [
+              0.5,
+              0.937984496124031
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/sticker/gold-empty.png",
+            "width": 290,
+            "height": 258,
+            "dimensions": {
+              "width": 290,
+              "height": 258
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 290,
+              "height": 258
+            },
+            "pivot": [
+              0.5,
+              0.937984496124031
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "wood": {
+      "displayName": "Tree grove (Timber)",
+      "styles": {
+        "toon": {
+          "full": {
+            "file": "graphics/resources/toon/wood-full.png",
+            "width": 353,
+            "height": 342,
+            "dimensions": {
+              "width": 353,
+              "height": 342
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 353,
+              "height": 342
+            },
+            "pivot": [
+              0.5,
+              0.9532163742690059
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/toon/wood-half.png",
+            "width": 353,
+            "height": 342,
+            "dimensions": {
+              "width": 353,
+              "height": 342
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 353,
+              "height": 342
+            },
+            "pivot": [
+              0.5,
+              0.9532163742690059
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/toon/wood-sparse.png",
+            "width": 353,
+            "height": 342,
+            "dimensions": {
+              "width": 353,
+              "height": 342
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 353,
+              "height": 342
+            },
+            "pivot": [
+              0.5,
+              0.9532163742690059
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/toon/wood-empty.png",
+            "width": 353,
+            "height": 342,
+            "dimensions": {
+              "width": 353,
+              "height": 342
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 353,
+              "height": 342
+            },
+            "pivot": [
+              0.5,
+              0.9532163742690059
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "full": {
+            "file": "graphics/resources/realistic/wood-full.png",
+            "width": 355,
+            "height": 355,
+            "dimensions": {
+              "width": 355,
+              "height": 355
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 355,
+              "height": 355
+            },
+            "pivot": [
+              0.5,
+              0.9549295774647887
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/realistic/wood-half.png",
+            "width": 355,
+            "height": 355,
+            "dimensions": {
+              "width": 355,
+              "height": 355
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 355,
+              "height": 355
+            },
+            "pivot": [
+              0.5,
+              0.9549295774647887
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/realistic/wood-sparse.png",
+            "width": 355,
+            "height": 355,
+            "dimensions": {
+              "width": 355,
+              "height": 355
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 355,
+              "height": 355
+            },
+            "pivot": [
+              0.5,
+              0.9549295774647887
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/realistic/wood-empty.png",
+            "width": 355,
+            "height": 355,
+            "dimensions": {
+              "width": 355,
+              "height": 355
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 355,
+              "height": 355
+            },
+            "pivot": [
+              0.5,
+              0.9549295774647887
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "full": {
+            "file": "graphics/resources/sticker/wood-full.png",
+            "width": 305,
+            "height": 304,
+            "dimensions": {
+              "width": 305,
+              "height": 304
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 304
+            },
+            "pivot": [
+              0.5,
+              0.9473684210526315
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/sticker/wood-half.png",
+            "width": 305,
+            "height": 304,
+            "dimensions": {
+              "width": 305,
+              "height": 304
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 304
+            },
+            "pivot": [
+              0.5,
+              0.9473684210526315
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/sticker/wood-sparse.png",
+            "width": 305,
+            "height": 304,
+            "dimensions": {
+              "width": 305,
+              "height": 304
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 304
+            },
+            "pivot": [
+              0.5,
+              0.9473684210526315
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/sticker/wood-empty.png",
+            "width": 305,
+            "height": 304,
+            "dimensions": {
+              "width": 305,
+              "height": 304
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 304
+            },
+            "pivot": [
+              0.5,
+              0.9473684210526315
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "relic": {
+      "displayName": "Rune obelisk",
+      "styles": {
+        "toon": {
+          "neutral": {
+            "file": "graphics/resources/toon/relic-neutral.png",
+            "width": 350,
+            "height": 351,
+            "dimensions": {
+              "width": 350,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 350,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/toon/relic-contested.png",
+            "width": 350,
+            "height": 351,
+            "dimensions": {
+              "width": 350,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 350,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/toon/relic-captured.png",
+            "width": 350,
+            "height": 351,
+            "dimensions": {
+              "width": 350,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 350,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/toon/relic-inactive.png",
+            "width": 350,
+            "height": 351,
+            "dimensions": {
+              "width": 350,
+              "height": 351
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 350,
+              "height": 351
+            },
+            "pivot": [
+              0.5,
+              0.9544159544159544
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "neutral": {
+            "file": "graphics/resources/realistic/relic-neutral.png",
+            "width": 338,
+            "height": 356,
+            "dimensions": {
+              "width": 338,
+              "height": 356
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 338,
+              "height": 356
+            },
+            "pivot": [
+              0.5,
+              0.9550561797752809
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/realistic/relic-contested.png",
+            "width": 338,
+            "height": 356,
+            "dimensions": {
+              "width": 338,
+              "height": 356
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 338,
+              "height": 356
+            },
+            "pivot": [
+              0.5,
+              0.9550561797752809
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/realistic/relic-captured.png",
+            "width": 338,
+            "height": 356,
+            "dimensions": {
+              "width": 338,
+              "height": 356
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 338,
+              "height": 356
+            },
+            "pivot": [
+              0.5,
+              0.9550561797752809
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/realistic/relic-inactive.png",
+            "width": 338,
+            "height": 356,
+            "dimensions": {
+              "width": 338,
+              "height": 356
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 338,
+              "height": 356
+            },
+            "pivot": [
+              0.5,
+              0.9550561797752809
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "neutral": {
+            "file": "graphics/resources/sticker/relic-neutral.png",
+            "width": 276,
+            "height": 301,
+            "dimensions": {
+              "width": 276,
+              "height": 301
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 276,
+              "height": 301
+            },
+            "pivot": [
+              0.5,
+              0.946843853820598
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/sticker/relic-contested.png",
+            "width": 276,
+            "height": 301,
+            "dimensions": {
+              "width": 276,
+              "height": 301
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 276,
+              "height": 301
+            },
+            "pivot": [
+              0.5,
+              0.946843853820598
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/sticker/relic-captured.png",
+            "width": 276,
+            "height": 301,
+            "dimensions": {
+              "width": 276,
+              "height": 301
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 276,
+              "height": 301
+            },
+            "pivot": [
+              0.5,
+              0.946843853820598
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/sticker/relic-inactive.png",
+            "width": 276,
+            "height": 301,
+            "dimensions": {
+              "width": 276,
+              "height": 301
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 276,
+              "height": 301
+            },
+            "pivot": [
+              0.5,
+              0.946843853820598
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "camp": {
+      "displayName": "Raider encampment",
+      "styles": {
+        "toon": {
+          "guarded": {
+            "file": "graphics/resources/toon/camp-guarded.png",
+            "width": 358,
+            "height": 314,
+            "dimensions": {
+              "width": 358,
+              "height": 314
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 358,
+              "height": 314
+            },
+            "pivot": [
+              0.5,
+              0.9490445859872612
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/toon/camp-cleared.png",
+            "width": 358,
+            "height": 314,
+            "dimensions": {
+              "width": 358,
+              "height": 314
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 358,
+              "height": 314
+            },
+            "pivot": [
+              0.5,
+              0.9490445859872612
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "guarded": {
+            "file": "graphics/resources/realistic/camp-guarded.png",
+            "width": 347,
+            "height": 305,
+            "dimensions": {
+              "width": 347,
+              "height": 305
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 347,
+              "height": 305
+            },
+            "pivot": [
+              0.5,
+              0.9475409836065574
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/realistic/camp-cleared.png",
+            "width": 347,
+            "height": 305,
+            "dimensions": {
+              "width": 347,
+              "height": 305
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 347,
+              "height": 305
+            },
+            "pivot": [
+              0.5,
+              0.9475409836065574
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "guarded": {
+            "file": "graphics/resources/sticker/camp-guarded.png",
+            "width": 331,
+            "height": 308,
+            "dimensions": {
+              "width": 331,
+              "height": 308
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 331,
+              "height": 308
+            },
+            "pivot": [
+              0.5,
+              0.948051948051948
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/sticker/camp-cleared.png",
+            "width": 331,
+            "height": 308,
+            "dimensions": {
+              "width": 331,
+              "height": 308
+            },
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 331,
+              "height": 308
+            },
+            "pivot": [
+              0.5,
+              0.948051948051948
+            ],
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    }
+  },
+  "harvestCues": {
+    "mining": {
+      "styles": {
+        "toon": {
+          "file": "graphics/resources/toon/mining-cue.png",
+          "width": 309,
+          "height": 263,
+          "dimensions": {
+            "width": 309,
+            "height": 263
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 309,
+            "height": 263
+          },
+          "pivot": [
+            0.5,
+            0.9391634980988594
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/resources/realistic/mining-cue.png",
+          "width": 331,
+          "height": 254,
+          "dimensions": {
+            "width": 331,
+            "height": 254
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 331,
+            "height": 254
+          },
+          "pivot": [
+            0.5,
+            0.937007874015748
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/resources/sticker/mining-cue.png",
+          "width": 285,
+          "height": 255,
+          "dimensions": {
+            "width": 285,
+            "height": 255
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 285,
+            "height": 255
+          },
+          "pivot": [
+            0.5,
+            0.9372549019607843
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    },
+    "chopping": {
+      "styles": {
+        "toon": {
+          "file": "graphics/resources/toon/chopping-cue.png",
+          "width": 336,
+          "height": 281,
+          "dimensions": {
+            "width": 336,
+            "height": 281
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 336,
+            "height": 281
+          },
+          "pivot": [
+            0.5,
+            0.9430604982206405
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "realistic": {
+          "file": "graphics/resources/realistic/chopping-cue.png",
+          "width": 334,
+          "height": 255,
+          "dimensions": {
+            "width": 334,
+            "height": 255
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 334,
+            "height": 255
+          },
+          "pivot": [
+            0.5,
+            0.9372549019607843
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        },
+        "sticker": {
+          "file": "graphics/resources/sticker/chopping-cue.png",
+          "width": 301,
+          "height": 245,
+          "dimensions": {
+            "width": 301,
+            "height": 245
+          },
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 301,
+            "height": 245
+          },
+          "pivot": [
+            0.5,
+            0.9346938775510204
+          ],
+          "state": "static",
+          "authoredAnimation": false
+        }
+      }
+    }
+  }
+}

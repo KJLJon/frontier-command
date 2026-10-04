@@ -1,0 +1,4667 @@
+{
+  "schemaVersion": 1,
+  "state": "static",
+  "authoredAnimation": false,
+  "units": {
+    "swordsman": {
+      "displayName": "Toy shield soldier",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/swordsman/idle.png",
+          "width": 307,
+          "height": 355,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 307,
+            "height": 355
+          },
+          "pivot": [
+            0.498371335504886,
+            0.952112676056338
+          ],
+          "sourceRect": {
+            "x": 97,
+            "y": 81,
+            "width": 275,
+            "height": 323
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 275,
+            "height": 323
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/swordsman/idle.png",
+          "width": 363,
+          "height": 424,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 363,
+            "height": 424
+          },
+          "pivot": [
+            0.4986225895316804,
+            0.9599056603773585
+          ],
+          "sourceRect": {
+            "x": 57,
+            "y": 11,
+            "width": 331,
+            "height": 392
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 331,
+            "height": 392
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/swordsman/idle.png",
+          "width": 339,
+          "height": 371,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 339,
+            "height": 371
+          },
+          "pivot": [
+            0.49852507374631266,
+            0.954177897574124
+          ],
+          "sourceRect": {
+            "x": 68,
+            "y": 62,
+            "width": 307,
+            "height": 339
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 307,
+            "height": 339
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "spearman": {
+      "displayName": "Candy-cane pikeman",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/spearman/idle.png",
+          "width": 348,
+          "height": 326,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 348,
+            "height": 326
+          },
+          "pivot": [
+            0.4985632183908046,
+            0.9478527607361963
+          ],
+          "sourceRect": {
+            "x": 487,
+            "y": 109,
+            "width": 316,
+            "height": 294
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 316,
+            "height": 294
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/spearman/idle.png",
+          "width": 420,
+          "height": 344,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 420,
+            "height": 344
+          },
+          "pivot": [
+            0.4988095238095238,
+            0.9505813953488372
+          ],
+          "sourceRect": {
+            "x": 459,
+            "y": 88,
+            "width": 388,
+            "height": 312
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 388,
+            "height": 312
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/spearman/idle.png",
+          "width": 372,
+          "height": 376,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 372,
+            "height": 376
+          },
+          "pivot": [
+            0.4986559139784946,
+            0.9547872340425532
+          ],
+          "sourceRect": {
+            "x": 489,
+            "y": 62,
+            "width": 340,
+            "height": 344
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 340,
+            "height": 344
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "archer": {
+      "displayName": "Candy archer elf",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/archer/idle.png",
+          "width": 310,
+          "height": 351,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 310,
+            "height": 351
+          },
+          "pivot": [
+            0.49838709677419357,
+            0.9515669515669516
+          ],
+          "sourceRect": {
+            "x": 931,
+            "y": 94,
+            "width": 278,
+            "height": 319
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 278,
+            "height": 319
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/archer/idle.png",
+          "width": 319,
+          "height": 400,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 319,
+            "height": 400
+          },
+          "pivot": [
+            0.49843260188087773,
+            0.9575
+          ],
+          "sourceRect": {
+            "x": 933,
+            "y": 47,
+            "width": 287,
+            "height": 368
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 287,
+            "height": 368
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/archer/idle.png",
+          "width": 349,
+          "height": 353,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 349,
+            "height": 353
+          },
+          "pivot": [
+            0.498567335243553,
+            0.9518413597733711
+          ],
+          "sourceRect": {
+            "x": 891,
+            "y": 90,
+            "width": 317,
+            "height": 321
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 317,
+            "height": 321
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "cavalry": {
+      "displayName": "Reindeer rider",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/cavalry/idle.png",
+          "width": 337,
+          "height": 364,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 337,
+            "height": 364
+          },
+          "pivot": [
+            0.49851632047477745,
+            0.9532967032967034
+          ],
+          "sourceRect": {
+            "x": 95,
+            "y": 474,
+            "width": 305,
+            "height": 332
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 305,
+            "height": 332
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/cavalry/idle.png",
+          "width": 406,
+          "height": 437,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 406,
+            "height": 437
+          },
+          "pivot": [
+            0.4987684729064039,
+            0.9610983981693364
+          ],
+          "sourceRect": {
+            "x": 34,
+            "y": 417,
+            "width": 374,
+            "height": 405
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 374,
+            "height": 405
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/cavalry/idle.png",
+          "width": 386,
+          "height": 405,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 386,
+            "height": 405
+          },
+          "pivot": [
+            0.49870466321243523,
+            0.9580246913580247
+          ],
+          "sourceRect": {
+            "x": 58,
+            "y": 440,
+            "width": 354,
+            "height": 373
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 354,
+            "height": 373
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "siege": {
+      "displayName": "Gift launcher",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/siege/idle.png",
+          "width": 376,
+          "height": 334,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 376,
+            "height": 334
+          },
+          "pivot": [
+            0.49867021276595747,
+            0.9491017964071856
+          ],
+          "sourceRect": {
+            "x": 478,
+            "y": 502,
+            "width": 344,
+            "height": 302
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 344,
+            "height": 302
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/siege/idle.png",
+          "width": 466,
+          "height": 385,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 466,
+            "height": 385
+          },
+          "pivot": [
+            0.4989270386266094,
+            0.9558441558441558
+          ],
+          "sourceRect": {
+            "x": 452,
+            "y": 464,
+            "width": 434,
+            "height": 353
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 434,
+            "height": 353
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/siege/idle.png",
+          "width": 385,
+          "height": 346,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 385,
+            "height": 346
+          },
+          "pivot": [
+            0.4987012987012987,
+            0.9508670520231214
+          ],
+          "sourceRect": {
+            "x": 485,
+            "y": 485,
+            "width": 353,
+            "height": 314
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 353,
+            "height": 314
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "support": {
+      "displayName": "Cocoa healer elf",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/support/idle.png",
+          "width": 287,
+          "height": 356,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 287,
+            "height": 356
+          },
+          "pivot": [
+            0.49825783972125437,
+            0.952247191011236
+          ],
+          "sourceRect": {
+            "x": 962,
+            "y": 484,
+            "width": 255,
+            "height": 324
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 255,
+            "height": 324
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/support/idle.png",
+          "width": 305,
+          "height": 423,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 305,
+            "height": 423
+          },
+          "pivot": [
+            0.49836065573770494,
+            0.9598108747044918
+          ],
+          "sourceRect": {
+            "x": 935,
+            "y": 435,
+            "width": 273,
+            "height": 391
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 273,
+            "height": 391
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/support/idle.png",
+          "width": 333,
+          "height": 359,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 333,
+            "height": 359
+          },
+          "pivot": [
+            0.4984984984984985,
+            0.9526462395543176
+          ],
+          "sourceRect": {
+            "x": 913,
+            "y": 479,
+            "width": 301,
+            "height": 327
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 301,
+            "height": 327
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "warlord": {
+      "displayName": "Santa commander",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/warlord/idle.png",
+          "width": 439,
+          "height": 360,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 439,
+            "height": 360
+          },
+          "pivot": [
+            0.4988610478359909,
+            0.9527777777777777
+          ],
+          "sourceRect": {
+            "x": 59,
+            "y": 858,
+            "width": 407,
+            "height": 328
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 407,
+            "height": 328
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/warlord/idle.png",
+          "width": 450,
+          "height": 403,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 450,
+            "height": 403
+          },
+          "pivot": [
+            0.4988888888888889,
+            0.9578163771712159
+          ],
+          "sourceRect": {
+            "x": 17,
+            "y": 835,
+            "width": 418,
+            "height": 371
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 418,
+            "height": 371
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/warlord/idle.png",
+          "width": 400,
+          "height": 355,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 400,
+            "height": 355
+          },
+          "pivot": [
+            0.49875,
+            0.952112676056338
+          ],
+          "sourceRect": {
+            "x": 54,
+            "y": 866,
+            "width": 368,
+            "height": 323
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 368,
+            "height": 323
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "ranger": {
+      "displayName": "Trailmaster elf",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/ranger/idle.png",
+          "width": 291,
+          "height": 353,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 291,
+            "height": 353
+          },
+          "pivot": [
+            0.49828178694158076,
+            0.9518413597733711
+          ],
+          "sourceRect": {
+            "x": 531,
+            "y": 853,
+            "width": 259,
+            "height": 321
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 259,
+            "height": 321
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/ranger/idle.png",
+          "width": 359,
+          "height": 387,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 359,
+            "height": 387
+          },
+          "pivot": [
+            0.4986072423398329,
+            0.9560723514211886
+          ],
+          "sourceRect": {
+            "x": 481,
+            "y": 852,
+            "width": 327,
+            "height": 355
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 327,
+            "height": 355
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/ranger/idle.png",
+          "width": 327,
+          "height": 353,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 327,
+            "height": 353
+          },
+          "pivot": [
+            0.4984709480122324,
+            0.9518413597733711
+          ],
+          "sourceRect": {
+            "x": 511,
+            "y": 869,
+            "width": 295,
+            "height": 321
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 295,
+            "height": 321
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    },
+    "engineer": {
+      "displayName": "Workshop foreman",
+      "styles": {
+        "toon": {
+          "file": "graphics/units/toon/engineer/idle.png",
+          "width": 341,
+          "height": 285,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 341,
+            "height": 285
+          },
+          "pivot": [
+            0.49853372434017595,
+            0.9403508771929825
+          ],
+          "sourceRect": {
+            "x": 913,
+            "y": 923,
+            "width": 309,
+            "height": 253
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 309,
+            "height": 253
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "realistic": {
+          "file": "graphics/units/realistic/engineer/idle.png",
+          "width": 346,
+          "height": 327,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 346,
+            "height": 327
+          },
+          "pivot": [
+            0.4985549132947977,
+            0.9480122324159022
+          ],
+          "sourceRect": {
+            "x": 911,
+            "y": 915,
+            "width": 314,
+            "height": 295
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 314,
+            "height": 295
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        },
+        "sticker": {
+          "file": "graphics/units/sticker/engineer/idle.png",
+          "width": 359,
+          "height": 342,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 359,
+            "height": 342
+          },
+          "pivot": [
+            0.4986072423398329,
+            0.9502923976608187
+          ],
+          "sourceRect": {
+            "x": 894,
+            "y": 880,
+            "width": 327,
+            "height": 310
+          },
+          "sourceDimensions": {
+            "width": 1254,
+            "height": 1254
+          },
+          "originalSize": {
+            "width": 327,
+            "height": 310
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 418,
+            "height": 418
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "pose": "idle"
+        }
+      }
+    }
+  },
+  "buildings": {
+    "keep": {
+      "displayName": "Santa command lodge",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/keep-complete.png",
+          "width": 434,
+          "height": 351,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 434,
+            "height": 351
+          },
+          "pivot": [
+            0.4988479262672811,
+            0.9515669515669516
+          ],
+          "sourceRect": {
+            "x": 17,
+            "y": 31,
+            "width": 402,
+            "height": 319
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 402,
+            "height": 319
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/keep-complete.png",
+          "width": 391,
+          "height": 362,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 391,
+            "height": 362
+          },
+          "pivot": [
+            0.49872122762148335,
+            0.9530386740331491
+          ],
+          "sourceRect": {
+            "x": 27,
+            "y": 31,
+            "width": 359,
+            "height": 330
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 359,
+            "height": 330
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/keep-complete.png",
+          "width": 417,
+          "height": 396,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 417,
+            "height": 396
+          },
+          "pivot": [
+            0.4988009592326139,
+            0.9570707070707071
+          ],
+          "sourceRect": {
+            "x": 1,
+            "y": 10,
+            "width": 385,
+            "height": 364
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 385,
+            "height": 364
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "house": {
+      "displayName": "Elf cottage",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/house-complete.png",
+          "width": 314,
+          "height": 313,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 314,
+            "height": 313
+          },
+          "pivot": [
+            0.4984076433121019,
+            0.9456869009584664
+          ],
+          "sourceRect": {
+            "x": 434,
+            "y": 58,
+            "width": 282,
+            "height": 281
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 282,
+            "height": 281
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/house-complete.png",
+          "width": 309,
+          "height": 289,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 309,
+            "height": 289
+          },
+          "pivot": [
+            0.49838187702265374,
+            0.9411764705882353
+          ],
+          "sourceRect": {
+            "x": 416,
+            "y": 94,
+            "width": 277,
+            "height": 257
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 277,
+            "height": 257
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/house-complete.png",
+          "width": 322,
+          "height": 306,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 322,
+            "height": 306
+          },
+          "pivot": [
+            0.4984472049689441,
+            0.9444444444444444
+          ],
+          "sourceRect": {
+            "x": 410,
+            "y": 80,
+            "width": 290,
+            "height": 274
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 290,
+            "height": 274
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "barracks": {
+      "displayName": "Toy soldier barracks",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/barracks-complete.png",
+          "width": 377,
+          "height": 297,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 377,
+            "height": 297
+          },
+          "pivot": [
+            0.4986737400530504,
+            0.9427609427609428
+          ],
+          "sourceRect": {
+            "x": 733,
+            "y": 66,
+            "width": 345,
+            "height": 265
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 345,
+            "height": 265
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/barracks-complete.png",
+          "width": 390,
+          "height": 292,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 390,
+            "height": 292
+          },
+          "pivot": [
+            0.4987179487179487,
+            0.9417808219178082
+          ],
+          "sourceRect": {
+            "x": 719,
+            "y": 85,
+            "width": 358,
+            "height": 260
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 358,
+            "height": 260
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/barracks-complete.png",
+          "width": 367,
+          "height": 294,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 367,
+            "height": 294
+          },
+          "pivot": [
+            0.4986376021798365,
+            0.9421768707482994
+          ],
+          "sourceRect": {
+            "x": 735,
+            "y": 92,
+            "width": 335,
+            "height": 262
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 335,
+            "height": 262
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "range": {
+      "displayName": "Candy bow range",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/range-complete.png",
+          "width": 360,
+          "height": 286,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 360,
+            "height": 286
+          },
+          "pivot": [
+            0.4986111111111111,
+            0.9405594405594405
+          ],
+          "sourceRect": {
+            "x": 1101,
+            "y": 84,
+            "width": 328,
+            "height": 254
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 328,
+            "height": 254
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/range-complete.png",
+          "width": 364,
+          "height": 308,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 364,
+            "height": 308
+          },
+          "pivot": [
+            0.49862637362637363,
+            0.9448051948051948
+          ],
+          "sourceRect": {
+            "x": 1102,
+            "y": 86,
+            "width": 332,
+            "height": 276
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 332,
+            "height": 276
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/range-complete.png",
+          "width": 396,
+          "height": 328,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 396,
+            "height": 328
+          },
+          "pivot": [
+            0.49873737373737376,
+            0.948170731707317
+          ],
+          "sourceRect": {
+            "x": 1084,
+            "y": 66,
+            "width": 364,
+            "height": 296
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 364,
+            "height": 296
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "stable": {
+      "displayName": "Reindeer stable",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/stable-complete.png",
+          "width": 419,
+          "height": 303,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 419,
+            "height": 303
+          },
+          "pivot": [
+            0.4988066825775656,
+            0.9438943894389439
+          ],
+          "sourceRect": {
+            "x": 17,
+            "y": 412,
+            "width": 387,
+            "height": 271
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 387,
+            "height": 271
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/stable-complete.png",
+          "width": 407,
+          "height": 284,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 407,
+            "height": 284
+          },
+          "pivot": [
+            0.4987714987714988,
+            0.9401408450704225
+          ],
+          "sourceRect": {
+            "x": 11,
+            "y": 437,
+            "width": 375,
+            "height": 252
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 375,
+            "height": 252
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/stable-complete.png",
+          "width": 414,
+          "height": 341,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 414,
+            "height": 341
+          },
+          "pivot": [
+            0.49879227053140096,
+            0.9501466275659824
+          ],
+          "sourceRect": {
+            "x": 0,
+            "y": 404,
+            "width": 382,
+            "height": 309
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 382,
+            "height": 309
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "workshop": {
+      "displayName": "Gift siege workshop",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/workshop-complete.png",
+          "width": 379,
+          "height": 305,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 379,
+            "height": 305
+          },
+          "pivot": [
+            0.49868073878627966,
+            0.9442622950819672
+          ],
+          "sourceRect": {
+            "x": 427,
+            "y": 405,
+            "width": 347,
+            "height": 273
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 347,
+            "height": 273
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/workshop-complete.png",
+          "width": 406,
+          "height": 303,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 406,
+            "height": 303
+          },
+          "pivot": [
+            0.4987684729064039,
+            0.9438943894389439
+          ],
+          "sourceRect": {
+            "x": 393,
+            "y": 419,
+            "width": 374,
+            "height": 271
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 374,
+            "height": 271
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/workshop-complete.png",
+          "width": 428,
+          "height": 333,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 428,
+            "height": 333
+          },
+          "pivot": [
+            0.49883177570093457,
+            0.948948948948949
+          ],
+          "sourceRect": {
+            "x": 379,
+            "y": 402,
+            "width": 396,
+            "height": 301
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 396,
+            "height": 301
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "tower": {
+      "displayName": "Peppermint watchtower",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/tower-complete.png",
+          "width": 256,
+          "height": 399,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 256,
+            "height": 399
+          },
+          "pivot": [
+            0.498046875,
+            0.9573934837092731
+          ],
+          "sourceRect": {
+            "x": 802,
+            "y": 350,
+            "width": 224,
+            "height": 367
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 224,
+            "height": 367
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/tower-complete.png",
+          "width": 270,
+          "height": 382,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 270,
+            "height": 382
+          },
+          "pivot": [
+            0.4981481481481482,
+            0.9554973821989529
+          ],
+          "sourceRect": {
+            "x": 810,
+            "y": 358,
+            "width": 238,
+            "height": 350
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 238,
+            "height": 350
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/tower-complete.png",
+          "width": 239,
+          "height": 399,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 239,
+            "height": 399
+          },
+          "pivot": [
+            0.497907949790795,
+            0.9573934837092731
+          ],
+          "sourceRect": {
+            "x": 817,
+            "y": 351,
+            "width": 207,
+            "height": 367
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 207,
+            "height": 367
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "depot": {
+      "displayName": "Holiday supply depot",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/depot-complete.png",
+          "width": 410,
+          "height": 325,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 410,
+            "height": 325
+          },
+          "pivot": [
+            0.49878048780487805,
+            0.9476923076923077
+          ],
+          "sourceRect": {
+            "x": 1055,
+            "y": 398,
+            "width": 378,
+            "height": 293
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 378,
+            "height": 293
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/depot-complete.png",
+          "width": 371,
+          "height": 283,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 371,
+            "height": 283
+          },
+          "pivot": [
+            0.49865229110512127,
+            0.9399293286219081
+          ],
+          "sourceRect": {
+            "x": 1095,
+            "y": 439,
+            "width": 339,
+            "height": 251
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 339,
+            "height": 251
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/depot-complete.png",
+          "width": 421,
+          "height": 330,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 421,
+            "height": 330
+          },
+          "pivot": [
+            0.498812351543943,
+            0.9484848484848485
+          ],
+          "sourceRect": {
+            "x": 1059,
+            "y": 418,
+            "width": 389,
+            "height": 298
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 389,
+            "height": 298
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "blacksmith": {
+      "displayName": "Toy armor forge",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/blacksmith-complete.png",
+          "width": 404,
+          "height": 374,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 404,
+            "height": 374
+          },
+          "pivot": [
+            0.49876237623762376,
+            0.9545454545454546
+          ],
+          "sourceRect": {
+            "x": 17,
+            "y": 684,
+            "width": 372,
+            "height": 342
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 372,
+            "height": 342
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/blacksmith-complete.png",
+          "width": 392,
+          "height": 335,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 392,
+            "height": 335
+          },
+          "pivot": [
+            0.4987244897959184,
+            0.9492537313432836
+          ],
+          "sourceRect": {
+            "x": 23,
+            "y": 723,
+            "width": 360,
+            "height": 303
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 360,
+            "height": 303
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/blacksmith-complete.png",
+          "width": 409,
+          "height": 384,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 409,
+            "height": 384
+          },
+          "pivot": [
+            0.49877750611246946,
+            0.9557291666666666
+          ],
+          "sourceRect": {
+            "x": 0,
+            "y": 716,
+            "width": 377,
+            "height": 352
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 377,
+            "height": 352
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "arcane": {
+      "displayName": "Cocoa healing academy",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/arcane-complete.png",
+          "width": 401,
+          "height": 353,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 401,
+            "height": 353
+          },
+          "pivot": [
+            0.49875311720698257,
+            0.9518413597733711
+          ],
+          "sourceRect": {
+            "x": 388,
+            "y": 714,
+            "width": 369,
+            "height": 321
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 369,
+            "height": 321
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/arcane-complete.png",
+          "width": 369,
+          "height": 361,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 369,
+            "height": 361
+          },
+          "pivot": [
+            0.4986449864498645,
+            0.9529085872576177
+          ],
+          "sourceRect": {
+            "x": 393,
+            "y": 697,
+            "width": 337,
+            "height": 329
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 337,
+            "height": 329
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/arcane-complete.png",
+          "width": 397,
+          "height": 340,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 397,
+            "height": 340
+          },
+          "pivot": [
+            0.4987405541561713,
+            0.95
+          ],
+          "sourceRect": {
+            "x": 378,
+            "y": 743,
+            "width": 365,
+            "height": 308
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 365,
+            "height": 308
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    },
+    "wall": {
+      "displayName": "Candy stone wall",
+      "styles": {
+        "toon": {
+          "file": "graphics/buildings/toon/wall-complete.png",
+          "width": 386,
+          "height": 299,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 386,
+            "height": 299
+          },
+          "pivot": [
+            0.49870466321243523,
+            0.9431438127090301
+          ],
+          "sourceRect": {
+            "x": 759,
+            "y": 775,
+            "width": 354,
+            "height": 267
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 354,
+            "height": 267
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "realistic": {
+          "file": "graphics/buildings/realistic/wall-complete.png",
+          "width": 368,
+          "height": 295,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 368,
+            "height": 295
+          },
+          "pivot": [
+            0.4986413043478261,
+            0.9423728813559322
+          ],
+          "sourceRect": {
+            "x": 745,
+            "y": 761,
+            "width": 336,
+            "height": 263
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 336,
+            "height": 263
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        },
+        "sticker": {
+          "file": "graphics/buildings/sticker/wall-complete.png",
+          "width": 386,
+          "height": 280,
+          "pixelRect": {
+            "x": 0,
+            "y": 0,
+            "width": 386,
+            "height": 280
+          },
+          "pivot": [
+            0.49870466321243523,
+            0.9392857142857143
+          ],
+          "sourceRect": {
+            "x": 741,
+            "y": 811,
+            "width": 354,
+            "height": 248
+          },
+          "sourceDimensions": {
+            "width": 1448,
+            "height": 1086
+          },
+          "originalSize": {
+            "width": 354,
+            "height": 248
+          },
+          "canvasPadding": 16,
+          "trimOffset": {
+            "x": -16,
+            "y": -16
+          },
+          "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+          "referenceCellSize": {
+            "width": 362,
+            "height": 362
+          },
+          "state": "static",
+          "authoredAnimation": false,
+          "buildingState": "complete"
+        }
+      }
+    }
+  },
+  "resourceSites": {
+    "gold": {
+      "displayName": "Crystal gift mine (Gold)",
+      "styles": {
+        "toon": {
+          "full": {
+            "file": "graphics/resources/toon/gold-full.png",
+            "width": 319,
+            "height": 325,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 319,
+              "height": 325
+            },
+            "pivot": [
+              0.49843260188087773,
+              0.9476923076923077
+            ],
+            "sourceRect": {
+              "x": 32,
+              "y": 49,
+              "width": 287,
+              "height": 293
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 287,
+              "height": 293
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/toon/gold-half.png",
+            "width": 306,
+            "height": 307,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 306,
+              "height": 307
+            },
+            "pivot": [
+              0.49836601307189543,
+              0.9446254071661238
+            ],
+            "sourceRect": {
+              "x": 349,
+              "y": 64,
+              "width": 274,
+              "height": 275
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 274,
+              "height": 275
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/toon/gold-sparse.png",
+            "width": 301,
+            "height": 307,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 301,
+              "height": 307
+            },
+            "pivot": [
+              0.4983388704318937,
+              0.9446254071661238
+            ],
+            "sourceRect": {
+              "x": 666,
+              "y": 65,
+              "width": 269,
+              "height": 275
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 269,
+              "height": 275
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/toon/gold-empty.png",
+            "width": 306,
+            "height": 305,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 306,
+              "height": 305
+            },
+            "pivot": [
+              0.49836601307189543,
+              0.9442622950819672
+            ],
+            "sourceRect": {
+              "x": 964,
+              "y": 67,
+              "width": 274,
+              "height": 273
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 274,
+              "height": 273
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "full": {
+            "file": "graphics/resources/realistic/gold-full.png",
+            "width": 309,
+            "height": 309,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 309,
+              "height": 309
+            },
+            "pivot": [
+              0.49838187702265374,
+              0.9449838187702265
+            ],
+            "sourceRect": {
+              "x": 35,
+              "y": 53,
+              "width": 277,
+              "height": 277
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 277,
+              "height": 277
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/realistic/gold-half.png",
+            "width": 293,
+            "height": 285,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 293,
+              "height": 285
+            },
+            "pivot": [
+              0.49829351535836175,
+              0.9403508771929825
+            ],
+            "sourceRect": {
+              "x": 354,
+              "y": 76,
+              "width": 261,
+              "height": 253
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 261,
+              "height": 253
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/realistic/gold-sparse.png",
+            "width": 289,
+            "height": 264,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 289,
+              "height": 264
+            },
+            "pivot": [
+              0.4982698961937716,
+              0.9356060606060606
+            ],
+            "sourceRect": {
+              "x": 662,
+              "y": 104,
+              "width": 257,
+              "height": 232
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 257,
+              "height": 232
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/realistic/gold-empty.png",
+            "width": 275,
+            "height": 252,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 275,
+              "height": 252
+            },
+            "pivot": [
+              0.49818181818181817,
+              0.9325396825396826
+            ],
+            "sourceRect": {
+              "x": 977,
+              "y": 111,
+              "width": 243,
+              "height": 220
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 243,
+              "height": 220
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "full": {
+            "file": "graphics/resources/sticker/gold-full.png",
+            "width": 355,
+            "height": 326,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 355,
+              "height": 326
+            },
+            "pivot": [
+              0.49859154929577465,
+              0.9478527607361963
+            ],
+            "sourceRect": {
+              "x": 0,
+              "y": 12,
+              "width": 323,
+              "height": 294
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 323,
+              "height": 294
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/sticker/gold-half.png",
+            "width": 342,
+            "height": 322,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 342,
+              "height": 322
+            },
+            "pivot": [
+              0.49853801169590645,
+              0.9472049689440993
+            ],
+            "sourceRect": {
+              "x": 320,
+              "y": 13,
+              "width": 310,
+              "height": 290
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 310,
+              "height": 290
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/sticker/gold-sparse.png",
+            "width": 345,
+            "height": 323,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 345,
+              "height": 323
+            },
+            "pivot": [
+              0.4985507246376812,
+              0.9473684210526315
+            ],
+            "sourceRect": {
+              "x": 640,
+              "y": 15,
+              "width": 313,
+              "height": 291
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 313,
+              "height": 291
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/sticker/gold-empty.png",
+            "width": 333,
+            "height": 320,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 333,
+              "height": 320
+            },
+            "pivot": [
+              0.4984984984984985,
+              0.946875
+            ],
+            "sourceRect": {
+              "x": 953,
+              "y": 18,
+              "width": 301,
+              "height": 288
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 301,
+              "height": 288
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "wood": {
+      "displayName": "Fir grove (Timber)",
+      "styles": {
+        "toon": {
+          "full": {
+            "file": "graphics/resources/toon/wood-full.png",
+            "width": 317,
+            "height": 307,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 317,
+              "height": 307
+            },
+            "pivot": [
+              0.49842271293375395,
+              0.9446254071661238
+            ],
+            "sourceRect": {
+              "x": 23,
+              "y": 371,
+              "width": 285,
+              "height": 275
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 285,
+              "height": 275
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/toon/wood-half.png",
+            "width": 314,
+            "height": 306,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 314,
+              "height": 306
+            },
+            "pivot": [
+              0.4984076433121019,
+              0.9444444444444444
+            ],
+            "sourceRect": {
+              "x": 345,
+              "y": 371,
+              "width": 282,
+              "height": 274
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 282,
+              "height": 274
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/toon/wood-sparse.png",
+            "width": 305,
+            "height": 295,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 295
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.9423728813559322
+            ],
+            "sourceRect": {
+              "x": 662,
+              "y": 382,
+              "width": 273,
+              "height": 263
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 263
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/toon/wood-empty.png",
+            "width": 299,
+            "height": 224,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 299,
+              "height": 224
+            },
+            "pivot": [
+              0.4983277591973244,
+              0.9241071428571429
+            ],
+            "sourceRect": {
+              "x": 972,
+              "y": 453,
+              "width": 267,
+              "height": 192
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 267,
+              "height": 192
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "full": {
+            "file": "graphics/resources/realistic/wood-full.png",
+            "width": 325,
+            "height": 323,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 325,
+              "height": 323
+            },
+            "pivot": [
+              0.49846153846153846,
+              0.9473684210526315
+            ],
+            "sourceRect": {
+              "x": 30,
+              "y": 352,
+              "width": 293,
+              "height": 291
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 293,
+              "height": 291
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/realistic/wood-half.png",
+            "width": 305,
+            "height": 309,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 309
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.9449838187702265
+            ],
+            "sourceRect": {
+              "x": 351,
+              "y": 374,
+              "width": 273,
+              "height": 277
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 277
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/realistic/wood-sparse.png",
+            "width": 305,
+            "height": 280,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 280
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.9392857142857143
+            ],
+            "sourceRect": {
+              "x": 654,
+              "y": 401,
+              "width": 273,
+              "height": 248
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 248
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/realistic/wood-empty.png",
+            "width": 304,
+            "height": 213,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 304,
+              "height": 213
+            },
+            "pivot": [
+              0.49835526315789475,
+              0.92018779342723
+            ],
+            "sourceRect": {
+              "x": 963,
+              "y": 475,
+              "width": 272,
+              "height": 181
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 272,
+              "height": 181
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "full": {
+            "file": "graphics/resources/sticker/wood-full.png",
+            "width": 354,
+            "height": 343,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 354,
+              "height": 343
+            },
+            "pivot": [
+              0.4985875706214689,
+              0.9504373177842566
+            ],
+            "sourceRect": {
+              "x": 5,
+              "y": 316,
+              "width": 322,
+              "height": 311
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 322,
+              "height": 311
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "half": {
+            "file": "graphics/resources/sticker/wood-half.png",
+            "width": 329,
+            "height": 335,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 329,
+              "height": 335
+            },
+            "pivot": [
+              0.49848024316109424,
+              0.9492537313432836
+            ],
+            "sourceRect": {
+              "x": 329,
+              "y": 316,
+              "width": 297,
+              "height": 303
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 297,
+              "height": 303
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "sparse": {
+            "file": "graphics/resources/sticker/wood-sparse.png",
+            "width": 315,
+            "height": 341,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 315,
+              "height": 341
+            },
+            "pivot": [
+              0.4984126984126984,
+              0.9501466275659824
+            ],
+            "sourceRect": {
+              "x": 640,
+              "y": 311,
+              "width": 283,
+              "height": 309
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 283,
+              "height": 309
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "empty": {
+            "file": "graphics/resources/sticker/wood-empty.png",
+            "width": 317,
+            "height": 223,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 317,
+              "height": 223
+            },
+            "pivot": [
+              0.49842271293375395,
+              0.9237668161434978
+            ],
+            "sourceRect": {
+              "x": 955,
+              "y": 430,
+              "width": 285,
+              "height": 191
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 285,
+              "height": 191
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "relic": {
+      "displayName": "North-star monument",
+      "styles": {
+        "toon": {
+          "neutral": {
+            "file": "graphics/resources/toon/relic-neutral.png",
+            "width": 274,
+            "height": 320,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 274,
+              "height": 320
+            },
+            "pivot": [
+              0.4981751824817518,
+              0.946875
+            ],
+            "sourceRect": {
+              "x": 47,
+              "y": 660,
+              "width": 242,
+              "height": 288
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 242,
+              "height": 288
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/toon/relic-contested.png",
+            "width": 285,
+            "height": 313,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 285,
+              "height": 313
+            },
+            "pivot": [
+              0.4982456140350877,
+              0.9456869009584664
+            ],
+            "sourceRect": {
+              "x": 358,
+              "y": 660,
+              "width": 253,
+              "height": 281
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 253,
+              "height": 281
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/toon/relic-captured.png",
+            "width": 278,
+            "height": 323,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 278,
+              "height": 323
+            },
+            "pivot": [
+              0.4982014388489209,
+              0.9473684210526315
+            ],
+            "sourceRect": {
+              "x": 674,
+              "y": 660,
+              "width": 246,
+              "height": 291
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 246,
+              "height": 291
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/toon/relic-inactive.png",
+            "width": 258,
+            "height": 321,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 258,
+              "height": 321
+            },
+            "pivot": [
+              0.49806201550387597,
+              0.9470404984423676
+            ],
+            "sourceRect": {
+              "x": 994,
+              "y": 660,
+              "width": 226,
+              "height": 289
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 226,
+              "height": 289
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "neutral": {
+            "file": "graphics/resources/realistic/relic-neutral.png",
+            "width": 264,
+            "height": 315,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 264,
+              "height": 315
+            },
+            "pivot": [
+              0.4981060606060606,
+              0.946031746031746
+            ],
+            "sourceRect": {
+              "x": 55,
+              "y": 657,
+              "width": 232,
+              "height": 283
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 232,
+              "height": 283
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/realistic/relic-contested.png",
+            "width": 324,
+            "height": 313,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 324,
+              "height": 313
+            },
+            "pivot": [
+              0.4984567901234568,
+              0.9456869009584664
+            ],
+            "sourceRect": {
+              "x": 339,
+              "y": 657,
+              "width": 292,
+              "height": 281
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 292,
+              "height": 281
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/realistic/relic-captured.png",
+            "width": 299,
+            "height": 314,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 299,
+              "height": 314
+            },
+            "pivot": [
+              0.4983277591973244,
+              0.945859872611465
+            ],
+            "sourceRect": {
+              "x": 654,
+              "y": 657,
+              "width": 267,
+              "height": 282
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 267,
+              "height": 282
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/realistic/relic-inactive.png",
+            "width": 258,
+            "height": 318,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 258,
+              "height": 318
+            },
+            "pivot": [
+              0.49806201550387597,
+              0.9465408805031447
+            ],
+            "sourceRect": {
+              "x": 980,
+              "y": 656,
+              "width": 226,
+              "height": 286
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 226,
+              "height": 286
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "neutral": {
+            "file": "graphics/resources/sticker/relic-neutral.png",
+            "width": 305,
+            "height": 364,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 364
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.9532967032967034
+            ],
+            "sourceRect": {
+              "x": 19,
+              "y": 620,
+              "width": 273,
+              "height": 332
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 332
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "contested": {
+            "file": "graphics/resources/sticker/relic-contested.png",
+            "width": 314,
+            "height": 365,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 314,
+              "height": 365
+            },
+            "pivot": [
+              0.4984076433121019,
+              0.9534246575342465
+            ],
+            "sourceRect": {
+              "x": 333,
+              "y": 618,
+              "width": 282,
+              "height": 333
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 282,
+              "height": 333
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "captured": {
+            "file": "graphics/resources/sticker/relic-captured.png",
+            "width": 346,
+            "height": 366,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 346,
+              "height": 366
+            },
+            "pivot": [
+              0.4985549132947977,
+              0.953551912568306
+            ],
+            "sourceRect": {
+              "x": 638,
+              "y": 618,
+              "width": 314,
+              "height": 334
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 314,
+              "height": 334
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "inactive": {
+            "file": "graphics/resources/sticker/relic-inactive.png",
+            "width": 305,
+            "height": 365,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 365
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.9534246575342465
+            ],
+            "sourceRect": {
+              "x": 964,
+              "y": 619,
+              "width": 273,
+              "height": 333
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 333
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "camp": {
+      "displayName": "Mischievous toy camp",
+      "styles": {
+        "toon": {
+          "guarded": {
+            "file": "graphics/resources/toon/camp-guarded.png",
+            "width": 322,
+            "height": 280,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 322,
+              "height": 280
+            },
+            "pivot": [
+              0.4984472049689441,
+              0.9392857142857143
+            ],
+            "sourceRect": {
+              "x": 33,
+              "y": 969,
+              "width": 290,
+              "height": 248
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 290,
+              "height": 248
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/toon/camp-cleared.png",
+            "width": 312,
+            "height": 242,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 312,
+              "height": 242
+            },
+            "pivot": [
+              0.4983974358974359,
+              0.9297520661157025
+            ],
+            "sourceRect": {
+              "x": 360,
+              "y": 1012,
+              "width": 280,
+              "height": 210
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 280,
+              "height": 210
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "guarded": {
+            "file": "graphics/resources/realistic/camp-guarded.png",
+            "width": 342,
+            "height": 303,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 342,
+              "height": 303
+            },
+            "pivot": [
+              0.49853801169590645,
+              0.9438943894389439
+            ],
+            "sourceRect": {
+              "x": 25,
+              "y": 937,
+              "width": 310,
+              "height": 271
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 310,
+              "height": 271
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/realistic/camp-cleared.png",
+            "width": 320,
+            "height": 236,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 236
+            },
+            "pivot": [
+              0.4984375,
+              0.9279661016949152
+            ],
+            "sourceRect": {
+              "x": 341,
+              "y": 1000,
+              "width": 288,
+              "height": 204
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 288,
+              "height": 204
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "guarded": {
+            "file": "graphics/resources/sticker/camp-guarded.png",
+            "width": 366,
+            "height": 326,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 366,
+              "height": 326
+            },
+            "pivot": [
+              0.49863387978142076,
+              0.9478527607361963
+            ],
+            "sourceRect": {
+              "x": 0,
+              "y": 946,
+              "width": 334,
+              "height": 294
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 334,
+              "height": 294
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          },
+          "cleared": {
+            "file": "graphics/resources/sticker/camp-cleared.png",
+            "width": 332,
+            "height": 265,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 332,
+              "height": 265
+            },
+            "pivot": [
+              0.49849397590361444,
+              0.9358490566037736
+            ],
+            "sourceRect": {
+              "x": 334,
+              "y": 999,
+              "width": 300,
+              "height": 233
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 300,
+              "height": 233
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    }
+  },
+  "harvestCues": {
+    "mining": {
+      "displayName": "mining",
+      "styles": {
+        "toon": {
+          "cue": {
+            "file": "graphics/resources/toon/mining-cue.png",
+            "width": 291,
+            "height": 277,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 291,
+              "height": 277
+            },
+            "pivot": [
+              0.49828178694158076,
+              0.9386281588447654
+            ],
+            "sourceRect": {
+              "x": 670,
+              "y": 980,
+              "width": 259,
+              "height": 245
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 259,
+              "height": 245
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "cue": {
+            "file": "graphics/resources/realistic/mining-cue.png",
+            "width": 277,
+            "height": 262,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 277,
+              "height": 262
+            },
+            "pivot": [
+              0.4981949458483754,
+              0.9351145038167938
+            ],
+            "sourceRect": {
+              "x": 676,
+              "y": 979,
+              "width": 245,
+              "height": 230
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 245,
+              "height": 230
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "cue": {
+            "file": "graphics/resources/sticker/mining-cue.png",
+            "width": 320,
+            "height": 319,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 320,
+              "height": 319
+            },
+            "pivot": [
+              0.4984375,
+              0.9467084639498433
+            ],
+            "sourceRect": {
+              "x": 643,
+              "y": 947,
+              "width": 288,
+              "height": 287
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 288,
+              "height": 287
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    },
+    "chopping": {
+      "displayName": "chopping",
+      "styles": {
+        "toon": {
+          "cue": {
+            "file": "graphics/resources/toon/chopping-cue.png",
+            "width": 292,
+            "height": 273,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 292,
+              "height": 273
+            },
+            "pivot": [
+              0.4982876712328767,
+              0.9377289377289377
+            ],
+            "sourceRect": {
+              "x": 978,
+              "y": 979,
+              "width": 260,
+              "height": 241
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 260,
+              "height": 241
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "realistic": {
+          "cue": {
+            "file": "graphics/resources/realistic/chopping-cue.png",
+            "width": 305,
+            "height": 256,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 305,
+              "height": 256
+            },
+            "pivot": [
+              0.49836065573770494,
+              0.93359375
+            ],
+            "sourceRect": {
+              "x": 962,
+              "y": 982,
+              "width": 273,
+              "height": 224
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 273,
+              "height": 224
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        },
+        "sticker": {
+          "cue": {
+            "file": "graphics/resources/sticker/chopping-cue.png",
+            "width": 323,
+            "height": 327,
+            "pixelRect": {
+              "x": 0,
+              "y": 0,
+              "width": 323,
+              "height": 327
+            },
+            "pivot": [
+              0.4984520123839009,
+              0.9480122324159022
+            ],
+            "sourceRect": {
+              "x": 963,
+              "y": 943,
+              "width": 291,
+              "height": 295
+            },
+            "sourceDimensions": {
+              "width": 1254,
+              "height": 1254
+            },
+            "originalSize": {
+              "width": 291,
+              "height": 295
+            },
+            "canvasPadding": 16,
+            "trimOffset": {
+              "x": -16,
+              "y": -16
+            },
+            "extraction": "Exact RGBA alpha-connected source components, isolated without painting or resampling",
+            "referenceCellSize": {
+              "width": 313.5,
+              "height": 313.5
+            },
+            "state": "static",
+            "authoredAnimation": false
+          }
+        }
+      }
+    }
+  }
+}

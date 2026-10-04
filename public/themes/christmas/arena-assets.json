@@ -1,0 +1,284 @@
+{
+  "schemaVersion": 1,
+  "scope": "Mini-game visual asset kit; gameplay mode not implemented",
+  "backgrounds": {
+    "toon": "graphics/environment-toon.png",
+    "realistic": "graphics/environment-realistic.png",
+    "sticker": {
+      "file": "graphics/environment-toon.png",
+      "fallbackStyle": "toon",
+      "reason": "Sticker characters use existing decorative toon arena until dedicated backdrop is authored"
+    }
+  },
+  "pickups": {
+    "health": {
+      "file": "graphics/arena/pickups/health.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "shield": {
+      "file": "graphics/arena/pickups/shield.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "ammo": {
+      "file": "graphics/arena/pickups/ammo.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "speed": {
+      "file": "graphics/arena/pickups/speed.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "weapon": {
+      "file": "graphics/arena/pickups/weapon.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "turret": {
+      "file": "graphics/arena/pickups/turret.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "crate": {
+      "file": "graphics/arena/pickups/crate.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "revive": {
+      "file": "graphics/arena/pickups/revive.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    },
+    "crown": {
+      "file": "graphics/arena/pickups/crown.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ],
+      "source": "Original native vector arena pickup",
+      "animation": {
+        "kind": "cosmetic-bob",
+        "amplitudePixels": 2,
+        "periodSeconds": 1.4
+      },
+      "accounting": "Arena-only visual ID; no base-game economy introduced"
+    }
+  },
+  "markers": {
+    "safe-zone": {
+      "file": "graphics/arena/markers/safe-zone.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "danger-zone": {
+      "file": "graphics/arena/markers/danger-zone.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "drop": {
+      "file": "graphics/arena/markers/drop.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "spawn": {
+      "file": "graphics/arena/markers/spawn.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "elimination": {
+      "file": "graphics/arena/markers/elimination.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "winner": {
+      "file": "graphics/arena/markers/winner.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    },
+    "offscreen-warning": {
+      "file": "graphics/arena/markers/offscreen-warning.svg",
+      "dimensions": [
+        128,
+        128
+      ],
+      "pivot": [
+        0.5,
+        0.5
+      ]
+    }
+  },
+  "zone": {
+    "renderer": "FrontierLivingWorld.drawArenaZone",
+    "safeColor": "#7ce4ba",
+    "dangerColor": "#ef526a",
+    "blend": "normal",
+    "edgeWidthPixels": 3,
+    "reducedMotion": "Static edge and gentle outside tint",
+    "collisionSource": "Mini-game simulation owns playable bounds; background does not"
+  },
+  "sourceUnits": "gameAssets.units canonical roster",
+  "sourceEffects": "gameAssets.effects",
+  "supportedFormats": [
+    "png",
+    "svg"
+  ],
+  "intendedModes": [
+    "solo-arena",
+    "squad-arena",
+    "survival"
+  ],
+  "missingGameplay": [
+    "rules",
+    "loot spawning",
+    "shrinking zone damage",
+    "matchmaking/networking",
+    "scoring",
+    "round lifecycle"
+  ]
+}

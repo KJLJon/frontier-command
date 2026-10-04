@@ -5,27 +5,35 @@
     {
       "id": "space",
       "name": "Orbital Rush",
-      "manifest": "space/theme.json"
+      "manifest": "space/theme.json",
+      "gameAssets": "space/game-assets.json",
+      "arenaAssets": "space/arena-assets.json"
     },
     {
       "id": "mythic",
       "name": "Runestone Rally",
-      "manifest": "mythic/theme.json"
+      "manifest": "mythic/theme.json",
+      "gameAssets": "mythic/game-assets.json",
+      "arenaAssets": "mythic/arena-assets.json"
     },
     {
       "id": "old-time",
       "name": "Brass Battalion",
-      "manifest": "old-time/theme.json"
+      "manifest": "old-time/theme.json",
+      "arenaAssets": "old-time/arena-assets.json"
     },
     {
       "id": "christmas",
       "name": "North Pole Dash",
-      "manifest": "christmas/theme.json"
+      "manifest": "christmas/theme.json",
+      "gameAssets": "christmas/game-assets.json",
+      "arenaAssets": "christmas/arena-assets.json"
     },
     {
       "id": "halloween",
       "name": "Midnight Mayhem",
-      "manifest": "halloween/theme.json"
+      "manifest": "halloween/theme.json",
+      "arenaAssets": "halloween/arena-assets.json"
     }
   ],
   "styles": [
@@ -66,5 +74,5 @@
   "musicGuide": "MUSIC-GUIDE.md",
   "defaultTheme": "space",
   "defaultStyle": "toon",
-  "snapshot": "5d51ea0040b34c0a"
+  "snapshot": "7aee90a655d93b98"
 }
