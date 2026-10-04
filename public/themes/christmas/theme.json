@@ -1,0 +1,366 @@
+{
+  "schemaVersion": 1,
+  "id": "christmas",
+  "name": "North Pole Dash",
+  "palette": {
+    "background": "#183c39",
+    "accent": "#7ce4ba",
+    "secondary": "#ef526a"
+  },
+  "factions": [
+    {
+      "id": "azure",
+      "color": "#42baff",
+      "emblem": "diamond"
+    },
+    {
+      "id": "ember",
+      "color": "#ff6354",
+      "emblem": "triangle"
+    },
+    {
+      "id": "jade",
+      "color": "#63df9a",
+      "emblem": "circle"
+    },
+    {
+      "id": "violet",
+      "color": "#bd83ff",
+      "emblem": "square"
+    }
+  ],
+  "styles": {
+    "toon": {
+      "atlas": "../shared/units-toon.png",
+      "frames": {
+        "scout": {
+          "pixelRect": {
+            "x": 25,
+            "y": 832,
+            "width": 240,
+            "height": 259
+          }
+        },
+        "ranged": {
+          "pixelRect": {
+            "x": 289,
+            "y": 832,
+            "width": 260,
+            "height": 256
+          }
+        },
+        "heavy": {
+          "pixelRect": {
+            "x": 560,
+            "y": 839,
+            "width": 282,
+            "height": 258
+          }
+        },
+        "commander": {
+          "pixelRect": {
+            "x": 845,
+            "y": 830,
+            "width": 277,
+            "height": 270
+          }
+        }
+      }
+    },
+    "realistic": {
+      "atlas": "../shared/units-realistic.png",
+      "frames": {
+        "scout": {
+          "pixelRect": {
+            "x": 40,
+            "y": 841,
+            "width": 215,
+            "height": 267
+          }
+        },
+        "ranged": {
+          "pixelRect": {
+            "x": 280,
+            "y": 850,
+            "width": 255,
+            "height": 242
+          }
+        },
+        "heavy": {
+          "pixelRect": {
+            "x": 544,
+            "y": 846,
+            "width": 286,
+            "height": 260
+          }
+        },
+        "commander": {
+          "pixelRect": {
+            "x": 838,
+            "y": 850,
+            "width": 270,
+            "height": 260
+          }
+        }
+      }
+    }
+  },
+  "sprites": {
+    "scout": {
+      "displayName": "Elf scout",
+      "frame": {
+        "column": 0,
+        "row": 3
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "ranged": {
+      "displayName": "Candy archer",
+      "frame": {
+        "column": 1,
+        "row": 3
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "heavy": {
+      "displayName": "Snow guardian",
+      "frame": {
+        "column": 2,
+        "row": 3
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "commander": {
+      "displayName": "Santa",
+      "frame": {
+        "column": 3,
+        "row": 3
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    }
+  },
+  "atlas": {
+    "columns": 4,
+    "rows": 5,
+    "coordinates": "normalized grid; resolve actual image dimensions at load time",
+    "padding": "Keep cell padding; no trimming without preserving pivot"
+  },
+  "terrain": "graphics/terrain-tile.svg",
+  "models": {
+    "outpost": "models/outpost.gltf",
+    "resource": "models/resource.gltf",
+    "scout": "models/scout.gltf",
+    "heavy": "models/heavy.gltf"
+  },
+  "audio": {
+    "music": {
+      "file": "audio/music-loop.wav",
+      "bpm": 148,
+      "bars": 8,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 572108,
+      "durationSeconds": 12.97297052154195,
+      "gain": 0.35
+    },
+    "effects": {
+      "select": {
+        "file": "audio/select.wav",
+        "gain": 0.65
+      },
+      "move": {
+        "file": "audio/move.wav",
+        "gain": 0.65
+      },
+      "attack": {
+        "file": "audio/attack.wav",
+        "gain": 0.65
+      },
+      "impact": {
+        "file": "audio/impact.wav",
+        "gain": 0.65
+      },
+      "spawn": {
+        "file": "audio/spawn.wav",
+        "gain": 0.65
+      },
+      "collect": {
+        "file": "audio/collect.wav",
+        "gain": 0.65
+      },
+      "victory": {
+        "file": "audio/victory.wav",
+        "gain": 0.65
+      },
+      "defeat": {
+        "file": "audio/defeat.wav",
+        "gain": 0.65
+      },
+      "ui-confirm": {
+        "file": "audio/ui-confirm.wav",
+        "gain": 0.65
+      },
+      "ui-back": {
+        "file": "audio/ui-back.wav",
+        "gain": 0.65
+      }
+    },
+    "format": "PCM 16-bit mono 44100 Hz",
+    "combatMusic": {
+      "file": "audio/music-combat.wav",
+      "bpm": 148,
+      "bars": 24,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 1716324,
+      "durationSeconds": 38.91891156462585,
+      "gain": 0.3,
+      "channels": 1
+    },
+    "ambientMusic": {
+      "file": "audio/music-background.wav",
+      "title": "Workshop at Snowfall",
+      "bpm": 120,
+      "bars": 32,
+      "beatsPerBar": 4,
+      "channels": 2,
+      "sampleRate": 44100,
+      "loopStartSample": 0,
+      "loopEndSample": 2822400,
+      "durationSeconds": 64,
+      "gain": 0.35,
+      "description": "Bright glockenspiel and chime melody, sleigh-bell jingles, warm strings and pizzicato accompaniment in major harmony; original festive music without quoted carols.",
+      "source": "Original deterministic synthesized composition; no recorded or quoted music",
+      "loopNotes": "Loop frame bounds count stereo frames, not interleaved channel samples. Use decoded buffers for sample-accurate looping."
+    }
+  },
+  "gameplay": {
+    "override": false
+  },
+  "environments": {
+    "toon": "graphics/environment-toon.png",
+    "realistic": "graphics/environment-realistic.png"
+  },
+  "props": {
+    "atlas": "graphics/props-toon.png",
+    "columns": 3,
+    "rows": 2,
+    "entries": {
+      "hq": {
+        "column": 0,
+        "row": 0,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Santa headquarters",
+        "pixelRect": {
+          "x": 0,
+          "y": 0,
+          "width": 535,
+          "height": 550
+        }
+      },
+      "barracks": {
+        "column": 1,
+        "row": 0,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Elf workshop barracks",
+        "pixelRect": {
+          "x": 550,
+          "y": 90,
+          "width": 525,
+          "height": 465
+        }
+      },
+      "tower": {
+        "column": 2,
+        "row": 0,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Candy defense tower",
+        "pixelRect": {
+          "x": 1150,
+          "y": 0,
+          "width": 340,
+          "height": 555
+        }
+      },
+      "resource": {
+        "column": 0,
+        "row": 1,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Magical gift resource",
+        "pixelRect": {
+          "x": 0,
+          "y": 565,
+          "width": 525,
+          "height": 459
+        }
+      },
+      "obstacle": {
+        "column": 1,
+        "row": 1,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Snow and ice cover",
+        "pixelRect": {
+          "x": 530,
+          "y": 555,
+          "width": 485,
+          "height": 469
+        }
+      },
+      "transport": {
+        "column": 2,
+        "row": 1,
+        "pivot": [
+          0.5,
+          0.88
+        ],
+        "displayName": "Present sleigh transport",
+        "pixelRect": {
+          "x": 1050,
+          "y": 545,
+          "width": 486,
+          "height": 479
+        }
+      }
+    },
+    "coordinates": "Explicit pixelRect overrides nominal grid coordinates; source 1536x1024"
+  },
+  "icons": {
+    "attack": "graphics/icons/attack.svg",
+    "move": "graphics/icons/move.svg",
+    "defend": "graphics/icons/defend.svg",
+    "resource": "graphics/icons/resource.svg",
+    "ability": "graphics/icons/ability.svg",
+    "victory": "graphics/icons/victory.svg"
+  }
+}

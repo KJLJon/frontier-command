@@ -1,0 +1,274 @@
+{
+  "schemaVersion": 1,
+  "id": "old-time",
+  "name": "Brass Battalion",
+  "palette": {
+    "background": "#362b26",
+    "accent": "#f3be68",
+    "secondary": "#69c3bd"
+  },
+  "factions": [
+    {
+      "id": "azure",
+      "color": "#42baff",
+      "emblem": "diamond"
+    },
+    {
+      "id": "ember",
+      "color": "#ff6354",
+      "emblem": "triangle"
+    },
+    {
+      "id": "jade",
+      "color": "#63df9a",
+      "emblem": "circle"
+    },
+    {
+      "id": "violet",
+      "color": "#bd83ff",
+      "emblem": "square"
+    }
+  ],
+  "styles": {
+    "toon": {
+      "atlas": "../shared/units-toon.png"
+    },
+    "realistic": {
+      "atlas": "../shared/units-realistic.png"
+    }
+  },
+  "sprites": {
+    "scout": {
+      "displayName": "Courier",
+      "frame": {
+        "column": 0,
+        "row": 2
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "ranged": {
+      "displayName": "Musketeer",
+      "frame": {
+        "column": 1,
+        "row": 2
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "heavy": {
+      "displayName": "Brass automaton",
+      "frame": {
+        "column": 2,
+        "row": 2
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "commander": {
+      "displayName": "Officer",
+      "frame": {
+        "column": 3,
+        "row": 2
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    }
+  },
+  "atlas": {
+    "columns": 4,
+    "rows": 5,
+    "coordinates": "normalized grid; resolve actual image dimensions at load time",
+    "padding": "Keep cell padding; no trimming without preserving pivot"
+  },
+  "terrain": "graphics/terrain-tile.svg",
+  "models": {
+    "outpost": "models/outpost.gltf",
+    "resource": "models/resource.gltf",
+    "scout": "models/scout.gltf",
+    "heavy": "models/heavy.gltf"
+  },
+  "audio": {
+    "music": {
+      "file": "audio/music-loop.wav",
+      "bpm": 140,
+      "bars": 8,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 604800,
+      "durationSeconds": 13.714285714285714,
+      "gain": 0.35
+    },
+    "effects": {
+      "select": {
+        "file": "audio/select.wav",
+        "gain": 0.65
+      },
+      "move": {
+        "file": "audio/move.wav",
+        "gain": 0.65
+      },
+      "attack": {
+        "file": "audio/attack.wav",
+        "gain": 0.65
+      },
+      "impact": {
+        "file": "audio/impact.wav",
+        "gain": 0.65
+      },
+      "spawn": {
+        "file": "audio/spawn.wav",
+        "gain": 0.65
+      },
+      "collect": {
+        "file": "audio/collect.wav",
+        "gain": 0.65
+      },
+      "victory": {
+        "file": "audio/victory.wav",
+        "gain": 0.65
+      },
+      "defeat": {
+        "file": "audio/defeat.wav",
+        "gain": 0.65
+      },
+      "ui-confirm": {
+        "file": "audio/ui-confirm.wav",
+        "gain": 0.65
+      },
+      "ui-back": {
+        "file": "audio/ui-back.wav",
+        "gain": 0.65
+      }
+    },
+    "format": "PCM 16-bit mono 44100 Hz",
+    "combatMusic": {
+      "file": "audio/music-combat.wav",
+      "bpm": 144,
+      "bars": 24,
+      "beatsPerBar": 4,
+      "durationSeconds": 40,
+      "loopStartSample": 0,
+      "loopEndSample": 1764000,
+      "gain": 0.32,
+      "channels": 1,
+      "sampleRate": 44100
+    },
+    "ambientMusic": {
+      "file": "audio/music-background.wav",
+      "title": "Brass & Steam Promenade",
+      "bpm": 116,
+      "bars": 32,
+      "beatsPerBar": 4,
+      "channels": 2,
+      "sampleRate": 44100,
+      "loopStartSample": 0,
+      "loopEndSample": 2919724,
+      "durationSeconds": 66.20689342403628,
+      "gain": 0.35,
+      "description": "Playful brass and clarinet, alternating oom-pah bass, brushed snare and clockwork ticks; an original turn-of-the-century marching promenade.",
+      "source": "Original deterministic synthesized composition; no recorded or quoted music",
+      "loopNotes": "Loop frame bounds count stereo frames, not interleaved channel samples. Use decoded buffers for sample-accurate looping."
+    }
+  },
+  "gameplay": {
+    "override": false
+  },
+  "environments": {
+    "toon": "graphics/environment-toon.png",
+    "realistic": "graphics/environment-realistic.png"
+  },
+  "props": {
+    "atlas": "graphics/props-toon.png",
+    "columns": 3,
+    "rows": 2,
+    "entries": {
+      "hq": {
+        "column": 0,
+        "row": 0,
+        "displayName": "Clockwork Depot",
+        "pixelRect": {
+          "x": 0,
+          "y": 0,
+          "width": 513,
+          "height": 535
+        }
+      },
+      "barracks": {
+        "column": 1,
+        "row": 0,
+        "displayName": "Steam Workshop",
+        "pixelRect": {
+          "x": 535,
+          "y": 0,
+          "width": 489,
+          "height": 533
+        }
+      },
+      "tower": {
+        "column": 2,
+        "row": 0,
+        "displayName": "Brass Turret",
+        "pixelRect": {
+          "x": 1030,
+          "y": 38,
+          "width": 486,
+          "height": 471
+        }
+      },
+      "resource": {
+        "column": 0,
+        "row": 1,
+        "displayName": "Coal Cart",
+        "pixelRect": {
+          "x": 0,
+          "y": 553,
+          "width": 526,
+          "height": 471
+        }
+      },
+      "obstacle": {
+        "column": 1,
+        "row": 1,
+        "displayName": "Supply Crates",
+        "pixelRect": {
+          "x": 542,
+          "y": 536,
+          "width": 457,
+          "height": 488
+        }
+      },
+      "transport": {
+        "column": 2,
+        "row": 1,
+        "displayName": "Steam Locomotive",
+        "pixelRect": {
+          "x": 1000,
+          "y": 538,
+          "width": 536,
+          "height": 486
+        }
+      }
+    }
+  },
+  "icons": {
+    "attack": "graphics/icons/attack.svg",
+    "move": "graphics/icons/move.svg",
+    "defend": "graphics/icons/defend.svg",
+    "resource": "graphics/icons/resource.svg",
+    "ability": "graphics/icons/ability.svg",
+    "victory": "graphics/icons/victory.svg"
+  }
+}

@@ -1,0 +1,70 @@
+{
+  "schemaVersion": 1,
+  "presentationVersion": 2,
+  "themes": [
+    {
+      "id": "space",
+      "name": "Orbital Rush",
+      "manifest": "space/theme.json"
+    },
+    {
+      "id": "mythic",
+      "name": "Runestone Rally",
+      "manifest": "mythic/theme.json"
+    },
+    {
+      "id": "old-time",
+      "name": "Brass Battalion",
+      "manifest": "old-time/theme.json"
+    },
+    {
+      "id": "christmas",
+      "name": "North Pole Dash",
+      "manifest": "christmas/theme.json"
+    },
+    {
+      "id": "halloween",
+      "name": "Midnight Mayhem",
+      "manifest": "halloween/theme.json"
+    }
+  ],
+  "styles": [
+    "toon",
+    "realistic"
+  ],
+  "factions": [
+    {
+      "id": "azure",
+      "color": "#42baff",
+      "emblem": "diamond"
+    },
+    {
+      "id": "ember",
+      "color": "#ff6354",
+      "emblem": "triangle"
+    },
+    {
+      "id": "jade",
+      "color": "#63df9a",
+      "emblem": "circle"
+    },
+    {
+      "id": "violet",
+      "color": "#bd83ff",
+      "emblem": "square"
+    }
+  ],
+  "assetStatus": {
+    "unitArt": "40 static sprites across toon and realistic sheets, with six optional procedural motion states",
+    "environments": "Two illustrated battlefields per theme; decorative scenery",
+    "props": "Six toon prop roles per theme; explicit pixelRect crop overrides where supplied",
+    "icons": "Six native SVG action icons per theme",
+    "models": "Procedural low-poly props and proxy units; no rigs or textures",
+    "audio": "Original distinct 32-bar stereo background scores, 24-bar combat scores, short legacy loops and 50 effects"
+  },
+  "runtime": "shared/theme-runtime.js",
+  "musicGuide": "MUSIC-GUIDE.md",
+  "defaultTheme": "space",
+  "defaultStyle": "toon",
+  "snapshot": "5d51ea0040b34c0a"
+}

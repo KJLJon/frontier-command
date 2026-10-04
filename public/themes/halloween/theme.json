@@ -1,0 +1,238 @@
+{
+  "schemaVersion": 1,
+  "id": "halloween",
+  "name": "Midnight Mayhem",
+  "palette": {
+    "background": "#261b38",
+    "accent": "#ffae45",
+    "secondary": "#ba83ff"
+  },
+  "factions": [
+    {
+      "id": "azure",
+      "color": "#42baff",
+      "emblem": "diamond"
+    },
+    {
+      "id": "ember",
+      "color": "#ff6354",
+      "emblem": "triangle"
+    },
+    {
+      "id": "jade",
+      "color": "#63df9a",
+      "emblem": "circle"
+    },
+    {
+      "id": "violet",
+      "color": "#bd83ff",
+      "emblem": "square"
+    }
+  ],
+  "styles": {
+    "toon": {
+      "atlas": "../shared/units-toon.png"
+    },
+    "realistic": {
+      "atlas": "../shared/units-realistic.png"
+    }
+  },
+  "sprites": {
+    "scout": {
+      "displayName": "Bat scout",
+      "frame": {
+        "column": 0,
+        "row": 4
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "ranged": {
+      "displayName": "Pumpkin witch",
+      "frame": {
+        "column": 1,
+        "row": 4
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "heavy": {
+      "displayName": "Stitched guardian",
+      "frame": {
+        "column": 2,
+        "row": 4
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "commander": {
+      "displayName": "Vampire",
+      "frame": {
+        "column": 3,
+        "row": 4
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    }
+  },
+  "atlas": {
+    "columns": 4,
+    "rows": 5,
+    "coordinates": "normalized grid; resolve actual image dimensions at load time",
+    "padding": "Keep cell padding; no trimming without preserving pivot"
+  },
+  "terrain": "graphics/terrain-tile.svg",
+  "models": {
+    "outpost": "models/outpost.gltf",
+    "resource": "models/resource.gltf",
+    "scout": "models/scout.gltf",
+    "heavy": "models/heavy.gltf"
+  },
+  "audio": {
+    "music": {
+      "file": "audio/music-loop.wav",
+      "bpm": 142,
+      "bars": 8,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 596282,
+      "durationSeconds": 13.521133786848072,
+      "gain": 0.35
+    },
+    "effects": {
+      "select": {
+        "file": "audio/select.wav",
+        "gain": 0.65
+      },
+      "move": {
+        "file": "audio/move.wav",
+        "gain": 0.65
+      },
+      "attack": {
+        "file": "audio/attack.wav",
+        "gain": 0.65
+      },
+      "impact": {
+        "file": "audio/impact.wav",
+        "gain": 0.65
+      },
+      "spawn": {
+        "file": "audio/spawn.wav",
+        "gain": 0.65
+      },
+      "collect": {
+        "file": "audio/collect.wav",
+        "gain": 0.65
+      },
+      "victory": {
+        "file": "audio/victory.wav",
+        "gain": 0.65
+      },
+      "defeat": {
+        "file": "audio/defeat.wav",
+        "gain": 0.65
+      },
+      "ui-confirm": {
+        "file": "audio/ui-confirm.wav",
+        "gain": 0.65
+      },
+      "ui-back": {
+        "file": "audio/ui-back.wav",
+        "gain": 0.65
+      }
+    },
+    "format": "PCM 16-bit mono 44100 Hz",
+    "combatMusic": {
+      "file": "audio/music-combat.wav",
+      "bpm": 144,
+      "bars": 24,
+      "beatsPerBar": 4,
+      "durationSeconds": 40,
+      "loopStartSample": 0,
+      "loopEndSample": 1764000,
+      "gain": 0.35,
+      "channels": 1,
+      "sampleRate": 44100
+    },
+    "ambientMusic": {
+      "file": "audio/music-background.wav",
+      "title": "The Midnight Clock",
+      "bpm": 96,
+      "bars": 32,
+      "beatsPerBar": 4,
+      "channels": 2,
+      "sampleRate": 44100,
+      "loopStartSample": 0,
+      "loopEndSample": 3528000,
+      "durationSeconds": 80,
+      "gain": 0.35,
+      "description": "Hollow organ, eerie music-box melody, chromatic turns, low toms and soft spectral wind; playful spooky atmosphere without gore or borrowed tunes.",
+      "source": "Original deterministic synthesized composition; no recorded or quoted music",
+      "loopNotes": "Loop frame bounds count stereo frames, not interleaved channel samples. Use decoded buffers for sample-accurate looping."
+    }
+  },
+  "gameplay": {
+    "override": false
+  },
+  "environments": {
+    "toon": "graphics/environment-toon.png",
+    "realistic": "graphics/environment-realistic.png"
+  },
+  "props": {
+    "atlas": "graphics/props-toon.png",
+    "columns": 3,
+    "rows": 2,
+    "entries": {
+      "hq": {
+        "column": 0,
+        "row": 0,
+        "displayName": "Haunted headquarters"
+      },
+      "barracks": {
+        "column": 1,
+        "row": 0,
+        "displayName": "Bat barracks"
+      },
+      "tower": {
+        "column": 2,
+        "row": 0,
+        "displayName": "Pumpkin watchtower"
+      },
+      "resource": {
+        "column": 0,
+        "row": 1,
+        "displayName": "Candy crystals"
+      },
+      "obstacle": {
+        "column": 1,
+        "row": 1,
+        "displayName": "Lantern tree"
+      },
+      "transport": {
+        "column": 2,
+        "row": 1,
+        "displayName": "Pumpkin carriage"
+      }
+    }
+  },
+  "icons": {
+    "attack": "graphics/icons/attack.svg",
+    "move": "graphics/icons/move.svg",
+    "defend": "graphics/icons/defend.svg",
+    "resource": "graphics/icons/resource.svg",
+    "ability": "graphics/icons/ability.svg",
+    "victory": "graphics/icons/victory.svg"
+  }
+}

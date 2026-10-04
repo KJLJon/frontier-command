@@ -1,0 +1,273 @@
+{
+  "schemaVersion": 1,
+  "id": "mythic",
+  "name": "Runestone Rally",
+  "palette": {
+    "background": "#202c25",
+    "accent": "#9be46c",
+    "secondary": "#e3a7ff"
+  },
+  "factions": [
+    {
+      "id": "azure",
+      "color": "#42baff",
+      "emblem": "diamond"
+    },
+    {
+      "id": "ember",
+      "color": "#ff6354",
+      "emblem": "triangle"
+    },
+    {
+      "id": "jade",
+      "color": "#63df9a",
+      "emblem": "circle"
+    },
+    {
+      "id": "violet",
+      "color": "#bd83ff",
+      "emblem": "square"
+    }
+  ],
+  "styles": {
+    "toon": {
+      "atlas": "../shared/units-toon.png"
+    },
+    "realistic": {
+      "atlas": "../shared/units-realistic.png"
+    }
+  },
+  "sprites": {
+    "scout": {
+      "displayName": "Ranger",
+      "frame": {
+        "column": 0,
+        "row": 1
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "ranged": {
+      "displayName": "Mage",
+      "frame": {
+        "column": 1,
+        "row": 1
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "heavy": {
+      "displayName": "Stone golem",
+      "frame": {
+        "column": 2,
+        "row": 1
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    },
+    "commander": {
+      "displayName": "Crowned knight",
+      "frame": {
+        "column": 3,
+        "row": 1
+      },
+      "pivot": [
+        0.5,
+        0.85
+      ],
+      "animation": "static"
+    }
+  },
+  "atlas": {
+    "columns": 4,
+    "rows": 5,
+    "coordinates": "normalized grid; resolve actual image dimensions at load time",
+    "padding": "Keep cell padding; no trimming without preserving pivot"
+  },
+  "terrain": "graphics/terrain-tile.svg",
+  "models": {
+    "outpost": "models/outpost.gltf",
+    "resource": "models/resource.gltf",
+    "scout": "models/scout.gltf",
+    "heavy": "models/heavy.gltf"
+  },
+  "audio": {
+    "music": {
+      "file": "audio/music-loop.wav",
+      "bpm": 132,
+      "bars": 8,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 641455,
+      "durationSeconds": 14.54546485260771,
+      "gain": 0.35
+    },
+    "effects": {
+      "select": {
+        "file": "audio/select.wav",
+        "gain": 0.65
+      },
+      "move": {
+        "file": "audio/move.wav",
+        "gain": 0.65
+      },
+      "attack": {
+        "file": "audio/attack.wav",
+        "gain": 0.65
+      },
+      "impact": {
+        "file": "audio/impact.wav",
+        "gain": 0.65
+      },
+      "spawn": {
+        "file": "audio/spawn.wav",
+        "gain": 0.65
+      },
+      "collect": {
+        "file": "audio/collect.wav",
+        "gain": 0.65
+      },
+      "victory": {
+        "file": "audio/victory.wav",
+        "gain": 0.65
+      },
+      "defeat": {
+        "file": "audio/defeat.wav",
+        "gain": 0.65
+      },
+      "ui-confirm": {
+        "file": "audio/ui-confirm.wav",
+        "gain": 0.65
+      },
+      "ui-back": {
+        "file": "audio/ui-back.wav",
+        "gain": 0.65
+      }
+    },
+    "format": "PCM 16-bit mono 44100 Hz",
+    "combatMusic": {
+      "file": "audio/music-combat.wav",
+      "bpm": 144,
+      "bars": 24,
+      "beatsPerBar": 4,
+      "loopStartSample": 0,
+      "loopEndSample": 1764000,
+      "durationSeconds": 40,
+      "gain": 0.3,
+      "description": "Original minor-mode bell, plucked bass and resonant percussion march; 24 bars"
+    },
+    "ambientMusic": {
+      "file": "audio/music-background.wav",
+      "title": "Lanterns of the Grove",
+      "bpm": 100,
+      "bars": 32,
+      "beatsPerBar": 4,
+      "channels": 2,
+      "sampleRate": 44100,
+      "loopStartSample": 0,
+      "loopEndSample": 3386880,
+      "durationSeconds": 76.8,
+      "gain": 0.35,
+      "description": "Harp arpeggios, breathy flute, soft string pads, frame drums and woodland rustle; a flowing original minor-mode fantasy melody.",
+      "source": "Original deterministic synthesized composition; no recorded or quoted music",
+      "loopNotes": "Loop frame bounds count stereo frames, not interleaved channel samples. Use decoded buffers for sample-accurate looping."
+    }
+  },
+  "gameplay": {
+    "override": false
+  },
+  "environments": {
+    "toon": "graphics/environment-toon.png",
+    "realistic": "graphics/environment-realistic.png"
+  },
+  "props": {
+    "atlas": "graphics/props-toon.png",
+    "columns": 3,
+    "rows": 2,
+    "entries": {
+      "hq": {
+        "column": 0,
+        "row": 0,
+        "pixelRect": {
+          "x": 30,
+          "y": 5,
+          "width": 515,
+          "height": 552
+        }
+      },
+      "barracks": {
+        "column": 1,
+        "row": 0,
+        "pixelRect": {
+          "x": 545,
+          "y": 40,
+          "width": 545,
+          "height": 512
+        }
+      },
+      "tower": {
+        "column": 2,
+        "row": 0,
+        "pixelRect": {
+          "x": 1120,
+          "y": 5,
+          "width": 370,
+          "height": 552
+        }
+      },
+      "resource": {
+        "column": 0,
+        "row": 1,
+        "pixelRect": {
+          "x": 10,
+          "y": 565,
+          "width": 500,
+          "height": 445
+        }
+      },
+      "obstacle": {
+        "column": 1,
+        "row": 1,
+        "pixelRect": {
+          "x": 520,
+          "y": 565,
+          "width": 530,
+          "height": 435
+        }
+      },
+      "transport": {
+        "column": 2,
+        "row": 1,
+        "pixelRect": {
+          "x": 1055,
+          "y": 560,
+          "width": 481,
+          "height": 445
+        }
+      }
+    },
+    "coordinates": "pixelRect overrides grid coordinates; rectangles verified against 1536x1024 source",
+    "padding": "Preserve transparent padding",
+    "pivot": [
+      0.5,
+      0.85
+    ]
+  },
+  "icons": {
+    "attack": "graphics/icons/attack.svg",
+    "move": "graphics/icons/move.svg",
+    "defend": "graphics/icons/defend.svg",
+    "resource": "graphics/icons/resource.svg",
+    "ability": "graphics/icons/ability.svg",
+    "victory": "graphics/icons/victory.svg"
+  }
+}
