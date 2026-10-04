@@ -265,7 +265,13 @@ export class ThemeManager {
   }
   private async image(url: string) {
     const data = await this.data(url),
-      blobUrl = URL.createObjectURL(new Blob([data]));
+      blobUrl = URL.createObjectURL(
+        new Blob([data], {
+          type: new URL(url).pathname.endsWith(".svg")
+            ? "image/svg+xml"
+            : "image/png",
+        }),
+      );
     try {
       const image = new Image();
       image.src = blobUrl;
@@ -277,6 +283,14 @@ export class ThemeManager {
   }
   async load(id: string, style: ThemeStyle): Promise<boolean> {
     const sequence = ++this.sequence;
+    if (this.active?.manifest.id === id && this.active.style === style) {
+      this.loading = false;
+      this.status =
+        this.active.manifest.name +
+        (this.active.warnings.length ? " · some assets unavailable" : "");
+      this.onChange?.();
+      return true;
+    }
     this.loading = true;
     this.status = "Loading theme…";
     this.onChange?.();
@@ -291,6 +305,7 @@ export class ThemeManager {
     }
     try {
       await this.init();
+      if (sequence !== this.sequence) return false;
       const entry = this.catalog!.themes.find((t) => t.id === id);
       if (!entry) throw Error("Unknown theme");
       const manifest = JSON.parse(
@@ -298,6 +313,7 @@ export class ThemeManager {
           await this.data(this.url(entry.manifest, "catalog.json")),
         ),
       ) as ThemeManifest;
+      if (sequence !== this.sequence) return false;
       if (manifest.id !== id || !manifest.styles[style])
         throw Error("Invalid theme manifest");
       this.status = "Preparing " + manifest.name + "…";
@@ -308,6 +324,7 @@ export class ThemeManager {
         this.image(url(manifest.props.atlas)),
         this.image(url(manifest.environments[style])),
       ]);
+      if (sequence !== this.sequence) return false;
       const units = {} as Record<Role, Sprite>;
       for (const role of ["scout", "ranged", "heavy", "commander"] as Role[]) {
         const sprite = manifest.sprites[role],
@@ -415,8 +432,10 @@ export class ThemeManager {
                 }
               });
           }
-          for (let i = 0; i < tasks.length; i += 4)
+          for (let i = 0; i < tasks.length; i += 4) {
+            if (sequence !== this.sequence) return false;
             await Promise.all(tasks.slice(i, i + 4).map((task) => task()));
+          }
         } catch {
           warnings.push("Expanded roster");
         }

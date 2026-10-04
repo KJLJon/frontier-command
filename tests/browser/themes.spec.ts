@@ -39,9 +39,11 @@ test("all ten presentations switch atomically during play and work offline", asy
           () =>
             page.evaluate(() => {
               const t = (window as any).frontier.themes;
-              return !t.loading && t.active
-                ? `${t.active.manifest.id}:${t.active.style}`
-                : "";
+              return t.loading
+                ? "Loading: " + t.status
+                : t.active
+                  ? `${t.active.manifest.id}:${t.active.style}`
+                  : "Fallback: " + t.lastError;
             }),
           { timeout: 30000 },
         )

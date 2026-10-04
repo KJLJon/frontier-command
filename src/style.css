@@ -1262,3 +1262,28 @@ body.has-update #ui {
     margin-top: 5px;
   }
 }
+
+/* Keep themed commander names from pushing strategy controls under the HUD. */
+@media (max-width: 600px) {
+  .bottom-hud {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+  .commander-card {
+    min-width: 0;
+    max-width: 100%;
+  }
+  .commander-card strong {
+    display: block;
+    font-size: 0.85rem;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+  }
+  .orders {
+    grid-column: 1 / -1;
+  }
+  .side-actions {
+    bottom: 140px;
+  }
+}

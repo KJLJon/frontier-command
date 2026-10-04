@@ -1,5 +1,7 @@
 # Theme integration and Rush Arena
 
+The canonical game checkout is `C:/Users/micro/OneDrive/Desktop/J5/dev/projects/game-Frontier-Command`, the folder configured by the Frontier Command project. The separate `theme-assets`, `assets`, and `tools` authoring directories are ignored by the game Git repository and preserved.
+
 The game consumes a read-only snapshot of the separate `theme-assets` repository. The current imported snapshot is recorded in `public/themes/catalog.json`; `work/theme-import.json` records hashes of source bytes. Never edit the external repository from this game checkout. Authoring folders, tools and its Git history are excluded from production.
 
 ## Playing
