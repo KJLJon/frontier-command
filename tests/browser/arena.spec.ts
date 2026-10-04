@@ -69,7 +69,23 @@ test("Rush Arena is playable, shows upgrades and results, and retries on desktop
   await expect(
     page.getByRole("heading", { name: "Your squad has fallen" }),
   ).toBeVisible();
+  await page.evaluate(() => {
+    const f = (window as any).frontier;
+    f.themes.event(
+      { type: "hit", source: f.sim.hero(0).id, target: f.sim.hero(0).id },
+      f.sim.time,
+    );
+  });
   await page.getByRole("button", { name: "Retry arena", exact: true }).click();
+  expect(
+    await page.evaluate(() => {
+      const f = (window as any).frontier;
+      return [
+        ...f.themes.attacks.values(),
+        ...[...f.themes.motions.values()].map((m: any) => m.time),
+      ].every((time) => time <= f.sim.time);
+    }),
+  ).toBe(true);
   expect(
     await page.evaluate(() => (window as any).frontier.sim.hero(0).hp),
   ).toBeGreaterThan(0);

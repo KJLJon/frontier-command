@@ -276,8 +276,6 @@ export class ThemeManager {
   private sequence = 0;
   private cacheFailed = false;
   private coreStore = new ThemeAssetStore();
-  private detailCache?: Promise<Cache>;
-  private detailWrites: Promise<void> = Promise.resolve();
   targets = new Map<number, { x: number; y: number }>();
   private positions = new Map<
     number,
@@ -303,19 +301,10 @@ export class ThemeManager {
       clearTimeout(timer);
     }
   }
-  private async fetchBytes(url: string, optional = false) {
-    let cache: Cache | undefined;
+  private async fetchBytes(url: string) {
     try {
-      // Download all worlds also stores optional files here for complete offline packs.
       const committed = await this.cacheOperation(this.coreStore.get(url));
       if (committed) return committed;
-      if (optional) {
-        cache = await this.cacheOperation(
-          (this.detailCache ??= caches.open("frontier-theme-detail:v1")),
-        );
-        const cached = await this.cacheOperation(cache.match(url));
-        if (cached) return await this.cacheOperation(cached.arrayBuffer());
-      }
     } catch {
       this.cacheFailed = true;
     }
@@ -324,34 +313,19 @@ export class ThemeManager {
       throw Error("Asset unavailable: " + new URL(url).pathname);
     const bytes = await response.arrayBuffer();
     try {
-      if (!optional) {
-        // Completion means the independent bytes are committed in a transaction.
-        await this.cacheOperation(this.coreStore.put(url, bytes), 2000);
-      } else if (cache) {
-        const store = cache;
-        const copy = new Response(bytes, {
-          headers: {
-            "Content-Type":
-              response.headers.get("Content-Type") ??
-              "application/octet-stream",
-          },
-        });
-        const write = this.detailWrites.then(() => store.put(url, copy));
-        this.detailWrites = write.catch(() => {});
-        await this.cacheOperation(write, 2000);
-      }
+      // All art uses committed independent bytes; the worker owns only its small shell.
+      await this.cacheOperation(this.coreStore.put(url, bytes), 2000);
     } catch {
       this.cacheFailed = true;
     }
     return bytes;
   }
-  async data(url: string, optional = false) {
-    const key = (optional ? "detail:" : "core:") + url;
-    let existing = this.bytes.get(key);
+  async data(url: string) {
+    let existing = this.bytes.get(url);
     if (!existing) {
-      existing = this.fetchBytes(url, optional);
-      this.bytes.set(key, existing);
-      existing.catch(() => this.bytes.delete(key));
+      existing = this.fetchBytes(url);
+      this.bytes.set(url, existing);
+      existing.catch(() => this.bytes.delete(url));
     }
     return existing;
   }
@@ -379,8 +353,8 @@ export class ThemeManager {
     url.searchParams.set("v", this.catalog!.snapshot);
     return url.href;
   }
-  private async image(url: string, optional = false) {
-    const data = await this.data(url, optional),
+  private async image(url: string) {
+    const data = await this.data(url),
       blobUrl = URL.createObjectURL(
         new Blob([data], {
           type: new URL(url).pathname.endsWith(".svg")
@@ -681,7 +655,7 @@ export class ThemeManager {
       if (!frame?.file || seen.has(this.key(frame))) return;
       seen.add(this.key(frame));
       jobs.push(async () => {
-        const image = await this.image(url(frame.file), true);
+        const image = await this.image(url(frame.file));
         try {
           const sprite = crop(
             image,
@@ -717,7 +691,7 @@ export class ThemeManager {
         jobs.push(async () => {
           theme.terrain.set(
             biome + ":" + category,
-            await this.image(url(frame.file), true),
+            await this.image(url(frame.file)),
           );
         });
       }
@@ -728,7 +702,7 @@ export class ThemeManager {
       entry.variants.forEach((sound, i) =>
         jobs.push(async () => {
           const name = category + ":" + i;
-          theme.audio[name] = await this.data(url(sound.file), true);
+          theme.audio[name] = await this.data(url(sound.file));
           theme.audioVariants[category].push(name);
         }),
       );
@@ -736,7 +710,7 @@ export class ThemeManager {
     for (const [name, frame] of Object.entries(extra.icons ?? {}))
       jobs.push(async () => {
         if (theme.icons[name]) return;
-        const bytes = await this.data(url(frame.file), true);
+        const bytes = await this.data(url(frame.file));
         theme.icons[name] = URL.createObjectURL(
           new Blob([bytes], { type: "image/svg+xml" }),
         );
@@ -842,6 +816,12 @@ export class ThemeManager {
       ? (this.active.manifest.props.entries[propRole(kind)]?.displayName ?? "")
       : this.active.manifest.sprites[unitRole(kind)].displayName;
   }
+  resetMotion() {
+    this.positions.clear();
+    this.attacks.clear();
+    this.motions.clear();
+    this.targets.clear();
+  }
   event(event: Event, time: number) {
     if (event.source !== undefined && event.type === "hit")
       this.attacks.set(event.source, time);
@@ -921,11 +901,17 @@ export class ThemeManager {
     }
     const attackTime = this.attacks.get(e.id);
     const aim = e.target !== undefined ? this.targets.get(e.target) : undefined;
-    if (attackTime !== undefined && time - attackTime < 0.5 && aim)
+    if (
+      attackTime !== undefined &&
+      time >= attackTime &&
+      time - attackTime < 0.5 &&
+      aim
+    )
       direction = facing(aim.x - e.x, aim.y - e.y);
     const animations =
       this.active.extra?.units[e.kind]?.styles[this.active.style]?.animations;
-    const attacking = attackTime !== undefined && time - attackTime < 0.5;
+    const attacking =
+      attackTime !== undefined && time >= attackTime && time - attackTime < 0.5;
     const animation = animations?.[attacking ? "attack" : "move"];
     const frame =
       !reduced &&

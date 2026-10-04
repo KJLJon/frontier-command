@@ -18,7 +18,18 @@ export class Renderer {
   zoom = 1;
   tile = 48;
   selected: number[] = [];
-  world?: Simulation;
+  private currentWorld?: Simulation;
+  get world() {
+    return this.currentWorld;
+  }
+  set world(value: Simulation | undefined) {
+    if (value === this.currentWorld) return;
+    this.currentWorld = value;
+    this.themes?.resetMotion();
+    this.particles = [];
+    this.bursts = [];
+    this.ghosts = [];
+  }
   editor?: MapData;
   reveal = false;
   reducedMotion = false;
