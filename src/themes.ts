@@ -1,3 +1,4 @@
+import { ThemeAssetStore } from "./theme-cache";
 import {
   facing,
   sampleAnimation,
@@ -274,9 +275,8 @@ export class ThemeManager {
   lastError = "";
   private sequence = 0;
   private cacheFailed = false;
-  private coreCache?: Promise<Cache>;
+  private coreStore = new ThemeAssetStore();
   private detailCache?: Promise<Cache>;
-  private coreWrites: Promise<void> = Promise.resolve();
   private detailWrites: Promise<void> = Promise.resolve();
   targets = new Map<number, { x: number; y: number }>();
   private positions = new Map<
@@ -306,12 +306,16 @@ export class ThemeManager {
   private async fetchBytes(url: string, optional = false) {
     let cache: Cache | undefined;
     try {
-      const opened = optional
-        ? (this.detailCache ??= caches.open("frontier-theme-detail:v1"))
-        : (this.coreCache ??= caches.open("frontier-theme-core:v1"));
-      cache = await this.cacheOperation(opened);
-      const cached = await this.cacheOperation(cache.match(url));
-      if (cached) return await this.cacheOperation(cached.arrayBuffer());
+      // Download all worlds also stores optional files here for complete offline packs.
+      const committed = await this.cacheOperation(this.coreStore.get(url));
+      if (committed) return committed;
+      if (optional) {
+        cache = await this.cacheOperation(
+          (this.detailCache ??= caches.open("frontier-theme-detail:v1")),
+        );
+        const cached = await this.cacheOperation(cache.match(url));
+        if (cached) return await this.cacheOperation(cached.arrayBuffer());
+      }
     } catch {
       this.cacheFailed = true;
     }
@@ -319,21 +323,21 @@ export class ThemeManager {
     if (!response.ok)
       throw Error("Asset unavailable: " + new URL(url).pathname);
     const bytes = await response.arrayBuffer();
-    // Store an independent body; a network response clone retains its download stream.
-    const copy = new Response(bytes, {
-      headers: {
-        "Content-Type":
-          response.headers.get("Content-Type") ?? "application/octet-stream",
-      },
-    });
     try {
-      if (cache) {
+      if (!optional) {
+        // Completion means the independent bytes are committed in a transaction.
+        await this.cacheOperation(this.coreStore.put(url, bytes), 2000);
+      } else if (cache) {
         const store = cache;
-        const write = (optional ? this.detailWrites : this.coreWrites).then(
-          () => store.put(url, copy),
-        );
-        if (optional) this.detailWrites = write.catch(() => {});
-        else this.coreWrites = write.catch(() => {});
+        const copy = new Response(bytes, {
+          headers: {
+            "Content-Type":
+              response.headers.get("Content-Type") ??
+              "application/octet-stream",
+          },
+        });
+        const write = this.detailWrites.then(() => store.put(url, copy));
+        this.detailWrites = write.catch(() => {});
         await this.cacheOperation(write, 2000);
       }
     } catch {
@@ -342,11 +346,12 @@ export class ThemeManager {
     return bytes;
   }
   async data(url: string, optional = false) {
-    let existing = this.bytes.get(url);
+    const key = (optional ? "detail:" : "core:") + url;
+    let existing = this.bytes.get(key);
     if (!existing) {
       existing = this.fetchBytes(url, optional);
-      this.bytes.set(url, existing);
-      existing.catch(() => this.bytes.delete(url));
+      this.bytes.set(key, existing);
+      existing.catch(() => this.bytes.delete(key));
     }
     return existing;
   }
@@ -613,7 +618,7 @@ export class ThemeManager {
         extrasReady: !expanded,
       };
       if (expanded) void this.prepareExtras(this.active, url, sequence);
-      this.bytes.clear(); // Cache API keeps downloads; only the active pack remains in RAM.
+      this.bytes.clear(); // Browser storage keeps downloads; only the active pack remains in RAM.
       this.status =
         manifest.name + (warnings.length ? " · some assets unavailable" : "");
       this.loading = false;

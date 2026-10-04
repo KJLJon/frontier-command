@@ -102,6 +102,18 @@ test("all eighteen presentations switch atomically during play and work offline"
         { timeout: 60000 },
       )
       .toBe(id);
+    expect(
+      await page.evaluate(() => {
+        const active = (window as any).frontier.themes.active;
+        return {
+          roster: Object.keys(active.exact).length,
+          resources: Object.values(active.resources).reduce(
+            (count: number, states: any) => count + Object.keys(states).length,
+            0,
+          ),
+        };
+      }),
+    ).toEqual({ roster: 20, resources: 14 });
   }
   await page.reload();
   await expect(
