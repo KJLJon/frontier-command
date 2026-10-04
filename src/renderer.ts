@@ -1,3 +1,4 @@
+import { sampleAnimation } from "./animation";
 import Phaser from "phaser";
 import { RushArena } from "./arena";
 import { daylight } from "./daylight";
@@ -25,6 +26,7 @@ export class Renderer {
   themes?: ThemeManager;
   ghosts: { kind: string; team: number; x: number; y: number; time: number }[] =
     [];
+  bursts: { name: string; x: number; y: number; time: number }[] = [];
   effectStep = 0.025;
   drawAccumulator = 0;
   fps = 60;
@@ -193,6 +195,36 @@ export class Renderer {
         if (this.ghosts.length > 30) this.ghosts.shift();
       }
       const target = this.world?.entities.find((v) => v.id === e.target);
+      const source = this.world?.entities.find((v) => v.id === e.source);
+      const effectName =
+        e.type === "hit"
+          ? source?.kind === "siege"
+            ? "siege-explosion"
+            : e.sound === "arrow"
+              ? "ranged-impact"
+              : "melee-slash"
+          : e.type === "death"
+            ? buildings[e.targetKind ?? ""]
+              ? "building-collapse"
+              : "unit-defeat"
+            : (
+                {
+                  heal: "healing-pulse",
+                  capture: "capture-burst",
+                  depleted: "resource-depletion",
+                  spawn: "spawn",
+                  ability: e.text?.toLowerCase().replace(/ /g, "-") ?? "charge",
+                } as Record<string, string>
+              )[e.type];
+      if (effectName && !this.reducedMotion && this.quality !== "Low")
+        this.bursts.push({
+          name: effectName,
+          x: e.x,
+          y: e.y,
+          time: this.world?.time ?? 0,
+        });
+      if (this.bursts.length > 60)
+        this.bursts.splice(0, this.bursts.length - 60);
       if (this.quality === "Low" && e.type === "hit") continue;
       this.particles.push({
         x: e.x,
@@ -325,6 +357,23 @@ export class Renderer {
           s instanceof RushArena ? "#a6edff0b" : "#0000000c",
         );
         if (explored) {
+          const category = ["open", "forest", "marsh", "water", "rock"][t];
+          const tile = activeTheme?.terrain.get(
+            map.settings.biome + ":" + category,
+          );
+          if (tile && !this.editor && !(s instanceof RushArena)) {
+            c.save();
+            c.beginPath();
+            c.moveTo(p.x, p.y - 12 * z);
+            c.lineTo(p.x + 24 * z, p.y);
+            c.lineTo(p.x, p.y + 12 * z);
+            c.lineTo(p.x - 24 * z, p.y);
+            c.closePath();
+            c.clip();
+            c.globalAlpha = 0.55;
+            c.drawImage(tile, p.x - 24 * z, p.y - 12 * z, 48 * z, 24 * z);
+            c.restore();
+          }
           if (t === 1) {
             const sprite = activeTheme?.props.obstacle;
             if (sprite && !this.editor)
@@ -393,6 +442,24 @@ export class Renderer {
           49 * z,
         );
       }
+      const state =
+        point.kind === "camp"
+          ? point.owner >= 0
+            ? "cleared"
+            : "guarded"
+          : this.world?.winner !== null && this.world?.winner !== undefined
+            ? "inactive"
+            : point.progress > 0
+              ? "contested"
+              : point.owner >= 0
+                ? "captured"
+                : "neutral";
+      const site = activeTheme?.resources[point.kind]?.[state];
+      if (site) this.themes!.draw(c, site, p.x, p.y, 68 * z);
+      if (point.kind === "relic" && state !== "inactive")
+        this.resourceLife(point.kind, p, z, color);
+      if (point.kind === "camp" && state === "guarded")
+        this.resourceLife(point.kind, p, z, color);
       this.diamond(p.x, p.y, 18 * z, 9 * z, "#173b36aa", color);
       c.strokeStyle = color;
       c.lineWidth = 2 * z;
@@ -468,6 +535,10 @@ export class Renderer {
             s?.visible[0][index(map, e.x, e.y)]),
       )
       .sort((a, b) => a.x + a.y - (b.x + b.y));
+    if (this.themes)
+      this.themes.targets = new Map(
+        entities.map((e) => [e.id, { x: e.x, y: e.y }]),
+      );
     for (const e of entities) {
       const p = this.project(e.x, e.y);
       if (
@@ -549,6 +620,36 @@ export class Renderer {
     }
     this.particles = this.particles.filter((p) => p.life > 0);
     if (activeTheme) {
+      const now = s?.time ?? 0;
+      this.bursts = this.bursts.filter(
+        (effect) => now - effect.time >= 0 && now - effect.time < 0.8,
+      );
+      if (!this.reducedMotion && this.quality !== "Low")
+        for (const burst of this.bursts) {
+          const effect = activeTheme.extra?.effects?.[burst.name];
+          const frame = effect
+            ? sampleAnimation(
+                {
+                  frames: { SE: effect.frames },
+                  fps: effect.fps ?? 16,
+                  loop: effect.loop,
+                },
+                "SE",
+                now - burst.time,
+              )
+            : undefined;
+          const sprite = frame ? this.themes!.frame(frame) : undefined;
+          if (sprite) {
+            const p = this.project(burst.x, burst.y);
+            this.themes!.draw(
+              c,
+              sprite,
+              p.x,
+              p.y,
+              burst.name.includes("siege") ? 95 * z : 55 * z,
+            );
+          }
+        }
       this.ghosts = this.ghosts.filter(
         (g) => (s?.time ?? 0) - g.time >= 0 && (s?.time ?? 0) - g.time < 0.7,
       );
@@ -556,6 +657,7 @@ export class Renderer {
         const age = (s?.time ?? 0) - ghost.time,
           p = this.project(ghost.x, ghost.y),
           sprite =
+            this.themes?.overlay(ghost.kind, "destroyed") ??
             activeTheme.exact[ghost.kind] ??
             (buildings[ghost.kind]
               ? activeTheme.props[propRole(ghost.kind)]
@@ -584,6 +686,34 @@ export class Renderer {
       c.setLineDash([]);
     }
     this.texture?.refresh();
+  }
+  resourceLife(kind: string, p: Point, z: number, color: string) {
+    const c = this.ctx!,
+      time = this.world?.time ?? 0;
+    c.save();
+    c.translate(p.x, p.y);
+    c.scale(z, z);
+    c.fillStyle = c.strokeStyle = color;
+    c.lineWidth = 2;
+    if (kind === "relic") {
+      c.globalAlpha = this.reducedMotion
+        ? 0.35
+        : 0.35 + Math.sin(time * 2) * 0.15;
+      c.beginPath();
+      c.ellipse(0, 0, 21, 8, 0, 0, Math.PI * 2);
+      c.stroke();
+    } else
+      for (let i = 0; i < (this.reducedMotion ? 1 : 4); i++) {
+        const t = this.reducedMotion ? 0.4 : (time * 0.7 + i * 0.23) % 1;
+        c.globalAlpha = (1 - t) * 0.65;
+        c.fillRect(
+          Math.sin(i * 2.3) * 12,
+          -8 - t * 18,
+          kind === "wood" ? 4 : 2,
+          2,
+        );
+      }
+    c.restore();
   }
   resourceSite(point: MapData["points"][number], p: Point, z: number) {
     const c = this.ctx!,
@@ -620,6 +750,7 @@ export class Renderer {
           : "sparse";
     const exactResource = this.themes?.active?.resources[point.kind]?.[stage];
     if (exactResource) this.themes!.draw(c, exactResource, p.x, p.y, 68 * z);
+    if (!empty && point.owner >= 0) this.resourceLife(point.kind, p, z, color);
     if (!empty) {
       const sprite = exactResource
         ? undefined
@@ -759,6 +890,9 @@ export class Renderer {
         this.world?.time ?? 0,
         this.selected.includes(e.id),
         this.reducedMotion,
+        this.world instanceof RushArena
+          ? 0
+          : daylight(this.world?.time ?? 0).night,
       )
     )
       return;

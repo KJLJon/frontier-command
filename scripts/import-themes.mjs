@@ -18,6 +18,11 @@ const catalog = JSON.parse(
   await readFile(path.join(source, "catalog.json"), "utf8"),
 );
 const files = new Set(["catalog.json"]);
+const expanded = new Map();
+const normalized = new Map();
+const starter = JSON.parse(
+  await readFile(path.join(source, "space/theme.json"), "utf8"),
+);
 async function collect(relative) {
   for (const e of await readdir(path.join(source, relative), {
     withFileTypes: true,
@@ -32,20 +37,35 @@ for (const theme of catalog.themes) {
   const manifest = JSON.parse(
     await readFile(path.join(source, theme.manifest), "utf8"),
   );
-  if (
-    !manifest.environments?.toon ||
-    !manifest.environments?.realistic ||
-    !manifest.props ||
-    !manifest.audio?.ambientMusic ||
-    !manifest.audio?.combatMusic
-  )
+  if (!manifest.gameAssets && !manifest.props)
     throw Error("Incomplete theme: " + theme.id);
+  if (!manifest.props) {
+    manifest.props = structuredClone(starter.props);
+    manifest.props.atlas = "../space/" + starter.props.atlas;
+    manifest.sprites = structuredClone(starter.sprites);
+    manifest.styles = structuredClone(starter.styles);
+    manifest.icons = Object.fromEntries(
+      Object.entries(starter.icons).map(([k, v]) => [k, "../space/" + v]),
+    );
+  }
+  manifest.styles.sticker ??= structuredClone(manifest.styles.toon);
+  manifest.environments.sticker ??= manifest.environments.toon;
+  normalized.set(theme.manifest, manifest);
   files.add(theme.manifest);
   const extra = theme.id + "/game-assets.json";
+  if (manifest.gameAssets) {
+    expanded.set(extra, manifest.gameAssets);
+    theme.gameAssets = extra;
+  }
   try {
     await access(path.join(source, extra));
     const data = JSON.parse(await readFile(path.join(source, extra), "utf8"));
-    if (data.schemaVersion === 1 && data.units && data.resourceSites) {
+    if (
+      !manifest.gameAssets &&
+      data.schemaVersion === 1 &&
+      data.units &&
+      data.resourceSites
+    ) {
       files.add(extra);
       theme.gameAssets = extra;
     }
@@ -61,7 +81,7 @@ for (const theme of catalog.themes) {
     /* Arena art is optional. */
   }
   for (const directory of ["graphics", "audio", "models"])
-    await collect(theme.id + "/" + directory);
+    if (directory !== "models") await collect(theme.id + "/" + directory);
 }
 const hash = createHash("sha256"),
   inventory = [];
@@ -78,7 +98,13 @@ for (const relative of [...files].sort()) {
     sha256: createHash("sha256").update(bytes).digest("hex"),
   });
 }
+for (const [relative, data] of [...normalized, ...expanded]) {
+  const bytes = Buffer.from(JSON.stringify(data));
+  hash.update(relative).update(bytes);
+  await writeFile(path.join(destination, relative), bytes);
+}
 catalog.snapshot = hash.digest("hex").slice(0, 16);
+catalog.styles = catalog.gameAssetStyles ?? catalog.styles;
 await writeFile(
   path.join(destination, "catalog.json"),
   JSON.stringify(catalog, null, 2) + "\n",

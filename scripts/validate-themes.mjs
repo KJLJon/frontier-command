@@ -39,7 +39,7 @@ for (const theme of catalog.themes) {
         assert(data.units[id], `${theme.id}: missing unit ${id}`);
       for (const id of requiredBuildings)
         assert(data.buildings[id], `${theme.id}: missing building ${id}`);
-      for (const style of ["toon", "realistic"]) {
+      for (const style of ["toon", "realistic", "sticker"]) {
         for (const id of [...requiredUnits, ...requiredBuildings])
           assert(
             (data.units[id] ?? data.buildings[id]).styles[style],
@@ -93,7 +93,8 @@ for (const theme of catalog.themes) {
             );
         }
       }
-      for (const child of Object.values(value)) await scan(child);
+      for (const [key, child] of Object.entries(value))
+        if (key !== "source") await scan(child);
     }
     await scan(data);
   }

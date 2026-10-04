@@ -8,7 +8,7 @@ export type AudioSettings = {
   reducedMotion: boolean;
   uiScale: number;
   theme: string;
-  style: "toon" | "realistic";
+  style: "toon" | "realistic" | "sticker";
 };
 export const defaultAudio: AudioSettings = {
   master: 0.6,
@@ -144,7 +144,10 @@ export class AudioSystem {
       this.musicMode = "fallback";
     }
   }
-  private async themedEffect(name: string) {
+  private async themedEffect(
+    name: string,
+    spatial?: { x: number; y: number; listener: { x: number; y: number } },
+  ) {
     const c = this.context;
     if (
       !c ||
@@ -154,8 +157,9 @@ export class AudioSystem {
     )
       return;
     const now = performance.now();
-    if (now - (this.effectTimes.get(name) ?? -Infinity) < 75) return;
-    this.effectTimes.set(name, now);
+    const category = name.split(":")[0];
+    if (now - (this.effectTimes.get(category) ?? -Infinity) < 75) return;
+    this.effectTimes.set(category, now);
     if (["victory", "defeat"].includes(name)) {
       this.duckUntil = now + 3000;
       this.refreshVolumes();
@@ -174,11 +178,22 @@ export class AudioSystem {
       gain.gain.value =
         (theme?.manifest.audio.effects[name]?.gain ?? 0.65) * 0.7;
       source.connect(gain);
-      gain.connect(this.effectBus!);
+      let pan: StereoPannerNode | undefined;
+      if (spatial) {
+        const dx = spatial.x - spatial.listener.x,
+          dy = spatial.y - spatial.listener.y;
+        gain.gain.value *= 1 / (1 + Math.hypot(dx, dy) * 0.08);
+        pan = c.createStereoPanner();
+        pan.pan.value = Math.max(-0.9, Math.min(0.9, (dx - dy) / 18));
+        gain.connect(pan);
+        pan.connect(this.effectBus!);
+      } else gain.connect(this.effectBus!);
       this.sources.add(source);
       source.onended = () => {
         this.sources.delete(source);
         gain.disconnect();
+        source.disconnect();
+        pan?.disconnect();
       };
       source.start();
     } catch {}
@@ -248,8 +263,32 @@ export class AudioSystem {
     if (this.state === "combat" && b % 2 === 0)
       this.tone(80, 0.13, 0.14 * this.settings.music, "triangle", 30);
   }
-  effect(kind: string) {
+  effect(
+    kind: string,
+    spatial?: { x: number; y: number; listener: { x: number; y: number } },
+  ) {
     if (this.theme) {
+      const categories: Record<string, string> = {
+        hit: "melee-impact",
+        arrow: "ranged-impact",
+        capture: "capture",
+        depleted: "resource-depleted",
+        research: "research-complete",
+        build: "construction-start",
+        spawn: "construction-complete",
+        death: "unit-defeat",
+        heal: "heal",
+      };
+      const variants =
+        this.theme.audioVariants[kind] ??
+        this.theme.audioVariants[categories[kind]];
+      if (variants?.length) {
+        void this.themedEffect(
+          variants[Math.floor(Math.random() * variants.length)],
+          spatial,
+        );
+        return;
+      }
       const names: Record<string, string> = {
         hit: "impact",
         arrow: "attack",
@@ -271,7 +310,7 @@ export class AudioSystem {
       };
       const name = names[kind] ?? "ui-confirm";
       if (this.theme.audio[name]) {
-        void this.themedEffect(name);
+        void this.themedEffect(name, spatial);
         return;
       }
     }

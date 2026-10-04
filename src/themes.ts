@@ -1,6 +1,12 @@
+import {
+  facing,
+  sampleAnimation,
+  type Animation,
+  type Direction,
+} from "./animation";
 import { commanders } from "./content";
 import type { Entity, Event } from "./simulation";
-export type ThemeStyle = "toon" | "realistic";
+export type ThemeStyle = "toon" | "realistic" | "sticker";
 export type Role = "scout" | "ranged" | "heavy" | "commander";
 export type Rect = { x: number; y: number; width: number; height: number };
 type Frame = {
@@ -52,7 +58,12 @@ type Catalog = {
   }[];
 };
 
-type ExactFrame = Frame & { file: string };
+export type ExactFrame = Frame & {
+  file: string;
+  flipX?: boolean;
+  displayHeightFactor?: number;
+  animations?: Record<string, Animation<ExactFrame>>;
+};
 type AssetEntry<T> = {
   displayName?: string;
   styles: Partial<Record<ThemeStyle, T>>;
@@ -62,8 +73,26 @@ type GameAssets = {
   units: Record<string, AssetEntry<ExactFrame>>;
   buildings: Record<string, AssetEntry<ExactFrame>>;
   resourceSites: Record<string, AssetEntry<Record<string, ExactFrame>>>;
+  buildingOverlays?: Record<string, Record<string, ExactFrame>>;
+  effects?: Record<
+    string,
+    { fps?: number; loop?: boolean; frames: ExactFrame[] }
+  >;
+  terrain?: Partial<
+    Record<ThemeStyle, Record<string, Record<string, ExactFrame>>>
+  >;
+  icons?: Record<string, ExactFrame>;
+  audio?: { categories: Record<string, { variants: Sound[] }> };
+  arena?: {
+    backgrounds?: Partial<Record<ThemeStyle, string>>;
+    pickups?: Record<string, ExactFrame>;
+    markers?: Record<string, ExactFrame>;
+  };
 };
-type Sprite = {
+export type Sprite = {
+  registered?: boolean;
+  flipX?: boolean;
+  displayHeightFactor?: number;
   canvas: HTMLCanvasElement;
   anchorX: number;
   anchorY: number;
@@ -83,6 +112,11 @@ export type LoadedTheme = {
   resources: Record<string, Record<string, Sprite>>;
   names: Record<string, string>;
   pickups: Record<string, HTMLImageElement>;
+  extra?: GameAssets;
+  frames: Map<string, Sprite>;
+  terrain: Map<string, HTMLImageElement>;
+  audioVariants: Record<string, string[]>;
+  extrasReady: boolean;
 };
 export const themeNames: Record<string, { name: string }> = {
   space: { name: "Orbital Rush · Space" },
@@ -90,6 +124,7 @@ export const themeNames: Record<string, { name: string }> = {
   "old-time": { name: "Brass Battalion · Old-time" },
   christmas: { name: "North Pole Dash · Christmas" },
   halloween: { name: "Midnight Mayhem · Halloween" },
+  "street-kids": { name: "Block Party Blitz · Street Kids" },
   frontier: { name: "Classic Frontier · fallback" },
 };
 export function unitRole(kind: string): Role {
@@ -145,6 +180,7 @@ function crop(
   image: HTMLImageElement,
   rect: Rect,
   pivot: number[] = [0.5, 0.88],
+  registered = false,
 ): Sprite {
   const canvas = document.createElement("canvas");
   canvas.width = rect.width;
@@ -161,6 +197,16 @@ function crop(
     rect.width,
     rect.height,
   );
+  if (registered) {
+    return {
+      canvas,
+      anchorX: rect.width * pivot[0],
+      anchorY: rect.height * pivot[1],
+      width: rect.width,
+      height: rect.height,
+      registered: true,
+    };
+  }
   // Individual cutouts prevent sampling neighboring cells. Keep the original cell's pivot.
   const pixels = c.getImageData(0, 0, rect.width, rect.height).data;
   let left = rect.width,
@@ -228,6 +274,12 @@ export class ThemeManager {
   lastError = "";
   private sequence = 0;
   private cacheFailed = false;
+  targets = new Map<number, { x: number; y: number }>();
+  private positions = new Map<
+    number,
+    { x: number; y: number; direction: Direction }
+  >();
+  private attacks = new Map<number, number>();
   private motions = new Map<number, { kind: string; time: number }>();
   private bytes = new Map<string, Promise<ArrayBuffer>>();
   onChange?: () => void;
@@ -423,6 +475,7 @@ export class ThemeManager {
           warnings.push("Arena art");
         }
       }
+      let expanded: GameAssets | undefined;
       if (entry.gameAssets) {
         try {
           const extra = JSON.parse(
@@ -430,9 +483,10 @@ export class ThemeManager {
               await this.data(this.url(entry.gameAssets, "catalog.json")),
             ),
           ) as GameAssets;
+          expanded = extra;
           if (extra.schemaVersion !== 1)
             throw Error("Unknown expanded roster schema");
-          const loadFrame = async (frame: ExactFrame) => {
+          const loadFrame = async (frame: ExactFrame, registered = false) => {
             const image = await this.image(url(frame.file));
             try {
               return crop(
@@ -445,6 +499,7 @@ export class ThemeManager {
                   1,
                 ),
                 frame.pivot,
+                registered,
               );
             } finally {
               image.src = "";
@@ -476,7 +531,7 @@ export class ThemeManager {
             ))
               tasks.push(async () => {
                 try {
-                  resources[kind][state] = await loadFrame(frame);
+                  resources[kind][state] = await loadFrame(frame, true);
                 } catch {
                   warnings.push("Resource " + kind + "/" + state);
                 }
@@ -528,7 +583,13 @@ export class ThemeManager {
         resources,
         names,
         pickups,
+        extra: expanded,
+        frames: new Map(),
+        terrain: new Map(),
+        audioVariants: {},
+        extrasReady: !expanded,
       };
+      if (expanded) void this.prepareExtras(this.active, url, sequence);
       this.bytes.clear(); // Cache API keeps downloads; only the active pack remains in RAM.
       this.status =
         manifest.name + (warnings.length ? " · some assets unavailable" : "");
@@ -547,6 +608,104 @@ export class ThemeManager {
       return false;
     }
   }
+  private key(frame: ExactFrame) {
+    return frame.file + ":" + JSON.stringify(frame.pixelRect ?? null);
+  }
+  frame(frame: ExactFrame) {
+    const sprite = this.active?.frames.get(this.key(frame));
+    return sprite
+      ? {
+          ...sprite,
+          flipX: frame.flipX,
+          displayHeightFactor: frame.displayHeightFactor,
+        }
+      : undefined;
+  }
+  overlay(kind: string, state: string) {
+    const frame = this.active?.extra?.buildingOverlays?.[kind]?.[state];
+    return frame?.file ? this.frame(frame) : undefined;
+  }
+  private async prepareExtras(
+    theme: LoadedTheme,
+    url: (file: string) => string,
+    sequence: number,
+  ) {
+    const extra = theme.extra!,
+      jobs: (() => Promise<void>)[] = [];
+    const seen = new Set<string>();
+    const add = (frame: ExactFrame, registered = false) => {
+      if (!frame?.file || seen.has(this.key(frame))) return;
+      seen.add(this.key(frame));
+      jobs.push(async () => {
+        const image = await this.image(url(frame.file));
+        try {
+          const sprite = crop(
+            image,
+            assetFrame(image.naturalWidth, image.naturalHeight, frame, 1, 1),
+            frame.pivot,
+            registered,
+          );
+          theme.frames.set(this.key(frame), sprite);
+        } finally {
+          image.src = "";
+        }
+      });
+    };
+    for (const asset of Object.values(extra.units))
+      for (const animation of Object.values(
+        asset.styles[theme.style]?.animations ?? {},
+      ))
+        for (const frames of Object.values(animation.frames))
+          for (const frame of frames) add(frame, true);
+    for (const states of Object.values(extra.buildingOverlays ?? {}))
+      for (const frame of Object.values(states)) add(frame, true);
+    for (const effect of Object.values(extra.effects ?? {}))
+      for (const frame of effect.frames) add(frame, true);
+    for (const [biome, categories] of Object.entries(
+      extra.terrain?.[theme.style] ?? {},
+    ))
+      for (const [category, frame] of Object.entries(categories))
+        jobs.push(async () => {
+          theme.terrain.set(
+            biome + ":" + category,
+            await this.image(url(frame.file)),
+          );
+        });
+    for (const [category, entry] of Object.entries(
+      extra.audio?.categories ?? {},
+    )) {
+      theme.audioVariants[category] = [];
+      entry.variants.forEach((sound, i) =>
+        jobs.push(async () => {
+          const name = category + ":" + i;
+          theme.audio[name] = await this.data(url(sound.file));
+          theme.audioVariants[category].push(name);
+        }),
+      );
+    }
+    for (const [name, frame] of Object.entries(extra.icons ?? {}))
+      jobs.push(async () => {
+        if (theme.icons[name]) return;
+        const bytes = await this.data(url(frame.file));
+        theme.icons[name] = URL.createObjectURL(
+          new Blob([bytes], { type: "image/svg+xml" }),
+        );
+      });
+    for (let i = 0; i < jobs.length; i += 6) {
+      if (theme !== this.active) return;
+      const results = await Promise.allSettled(
+        jobs.slice(i, i + 6).map((job) => job()),
+      );
+      results.forEach((result) => {
+        if (result.status === "rejected")
+          theme.warnings.push("Optional presentation asset");
+      });
+      if (theme === this.active) this.bytes.clear();
+    }
+    if (theme !== this.active) return;
+    theme.extrasReady = true;
+    this.onChange?.();
+  }
   async downloadAll(progress: (message: string) => void) {
     await this.init();
     this.cacheFailed = false;
@@ -557,7 +716,7 @@ export class ThemeManager {
           await this.data(this.url(entry.manifest, "catalog.json")),
         ),
       ) as ThemeManifest;
-      for (const style of ["toon", "realistic"] as ThemeStyle[]) {
+      for (const style of ["toon", "realistic", "sticker"] as ThemeStyle[]) {
         urls.add(this.url(manifest.styles[style].atlas, entry.manifest));
         urls.add(this.url(manifest.environments[style], entry.manifest));
       }
@@ -572,7 +731,7 @@ export class ThemeManager {
           if ("file" in value && typeof value.file === "string")
             urls.add(this.url(value.file, entry.manifest));
           for (const [key, child] of Object.entries(value))
-            if (key !== "sticker") scan(child);
+            if (key !== "source") scan(child);
         };
         scan(extra);
       }
@@ -611,7 +770,7 @@ export class ThemeManager {
       throw Error(
         "Browser storage could not retain all theme files. Online play remains available.",
       );
-    progress("All five worlds and both art styles are ready offline.");
+    progress("All six worlds and three art styles are ready offline.");
   }
   faction(team: number) {
     const list = this.active?.manifest.factions;
@@ -632,6 +791,8 @@ export class ThemeManager {
       : this.active.manifest.sprites[unitRole(kind)].displayName;
   }
   event(event: Event, time: number) {
+    if (event.source !== undefined && event.type === "hit")
+      this.attacks.set(event.source, time);
     if (event.type === "hit") {
       if (event.target !== undefined)
         this.motions.set(event.target, { kind: "hit", time });
@@ -655,10 +816,13 @@ export class ThemeManager {
     size: number,
     motion = { x: 0, y: 0, rotation: 0, alpha: 1 },
   ) {
-    const scale = size / Math.max(sprite.canvas.width, sprite.canvas.height);
+    const scale = sprite.registered
+      ? (size * (sprite.displayHeightFactor ?? 1)) / sprite.canvas.height
+      : size / Math.max(sprite.canvas.width, sprite.canvas.height);
     c.save();
     c.translate(x + motion.x, y + motion.y);
     c.rotate(motion.rotation);
+    if (sprite.flipX) c.scale(-1, 1);
     c.globalAlpha *= motion.alpha;
     c.drawImage(
       sprite.canvas,
@@ -678,15 +842,56 @@ export class ThemeManager {
     time: number,
     selected: boolean,
     reduced: boolean,
+    night = 0,
   ) {
     if (!this.active) return false;
-    const role = e.building ? propRole(e.kind) : unitRole(e.kind),
-      sprite =
-        this.active.exact[e.kind] ??
-        (e.building
-          ? this.active.props[role]
-          : this.active.units[role as Role]);
+    const role = e.building ? propRole(e.kind) : unitRole(e.kind);
+    let sprite =
+      this.active.exact[e.kind] ??
+      (e.building ? this.active.props[role] : this.active.units[role as Role]);
     if (!sprite) return false;
+    const previous = this.positions.get(e.id);
+    const route = e.route[0] ?? e.destination;
+    const dx = previous
+      ? e.x - previous.x
+      : (e.steer?.dx ?? (route ? route.x - e.x : 1));
+    const dy = previous
+      ? e.y - previous.y
+      : (e.steer?.dy ?? (route ? route.y - e.y : 1));
+    let direction =
+      Math.abs(dx) + Math.abs(dy) > 0.001
+        ? facing(dx, dy)
+        : (previous?.direction ?? "SE");
+    this.positions.set(e.id, { x: e.x, y: e.y, direction });
+    if (this.positions.size > 600) {
+      this.positions.clear();
+      this.attacks.clear();
+    }
+    const attackTime = this.attacks.get(e.id);
+    const aim = e.target !== undefined ? this.targets.get(e.target) : undefined;
+    if (attackTime !== undefined && time - attackTime < 0.5 && aim)
+      direction = facing(aim.x - e.x, aim.y - e.y);
+    const animations =
+      this.active.extra?.units[e.kind]?.styles[this.active.style]?.animations;
+    const attacking = attackTime !== undefined && time - attackTime < 0.5;
+    const animation = animations?.[attacking ? "attack" : "move"];
+    const frame =
+      !reduced &&
+      !e.building &&
+      (attacking || e.route.length > 0 || !!e.steer?.remaining)
+        ? sampleAnimation(
+            animation,
+            direction,
+            attacking ? time - attackTime! : time + e.id * 0.13,
+          )
+        : undefined;
+    const animated = frame ? this.frame(frame) : undefined;
+    if (animated) sprite = animated;
+    const foundation =
+      e.building && e.build > 0
+        ? this.overlay(e.kind, "foundation")
+        : undefined;
+    if (foundation) sprite = foundation;
     const faction = this.faction(e.team),
       size =
         (e.building
@@ -716,7 +921,7 @@ export class ThemeManager {
     this.badge(c, x, y + 9 * z, faction.emblem, 3 * z);
     const moving = e.route.length > 0 || !!e.steer?.remaining;
     const bob =
-      reduced || e.building
+      reduced || e.building || animated
         ? 0
         : moving
           ? -Math.abs(Math.sin((time + e.id * 0.1) * 11)) * 2 * z
@@ -737,7 +942,8 @@ export class ThemeManager {
             Math.max(0, 1 - (time - this.motions.get(e.id)!.time) / 0.4)
           : 0),
       y: bob,
-      rotation: reduced ? 0 : moving ? Math.sin(time * 11) * 0.018 : 0,
+      rotation:
+        reduced || animated ? 0 : moving ? Math.sin(time * 11) * 0.018 : 0,
       alpha:
         e.build > 0
           ? 0.6
@@ -748,6 +954,23 @@ export class ThemeManager {
               )
             : 1,
     });
+    if (e.building && e.build === 0) {
+      const damaged =
+        e.hp / e.maxHp < 0.5 ? this.overlay(e.kind, "damaged") : undefined;
+      if (damaged) this.draw(c, damaged, x, y, size);
+      const lights = night > 0.1 ? this.overlay(e.kind, "night") : undefined;
+      if (lights) {
+        c.save();
+        c.globalCompositeOperation = "screen";
+        this.draw(c, lights, x, y, size, {
+          x: 0,
+          y: 0,
+          rotation: 0,
+          alpha: night,
+        });
+        c.restore();
+      }
+    }
     const motion = this.motions.get(e.id);
     if (motion && time - motion.time > 0.7) this.motions.delete(e.id);
     if (motion?.kind === "hit" && time - motion.time < 0.3) {

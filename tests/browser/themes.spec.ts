@@ -1,11 +1,18 @@
 import { test, expect } from "@playwright/test";
 
-const worlds = ["space", "mythic", "old-time", "christmas", "halloween"];
-test("all ten presentations switch atomically during play and work offline", async ({
+const worlds = [
+  "space",
+  "mythic",
+  "old-time",
+  "christmas",
+  "halloween",
+  "street-kids",
+];
+test("all eighteen presentations switch atomically during play and work offline", async ({
   page,
   context,
 }, info) => {
-  test.setTimeout(360000);
+  test.setTimeout(600000);
   const errors: string[] = [];
   page.on("pageerror", (e) => errors.push(e.message));
   await page.goto("./?test=1");
@@ -33,7 +40,7 @@ test("all ten presentations switch atomically during play and work offline", asy
   });
   await page.getByRole("button", { name: "Pause", exact: true }).click();
   for (const id of worlds)
-    for (const style of ["toon", "realistic"]) {
+    for (const style of ["toon", "realistic", "sticker"]) {
       await page.getByLabel("World", { exact: true }).selectOption(id);
       await page.getByLabel("Style", { exact: true }).selectOption(style);
       await expect
@@ -98,10 +105,10 @@ test("all ten presentations switch atomically during play and work offline", asy
     .poll(() =>
       page.evaluate(() => (window as any).frontier.themes.active?.manifest.id),
     )
-    .toBe("halloween");
+    .toBe("street-kids");
   expect(
     await page.evaluate(() => (window as any).frontier.themes.active.style),
-  ).toBe("realistic");
+  ).toBe("sticker");
   expect(errors).toEqual([]);
 });
 

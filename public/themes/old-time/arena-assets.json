@@ -4,11 +4,7 @@
   "backgrounds": {
     "toon": "graphics/environment-toon.png",
     "realistic": "graphics/environment-realistic.png",
-    "sticker": {
-      "file": "graphics/environment-toon.png",
-      "fallbackStyle": "toon",
-      "reason": "Sticker characters use existing decorative toon arena until dedicated backdrop is authored"
-    }
+    "sticker": "graphics/environment-toon.png"
   },
   "pickups": {
     "health": {
@@ -280,5 +276,8 @@
     "matchmaking/networking",
     "scoring",
     "round lifecycle"
-  ]
+  ],
+  "backgroundFallbacks": {
+    "sticker": "Toon decorative scenery reused with sticker units"
+  }
 }

@@ -75,8 +75,21 @@ function decorateCommands() {
     .querySelectorAll<HTMLButtonElement>("button[data-action]")
     .forEach((button) => {
       const action = button.dataset.action!,
-        name = action.startsWith("ability:") ? "ability" : mapping[action],
-        url = name ? theme?.icons[name] : undefined;
+        name = /^(build|recruit|research):/.test(action)
+          ? action.split(":")[1]
+          : action.startsWith("ability:")
+            ? sim
+              ? (commanders[sim.players[0].commander].abilities[
+                  Number(action.split(":")[1])
+                ]
+                  ?.toLowerCase()
+                  .replace(/ /g, "-") ?? "ability")
+              : "ability"
+            : mapping[action],
+        url = name
+          ? (theme?.icons[name] ??
+            (action.startsWith("ability:") ? theme?.icons.ability : undefined))
+          : undefined;
       const existing = button.querySelector<HTMLImageElement>(".theme-icon");
       if (!url) {
         existing?.remove();
@@ -329,7 +342,7 @@ function arenaMenu() {
   screen(
     "Rush Arena",
     "Four commanders. One closing arena. Up to four minutes.",
-    `<div class="card-grid"><article class="card"><h3>Lead your escort</h3><p>WASD or the mobile pad moves your commander. Tap to move; Q/E/R or ability buttons unleash attacks. Your escort keeps up and fights automatically.</p></article><article class="card"><h3>Race for supplies</h3><p>Walk onto a marked cache: green heals your squad, gold drops reinforcements, violet refreshes abilities. Used caches disappear.</p></article><article class="card"><h3>Stay inside the ring</h3><p>The bright boundary closes continuously. Outside it, the storm drains health. Red warning circles show strikes 2.5 seconds before impact.</p></article><article class="card"><h3>Choose your power</h3><p>Every 45 seconds, pause to choose an upgrade. Commander defeat eliminates the squad. At four minutes, surviving health plus collected supplies decides the winner.</p></article></div><div class="form-grid">${select("arenaCommander", "Arena commander", commanders, setup.commander)}${input("arenaSeed", "Arena seed", "RUSH-" + Math.floor(Date.now() / 1000))}</div><div class="footer-actions">${button("Back", suspendedBattle ? "arena-return" : "menu")}${button("Start Rush Arena", "arena-start", "primary")}</div><p class="muted">A separate single-player mini game. Campaign progress and saved RTS battles are preserved. All five worlds work with this arena.</p>`,
+    `<div class="card-grid"><article class="card"><h3>Lead your escort</h3><p>WASD or the mobile pad moves your commander. Tap to move; Q/E/R or ability buttons unleash attacks. Your escort keeps up and fights automatically.</p></article><article class="card"><h3>Race for supplies</h3><p>Walk onto a marked cache: green heals your squad, gold drops reinforcements, violet refreshes abilities. Used caches disappear.</p></article><article class="card"><h3>Stay inside the ring</h3><p>The bright boundary closes continuously. Outside it, the storm drains health. Red warning circles show strikes 2.5 seconds before impact.</p></article><article class="card"><h3>Choose your power</h3><p>Every 45 seconds, pause to choose an upgrade. Commander defeat eliminates the squad. At four minutes, surviving health plus collected supplies decides the winner.</p></article></div><div class="form-grid">${select("arenaCommander", "Arena commander", commanders, setup.commander)}${input("arenaSeed", "Arena seed", "RUSH-" + Math.floor(Date.now() / 1000))}</div><div class="footer-actions">${button("Back", suspendedBattle ? "arena-return" : "menu")}${button("Start Rush Arena", "arena-start", "primary")}</div><p class="muted">A separate single-player mini game. Campaign progress and saved RTS battles are preserved. All six worlds and three art styles work with this arena.</p>`,
   );
 }
 function startArena(seed: string, commander: string) {
@@ -582,7 +595,7 @@ function settingsMenu() {
     .querySelector(".form-grid")!
     .insertAdjacentHTML(
       "afterbegin",
-      `${select("theme", "World theme", themeNames, settings.theme)}${select("style", "Art style", { toon: { name: "Toon" }, realistic: { name: "Realistic illustration" } }, settings.style)}<p class="theme-status" data-theme-status>${escape(themes.status)}</p>`,
+      `${select("theme", "World theme", themeNames, settings.theme)}${select("style", "Art style", { toon: { name: "Toon" }, realistic: { name: "Realistic illustration" }, sticker: { name: "Sticker" } }, settings.style)}<p class="theme-status" data-theme-status>${escape(themes.status)}</p>`,
     );
   document.querySelector<HTMLFormElement>("#settings-form")!.onsubmit = async (
     e,
@@ -599,7 +612,12 @@ function settingsMenu() {
       mute: d.has("mute"),
       reducedMotion: d.has("reducedMotion"),
       theme: String(d.get("theme")),
-      style: d.get("style") === "realistic" ? "realistic" : "toon",
+      style:
+        d.get("style") === "sticker"
+          ? "sticker"
+          : d.get("style") === "realistic"
+            ? "realistic"
+            : "toon",
     };
     applySettings();
     await write("settings", "main", settings);
@@ -740,7 +758,7 @@ function gameUI() {
   updateHUD();
   const controls = document.createElement("div");
   controls.className = "theme-controls";
-  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" } }, settings.style)}<span data-theme-status>${escape(themes.status)}</span>`;
+  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" }, sticker: { name: "Sticker" } }, settings.style)}<span data-theme-status>${escape(themes.status)}</span>`;
   ui.append(controls);
   controls.onchange = async () => {
     const id = controls.querySelector<HTMLSelectElement>(
@@ -1220,7 +1238,16 @@ renderer.onFrame = (dt) => {
         renderer.reveal ||
         sim.visible[0][index(sim.map, e.x, e.y)]
       )
-        audio.effect(e.sound ?? e.type);
+        audio.effect(
+          e.type === "ability"
+            ? (e.text?.toLowerCase().replace(/ /g, "-") ?? "ability")
+            : e.type === "death" && buildings[e.targetKind ?? ""]
+              ? "building-collapse"
+              : (e.sound ?? e.type),
+          e.x !== undefined && e.y !== undefined
+            ? { x: e.x, y: e.y, listener: renderer.camera }
+            : undefined,
+        );
       if (
         e.type === "hit" &&
         e.sound === "arrow" &&
@@ -1236,7 +1263,12 @@ renderer.onFrame = (dt) => {
       e.cooldown > 0 &&
       sim!.visible[0][index(sim!.map, e.x, e.y)],
   );
-  audio.state = enemies ? "combat" : sim.time > 300 ? "tension" : "peace";
+  audio.state =
+    sim instanceof RushArena || enemies
+      ? "combat"
+      : sim.time > 300
+        ? "tension"
+        : "peace";
   if (hudTime > 0.25) {
     hudTime = 0;
     updateHUD();
