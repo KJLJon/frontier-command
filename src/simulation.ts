@@ -108,6 +108,7 @@ export type Event = {
   damage?: number;
   sourceKind?: string;
   targetKind?: string;
+  source?: number;
 };
 export type Stats = {
   kills: number;
@@ -533,11 +534,19 @@ export class Simulation {
       target: b.id,
       damage: amount,
       sourceKind: a.kind,
+      source: a.id,
       targetKind: b.kind,
       team: a.team,
     });
     if (b.hp <= 0) {
-      this.events.push({ type: "death", x: b.x, y: b.y, team: b.team });
+      this.events.push({
+        type: "death",
+        x: b.x,
+        y: b.y,
+        team: b.team,
+        targetKind: b.kind,
+        target: b.id,
+      });
       if (a.team === 0) {
         if (b.building) this.stats.destroyed++;
         else this.stats.kills++;
@@ -602,6 +611,14 @@ export class Simulation {
           const k = e.queue.shift()!.kind;
           const point = this.freeNear(e);
           const v = this.spawn(k, e.team, point.x, point.y);
+          this.events.push({
+            type: "spawn",
+            x: v.x,
+            y: v.y,
+            team: v.team,
+            target: v.id,
+            targetKind: v.kind,
+          });
           if (e.rally) {
             v.route = path(this.map, v, e.rally, blocked);
             v.order = "AttackMove";

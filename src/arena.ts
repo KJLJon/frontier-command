@@ -1,5 +1,6 @@
 import {
   Simulation,
+  combatDamage,
   type Entity,
   type Order,
   type Settings,
@@ -99,6 +100,21 @@ export class RushArena extends Simulation {
   get radius() {
     return 9.5 - 8 * Math.min(1, this.time / this.duration);
   }
+  override spawn(
+    kind: string,
+    team: number,
+    x: number,
+    y: number,
+    building = false,
+    construction = false,
+  ) {
+    const entity = super.spawn(kind, team, x, y, building, construction);
+    if (!building) {
+      entity.maxHp *= commanders[kind] ? 2.5 : 1.4;
+      entity.hp = entity.maxHp;
+    }
+    return entity;
+  }
   hero(team: number) {
     return this.entities.find((e) => e.team === team && commanders[e.kind]);
   }
@@ -140,14 +156,19 @@ export class RushArena extends Simulation {
   override execute(order: Order) {
     if (["Build", "Recruit", "Research", "Capture"].includes(order.type))
       return;
-    return super.execute(order);
+    const result = super.execute(order);
+    // Arena commanders fire while steering; strategy movement rules remain unchanged.
+    if (order.type === "Move")
+      for (const e of this.entities)
+        if (order.ids?.includes(e.id)) e.order = "AttackMove";
+    return result;
   }
   override setPause() {
     if (this.pendingUpgrade) return false;
     return super.setPause();
   }
   override hit(a: Entity, b: Entity, base?: number) {
-    super.hit(a, b, base);
+    super.hit(a, b, (base ?? combatDamage(a, b, this.players)) * 0.55);
     if (b.hp <= 0) b.respawn = undefined;
   }
   override ai() {

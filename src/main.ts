@@ -1,5 +1,7 @@
 import "./style.css";
+import { RushArena, arenaUpgrades, type ArenaUpgrade } from "./arena";
 import { daylight } from "./daylight";
+import { ThemeManager, themeNames, type ThemeStyle } from "./themes";
 import { Renderer } from "./renderer";
 import { Simulation, type Settings, type Order } from "./simulation";
 import { AudioSystem, defaultAudio, type AudioSettings } from "./audio";
@@ -43,6 +45,61 @@ const ui = document.querySelector<HTMLDivElement>("#ui")!,
   toastEl = document.querySelector<HTMLDivElement>("#toast")!;
 const audio = new AudioSystem(),
   renderer = new Renderer();
+const themes = new ThemeManager();
+renderer.themes = themes;
+themes.onChange = () => {
+  audio.useTheme(themes.active);
+  document.body.dataset.theme = themes.active?.manifest.id ?? "frontier";
+  document.documentElement.style.setProperty(
+    "--gold",
+    themes.active?.manifest.palette.accent ?? "#e7c57b",
+  );
+  document
+    .querySelectorAll<HTMLElement>("[data-theme-status]")
+    .forEach((el) => (el.textContent = themes.status));
+  decorateCommands();
+  if (view === "game") updateHUD();
+};
+function decorateCommands() {
+  const theme = themes.active;
+  const mapping: Record<string, string> = {
+    army: "attack",
+    attackmove: "attack",
+    hold: "defend",
+    commander: "move",
+    "panel:build": "resource",
+    "panel:recruit": "attack",
+    "panel:research": "ability",
+  };
+  document
+    .querySelectorAll<HTMLButtonElement>("button[data-action]")
+    .forEach((button) => {
+      const action = button.dataset.action!,
+        name = action.startsWith("ability:") ? "ability" : mapping[action],
+        url = name ? theme?.icons[name] : undefined;
+      const existing = button.querySelector<HTMLImageElement>(".theme-icon");
+      if (!url) {
+        existing?.remove();
+        return;
+      }
+      if (existing?.getAttribute("src") === url) return;
+      existing?.remove();
+      const image = document.createElement("img");
+      image.src = url;
+      image.alt = "";
+      image.className = "theme-icon";
+      button.prepend(image);
+    });
+}
+async function changeTheme(id: string, style: ThemeStyle) {
+  const ok = await themes.load(id, style);
+  if (ok) {
+    settings.theme = id;
+    settings.style = style;
+    await write("settings", "main", settings);
+  }
+  return ok;
+}
 let sim: Simulation | undefined,
   profile = freshProfile(),
   settings: AudioSettings = { ...defaultAudio };
@@ -101,7 +158,12 @@ const select = (
   label: string,
   o: Record<string, { name: string }> | string[],
   value: string,
-) => field(name, label, `<select name="NAME">${options(o, value)}</select>`);
+) =>
+  field(
+    name,
+    label,
+    `<select name="NAME" aria-label="${escape(label)}">${options(o, value)}</select>`,
+  );
 const input = (
   name: string,
   label: string,
@@ -168,7 +230,7 @@ function setView(v: string) {
 function menu() {
   renderer.editor = undefined;
   renderer.world = undefined;
-  ui.innerHTML = `<div class="menu-shade"><div class="logo"><span class="crest">◆</span> The frontier awaits</div><div class="menu-content"><div class="eyebrow">A kingdom worth fighting for</div><h1>Frontier<br>Command<span style="color:var(--gold)">.</span></h1><p>Lead from the front. Raise your banner.<br>Turn a foothold into a kingdom.</p><div class="menu-actions">${button("New skirmish", "skirmish", "primary")}${button("Campaign", "campaign")}${button("Expedition", "expedition")}${button("Continue", "continue")}${button("Level editor", "editor")}${button("Achievements", "achievements")}${button("Statistics", "stats")}${button("Settings", "settings")}${button("How to play", "help")}${button("Credits", "credits")}${button("Install game", "install")}</div></div><div class="menu-bottom"><span class="badge">Offline ready · Single player</span><span>v1.0 · Original art &amp; synthesized score</span></div></div>`;
+  ui.innerHTML = `<div class="menu-shade"><div class="logo"><span class="crest">◆</span> The frontier awaits</div><div class="menu-content"><div class="eyebrow">A kingdom worth fighting for</div><h1>Frontier<br>Command<span style="color:var(--gold)">.</span></h1><p>Lead from the front. Raise your banner.<br>Turn a foothold into a kingdom.</p><div class="menu-actions">${button("New skirmish", "skirmish", "primary")}${button("Rush Arena", "arena", "arena-launch")}${button("Campaign", "campaign")}${button("Expedition", "expedition")}${button("Continue", "continue")}${button("Level editor", "editor")}${button("Achievements", "achievements")}${button("Statistics", "stats")}${button("Settings", "settings")}${button("How to play", "help")}${button("Credits", "credits")}${button("Install game", "install")}</div></div><div class="menu-bottom"><span class="badge">Offline ready · Single player</span><span>v1.0 · Original art &amp; synthesized score</span></div></div>`;
 }
 let setup: Settings = {
   ...defaults,
@@ -258,6 +320,64 @@ function skirmish() {
       toast(String(error));
     }
   };
+}
+let suspendedBattle: Simulation | undefined;
+let suspendedRunBattle = false;
+function arenaMenu() {
+  view = "arena-menu";
+  renderer.world = undefined;
+  screen(
+    "Rush Arena",
+    "Four commanders. One closing arena. Up to four minutes.",
+    `<div class="card-grid"><article class="card"><h3>Lead your escort</h3><p>WASD or the mobile pad moves your commander. Tap to move; Q/E/R or ability buttons unleash attacks. Your escort keeps up and fights automatically.</p></article><article class="card"><h3>Race for supplies</h3><p>Walk onto a marked cache: green heals your squad, gold drops reinforcements, violet refreshes abilities. Used caches disappear.</p></article><article class="card"><h3>Stay inside the ring</h3><p>The bright boundary closes continuously. Outside it, the storm drains health. Red warning circles show strikes 2.5 seconds before impact.</p></article><article class="card"><h3>Choose your power</h3><p>Every 45 seconds, pause to choose an upgrade. Commander defeat eliminates the squad. At four minutes, surviving health plus collected supplies decides the winner.</p></article></div><div class="form-grid">${select("arenaCommander", "Arena commander", commanders, setup.commander)}${input("arenaSeed", "Arena seed", "RUSH-" + Math.floor(Date.now() / 1000))}</div><div class="footer-actions">${button("Back", suspendedBattle ? "arena-return" : "menu")}${button("Start Rush Arena", "arena-start", "primary")}</div><p class="muted">A separate single-player mini game. Campaign progress and saved RTS battles are preserved. All five worlds work with this arena.</p>`,
+  );
+}
+function startArena(seed: string, commander: string) {
+  if (sim && !(sim instanceof RushArena) && !ended) {
+    suspendedBattle = sim;
+    suspendedRunBattle = runBattle;
+  }
+  const arena = new RushArena(seed, commander);
+  sim = arena;
+  runBattle = false;
+  ended = false;
+  accumulator = 0;
+  saveTime = 0;
+  keys.clear();
+  selection = [arena.hero(0)!.id];
+  renderer.selected = selection;
+  renderer.follow = false;
+  renderer.center(arena.center);
+  renderer.zoom = Math.max(
+    0.35,
+    Math.min(1.05, window.innerWidth / 900, window.innerHeight / 570),
+  );
+  renderer.particles = [];
+  renderer.ghosts = [];
+  audio.start();
+  audio.state = "combat";
+  setView("game");
+  toast(
+    "Collect glowing supplies. Keep your commander inside the bright ring!",
+  );
+}
+function returnFromArena() {
+  if (suspendedBattle) {
+    sim = suspendedBattle;
+    runBattle = suspendedRunBattle;
+    suspendedBattle = undefined;
+    ended = false;
+    renderer.selected = selection = [
+      sim.entities.find((e) => e.team === 0 && commanders[e.kind])!.id,
+    ];
+    renderer.follow = true;
+    renderer.zoom = 1;
+    setView("game");
+  } else {
+    sim = undefined;
+    ended = false;
+    setView("menu");
+  }
 }
 function start(s: Settings, map?: MapData) {
   sim = new Simulation(s, map);
@@ -458,6 +578,12 @@ function settingsMenu() {
     "Your settings are saved on this device.",
     `<form id="settings-form"><div class="form-grid">${input("master", "Master volume", settings.master, "range", 'min="0" max="1" step="0.05"')}${input("music", "Music volume", settings.music, "range", 'min="0" max="1" step="0.05"')}${input("effects", "Effects volume", settings.effects, "range", 'min="0" max="1" step="0.05"')}${select("quality", "Visual effects", ["High", "Low"], settings.quality)}${input("uiScale", "UI scale", settings.uiScale, "range", 'min="0.85" max="1.3" step="0.05"')}<label class="checkbox"><input type="checkbox" name="mute" ${settings.mute ? "checked" : ""}>Mute all audio</label><label class="checkbox"><input type="checkbox" name="reducedMotion" ${settings.reducedMotion ? "checked" : ""}>Reduced motion</label></div><div class="footer-actions"><span class="muted">Friendly ◆ cyan · Enemy ▲ orange<br>Team markings stay distinct without color.</span><button class="primary" type="submit">Save settings</button></div></form>`,
   );
+  document
+    .querySelector(".form-grid")!
+    .insertAdjacentHTML(
+      "afterbegin",
+      `${select("theme", "World theme", themeNames, settings.theme)}${select("style", "Art style", { toon: { name: "Toon" }, realistic: { name: "Realistic illustration" } }, settings.style)}<p class="theme-status" data-theme-status>${escape(themes.status)}</p>`,
+    );
   document.querySelector<HTMLFormElement>("#settings-form")!.onsubmit = async (
     e,
   ) => {
@@ -472,14 +598,37 @@ function settingsMenu() {
       uiScale: Number(d.get("uiScale")),
       mute: d.has("mute"),
       reducedMotion: d.has("reducedMotion"),
+      theme: String(d.get("theme")),
+      style: d.get("style") === "realistic" ? "realistic" : "toon",
     };
     applySettings();
     await write("settings", "main", settings);
-    toast("Settings saved.");
+    const ok = await changeTheme(settings.theme, settings.style);
+    toast(ok ? "Settings saved." : themes.status);
   };
+  document
+    .querySelector("#settings-form")!
+    .insertAdjacentHTML(
+      "beforeend",
+      '<div class="offline-themes"><button type="button" id="download-themes">Download all worlds for offline play</button><p id="download-status" role="status">Selected themes are cached automatically. All worlds need about 120 MB.</p></div>',
+    );
+  document.querySelector<HTMLButtonElement>("#download-themes")!.onclick =
+    async (e) => {
+      const button = e.currentTarget as HTMLButtonElement;
+      button.disabled = true;
+      const status = document.querySelector("#download-status")!;
+      try {
+        await themes.downloadAll((message) => (status.textContent = message));
+      } catch (error) {
+        status.textContent = String(error);
+      } finally {
+        button.disabled = false;
+      }
+    };
 }
 function applySettings() {
   audio.settings = settings;
+  audio.refreshVolumes();
   renderer.quality = settings.quality;
   renderer.reducedMotion = settings.reducedMotion;
   document.documentElement.style.setProperty(
@@ -502,7 +651,7 @@ function help() {
   );
 }
 async function save(name = "manual", notify = true) {
-  if (!sim) return;
+  if (!sim || sim instanceof RushArena) return;
   try {
     await write("saves", name, {
       title:
@@ -581,7 +730,28 @@ function gameUI() {
     b.onpointerup = () => keys.delete(key);
     b.onpointercancel = () => keys.delete(key);
   });
+  if (sim instanceof RushArena) {
+    document.querySelector(".side-actions")?.remove();
+    document.querySelector(".minimap-wrap")?.remove();
+    document.querySelector("#hint")!.textContent =
+      "Move your commander · Escort follows · Collect caches · Avoid red strikes";
+    document.querySelector(".hud-objective")?.classList.add("arena-objective");
+  }
   updateHUD();
+  const controls = document.createElement("div");
+  controls.className = "theme-controls";
+  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" } }, settings.style)}<span data-theme-status>${escape(themes.status)}</span>`;
+  ui.append(controls);
+  controls.onchange = async () => {
+    const id = controls.querySelector<HTMLSelectElement>(
+      '[name="battleTheme"]',
+    )!.value;
+    const style = controls.querySelector<HTMLSelectElement>(
+      '[name="battleStyle"]',
+    )!.value as ThemeStyle;
+    if (!(await changeTheme(id, style))) toast(themes.status);
+  };
+  decorateCommands();
 }
 function updateHUD() {
   if (!sim || view !== "game") return;
@@ -615,6 +785,11 @@ function updateHUD() {
           : "",
   );
   if (hero) {
+    const name = document.querySelector(".commander-card strong");
+    if (name)
+      name.textContent = themes.name(hero.kind)
+        ? themes.name(hero.kind) + " · " + commanders[hero.kind].name
+        : commanders[hero.kind].name;
     const bar = document.querySelector<HTMLElement>("#hero-bar");
     if (bar) bar.style.width = Math.max(0, (hero.hp / hero.maxHp) * 100) + "%";
     update(
@@ -638,21 +813,52 @@ function updateHUD() {
     "selection",
     selected.length
       ? selected.length === 1
-        ? `${selected[0].building ? buildings[selected[0].kind].name : (units[selected[0].kind]?.name ?? commanders[selected[0].kind]?.name)} · ${Math.ceil(selected[0].hp)} HP${selected[0].queue.length ? " · Training: " + selected[0].queue.map((q) => units[q.kind].name + " " + Math.ceil(q.remaining) + "s").join(", ") : ""}`
+        ? `${themes.name(selected[0].kind, selected[0].building) ? themes.name(selected[0].kind, selected[0].building) + " · " : ""}${selected[0].building ? buildings[selected[0].kind].name : (units[selected[0].kind]?.name ?? commanders[selected[0].kind]?.name)} · ${Math.ceil(selected[0].hp)} HP${selected[0].queue.length ? " · Training: " + selected[0].queue.map((q) => units[q.kind].name + " " + Math.ceil(q.remaining) + "s").join(", ") : ""}`
         : `${selected.length} units selected · ${mode === "AttackMove" ? "Attack-move" : "Move"} orders`
       : "No units selected. Tap a unit or choose Army.",
   );
-  update(
-    "pause-root",
-    sim.paused
-      ? `<div class="paused-label"><strong>Tactical pause</strong><p>${sim.commands.length} queued orders · inspect, plan, then resume</p></div>`
-      : "",
-  );
+  if (!(sim instanceof RushArena && sim.pendingUpgrade))
+    update(
+      "pause-root",
+      sim.paused && !(sim instanceof RushArena && sim.pendingUpgrade)
+        ? `<div class="paused-label"><strong>Tactical pause</strong><p>${sim.commands.length} queued orders · inspect, plan, then resume</p></div>`
+        : "",
+    );
+  if (sim instanceof RushArena) {
+    update("gold", `${sim.collected[0]}<span>Supplies</span>`);
+    update("wood", `${sim.stats.kills}<span>Defeated</span>`);
+    update(
+      "population",
+      `${sim.entities.filter((e) => e.team === 0 && e.hp > 0).length}<span>Squad</span>`,
+    );
+    update(
+      "time",
+      `${clock(Math.max(0, sim.duration - sim.time))}<span>Remaining</span>`,
+    );
+    update("score", "Green: heal · Gold: escort · Violet: energy");
+    if (sim.pendingUpgrade && !document.querySelector(".arena-upgrade"))
+      update(
+        "pause-root",
+        `<div class="arena-upgrade" role="dialog" aria-modal="true" aria-label="Choose arena upgrade"><h2>Power drop</h2><p>Choose an upgrade to resume the arena.</p><div class="arena-upgrade-options">${Object.entries(
+          arenaUpgrades,
+        )
+          .map(
+            ([id, u]) =>
+              `<button data-action="arena-upgrade:${id}"><strong>${u.name}</strong><span>${u.description}</span></button>`,
+          )
+          .join("")}</div></div>`,
+      );
+  }
   const minimap = document.querySelector<HTMLCanvasElement>("#minimap");
   if (minimap) renderer.minimap(minimap);
   if (panel === "debug") updateDebug();
+  decorateCommands();
 }
 function showPanel(kind: string) {
+  if (sim instanceof RushArena && kind !== "debug") {
+    toast("Arena upgrades replace base construction.");
+    return;
+  }
   if (panel === kind) {
     panel = "";
     document.querySelector("#panel-root")!.innerHTML = "";
@@ -729,20 +935,45 @@ function issue(order: Omit<Order, "team">) {
 function selectIds(ids: number[]) {
   selection = ids;
   renderer.selected = ids;
+  audio.effect("select");
   updateHUD();
 }
 function matchMenu() {
   if (!sim) return;
+  if (sim instanceof RushArena) {
+    view = "match-menu";
+    screen(
+      "Arena intermission",
+      `${clock(sim.time)} elapsed · ${sim.collected[0]} supplies collected`,
+      `<div class="menu-actions">${button("Return to arena", "resume", "primary")}${button("Retry arena", "arena-retry")}${button("World settings", "settings")}${button(suspendedBattle ? "Return to RTS battle" : "Main menu", "arena-return")}</div><p class="muted">The arena stops while this menu is open. Your RTS save remains untouched.</p>`,
+    );
+    return;
+  }
   view = "match-menu";
   screen(
     "Council of war",
     `${sim.settings.mode} · ${clock(sim.time)} · ${sim.settings.seed}`,
-    `<div class="menu-actions">${button("Return to battle", "resume", "primary")}${button("Save battle", "save")}${button("Load a save", "continue")}${button("Field guide", "help")}${button("Settings", "settings")}${button("Main menu", "leave")}${button("Debug tools", "debug-from-menu")}</div><p class="muted" style="margin-top:18px">The battle stops while this menu is open. Your latest battle is autosaved before returning to the main menu.</p>`,
+    `<div class="menu-actions">${button("Return to battle", "resume", "primary")}${button("Save battle", "save")}${button("Load a save", "continue")}${button("Field guide", "help")}${button("Settings", "settings")}${button("Rush Arena", "arena")}${button("Main menu", "leave")}${button("Debug tools", "debug-from-menu")}</div><p class="muted" style="margin-top:18px">The battle stops while this menu is open. Your latest battle is autosaved before returning to the main menu.</p>`,
   );
 }
 async function finish() {
   if (!sim || ended) return;
   ended = true;
+  if (sim instanceof RushArena) {
+    const arena = sim;
+    const won = arena.winner === 0;
+    audio.state = won ? "victory" : "defeat";
+    audio.effect(won ? "victory" : "defeat");
+    view = "result";
+    screen(
+      won ? "Arena champion!" : "Your squad has fallen",
+      won
+        ? "Your commander outlasted the rival squads."
+        : "Try a different route, commander, or upgrade.",
+      `<div class="card-grid"><article class="card"><h3>${clock(arena.time)}</h3><p>Survival time</p></article><article class="card"><h3>${arena.stats.kills}</h3><p>Enemies defeated</p></article><article class="card"><h3>${arena.collected[0]}</h3><p>Supplies collected</p></article><article class="card"><h3>${arena.upgrades}</h3><p>Upgrades chosen</p></article></div><div class="footer-actions">${button("Retry arena", "arena-retry", "primary")}${button("New arena", "arena")}${button(suspendedBattle ? "Return to RTS battle" : "Main menu", "arena-return")}</div>`,
+    );
+    return;
+  }
   const won = sim.winner !== null && sim.friendly(sim.winner, 0),
     s = sim;
   const unlocked = recordMatch(profile, s);
@@ -886,6 +1117,23 @@ renderer.onTap = (p, button, shift) => {
   const selectedBuildings = sim.entities.filter(
     (e) => selection.includes(e.id) && e.building,
   );
+  const resource = sim.map.points.find(
+    (point) =>
+      (point.kind === "gold" || point.kind === "wood") &&
+      dist(point, p) < 1.35 &&
+      sim!.explored[0][index(sim!.map, point.x, point.y)],
+  );
+  if (resource && !selectedBuildings.length) {
+    const label = resource.kind === "gold" ? "Gold mine" : "Timber grove";
+    toast(
+      resource.remaining === 0
+        ? `${label} depleted. Scout for another site.`
+        : `${label}: ${Math.ceil(resource.remaining ?? 0)} remaining. ${resource.owner === 0 ? "Your workers harvest automatically." : "Stand here uncontested to capture it."}`,
+    );
+    if (resource.remaining !== 0)
+      issue({ type: "Capture", ids: selection, x: resource.x, y: resource.y });
+    return;
+  }
   issue({
     type: selectedBuildings.length ? "Rally" : (mode as "Move" | "AttackMove"),
     ids: selection,
@@ -941,7 +1189,7 @@ renderer.onFrame = (dt) => {
     }
     if (e && (dx || dy)) {
       sim.issue({ type: "Move", team: 0, ids: [e.id], dx, dy });
-      renderer.follow = true;
+      renderer.follow = !(sim instanceof RushArena);
     }
   }
   accumulator += dt * sim.settings.speed;
@@ -967,6 +1215,12 @@ renderer.onFrame = (dt) => {
         sim.visible[0][index(sim.map, e.x, e.y)]
       )
         audio.effect(e.sound ?? e.type);
+      if (
+        e.type === "hit" &&
+        e.sound === "arrow" &&
+        (renderer.reveal || sim.visible[0][index(sim.map, e.x!, e.y!)])
+      )
+        audio.effect("hit");
     }
   }
   const enemies = sim.entities.some(
@@ -1156,7 +1410,11 @@ ui.addEventListener("click", async (e) => {
   );
   if (!el) return;
   audio.start();
-  audio.effect("ui");
+  audio.effect(
+    ["back", "menu", "resume"].includes(el.dataset.action ?? "")
+      ? "back"
+      : "ui",
+  );
   if (el.dataset.mapKey) {
     const d = await read<{ map: MapData; name: string }>(
       "maps",
@@ -1172,6 +1430,37 @@ ui.addEventListener("click", async (e) => {
   }
   const action = el.dataset.action!;
   const [verb, id] = action.split(":");
+  if (action === "arena") {
+    if (sim && !(sim instanceof RushArena) && !ended) {
+      suspendedBattle = sim;
+      suspendedRunBattle = runBattle;
+    }
+    arenaMenu();
+    return;
+  }
+  if (action === "arena-start") {
+    startArena(
+      (document.querySelector('[name="arenaSeed"]') as HTMLInputElement)
+        .value || "RUSH",
+      (document.querySelector('[name="arenaCommander"]') as HTMLSelectElement)
+        .value,
+    );
+    return;
+  }
+  if (action === "arena-retry" && sim instanceof RushArena) {
+    startArena(sim.settings.seed, sim.settings.commander);
+    return;
+  }
+  if (action === "arena-return") {
+    returnFromArena();
+    return;
+  }
+  if (verb === "arena-upgrade" && sim instanceof RushArena) {
+    sim.chooseUpgrade(id as ArenaUpgrade);
+    audio.effect("ui-confirm");
+    updateHUD();
+    return;
+  }
   if (
     [
       "menu",
@@ -1396,12 +1685,16 @@ async function boot() {
     profile.missions = profile.missions.map((id) =>
       id.includes(":") ? id : "rise:" + id,
     );
-    settings = (await read<AudioSettings>("settings", "main")) ?? defaultAudio;
+    settings = {
+      ...defaultAudio,
+      ...(await read<AudioSettings>("settings", "main")),
+    };
     applySettings();
     const errors = campaigns.flatMap(validateCampaign);
     if (errors.length) throw Error(errors.join("; "));
     setView("menu");
     await pwa();
+    void themes.load(settings.theme, settings.style);
   } catch (e) {
     ui.innerHTML = `<div class="screen"><div class="sheet"><h2>Could not prepare the frontier</h2><p>${escape(String(e))}</p><p>Allow browser storage and reload. Existing saved data has been preserved.</p></div></div>`;
   }
@@ -1415,6 +1708,12 @@ if (import.meta.env.DEV || new URLSearchParams(location.search).has("test"))
     },
     get renderer() {
       return renderer;
+    },
+    get themes() {
+      return themes;
+    },
+    get audio() {
+      return audio;
     },
     get profile() {
       return profile;

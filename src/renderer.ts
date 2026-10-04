@@ -1,5 +1,7 @@
 import Phaser from "phaser";
+import { RushArena } from "./arena";
 import { daylight } from "./daylight";
+import { ThemeManager, propRole, unitRole } from "./themes";
 import { biomes, commanders, factions, buildings, units } from "./content";
 import { type Simulation, type Entity, type Event } from "./simulation";
 import { type MapData, type Point, index, dist } from "./map";
@@ -20,6 +22,10 @@ export class Renderer {
   reveal = false;
   reducedMotion = false;
   quality = "High";
+  themes?: ThemeManager;
+  ghosts: { kind: string; team: number; x: number; y: number; time: number }[] =
+    [];
+  effectStep = 0.025;
   fps = 60;
   particles: {
     x: number;
@@ -115,6 +121,9 @@ export class Renderer {
         },
         update(_t: number, delta: number) {
           self.fps = self.game.loop.actualFps;
+          self.effectStep = self.world?.paused
+            ? 0
+            : Math.min(delta / 1000, 0.1) / 0.65;
           self.onFrame?.(Math.min(delta / 1000, 0.1));
           self.draw();
         },
@@ -165,6 +174,17 @@ export class Renderer {
         continue;
       if (e.x === undefined || e.y === undefined || this.reducedMotion)
         continue;
+      this.themes?.event(e, this.world?.time ?? 0);
+      if (e.type === "death" && e.targetKind && this.themes?.active) {
+        this.ghosts.push({
+          kind: e.targetKind,
+          team: e.team ?? -1,
+          x: e.x,
+          y: e.y,
+          time: this.world?.time ?? 0,
+        });
+        if (this.ghosts.length > 30) this.ghosts.shift();
+      }
       const target = this.world?.entities.find((v) => v.id === e.target);
       if (this.quality === "Low" && e.type === "hit") continue;
       this.particles.push({
@@ -233,9 +253,26 @@ export class Renderer {
       this.texture?.refresh();
       return;
     }
+    const activeTheme = this.themes?.active;
+    if (activeTheme && !this.editor) {
+      const image = activeTheme.environment,
+        scale = Math.max(
+          this.width / image.naturalWidth,
+          this.height / image.naturalHeight,
+        );
+      c.drawImage(
+        image,
+        (this.width - image.naturalWidth * scale) / 2,
+        (this.height - image.naturalHeight * scale) / 2,
+        image.naturalWidth * scale,
+        image.naturalHeight * scale,
+      );
+      c.fillStyle = "#0a18254d";
+      c.fillRect(0, 0, this.width, this.height);
+    }
     const s = this.world;
     const n = map.settings.size,
-      b = biomes[map.settings.biome],
+      b = this.themeBiome(map),
       z = this.zoom;
     const commander = s?.entities.find(
       (e) => e.team === 0 && commanders[e.kind] && e.hp > 0,
@@ -272,9 +309,21 @@ export class Renderer {
                   : (x * 13 + y * 7) % 5 === 0
                     ? b.light
                     : b.ground;
-        this.diamond(p.x, p.y, 24 * z, 12 * z, fill, "#0000000c");
+        this.diamond(
+          p.x,
+          p.y,
+          24 * z,
+          12 * z,
+          s instanceof RushArena ? "#10233012" : fill,
+          s instanceof RushArena ? "#a6edff0b" : "#0000000c",
+        );
         if (explored) {
-          if (t === 1) this.tree(p.x, p.y, z, b.forest, (x + y) % 3);
+          if (t === 1) {
+            const sprite = activeTheme?.props.obstacle;
+            if (sprite && !this.editor)
+              this.themes!.draw(c, sprite, p.x, p.y, 40 * z);
+            else this.tree(p.x, p.y, z, b.forest, (x + y) % 3);
+          }
           if (t === 4) {
             this.diamond(p.x, p.y - 4 * z, 14 * z, 10 * z, "#91a19a");
             this.polygon(
@@ -304,6 +353,10 @@ export class Renderer {
         !s?.explored[0][index(map, point.x, point.y)]
       )
         continue;
+      if ((point.kind === "gold" || point.kind === "wood") && !this.editor) {
+        this.resourceSite(point, p, z);
+        continue;
+      }
       if (point.remaining === 0 && !this.editor) {
         this.diamond(p.x, p.y, 13 * z, 6 * z, "#766b55", "#b5a58a");
         c.fillStyle = "#eee2cb";
@@ -313,8 +366,26 @@ export class Renderer {
         c.textAlign = "start";
         continue;
       }
-      const color =
-        point.owner < 0 ? "#e6cd89" : point.owner === 0 ? "#65d7f4" : "#ffad7d";
+      const color = this.themes?.active
+        ? this.themes.faction(point.owner).color
+        : point.owner < 0
+          ? "#e6cd89"
+          : point.owner === 0
+            ? "#65d7f4"
+            : "#ffad7d";
+      if (
+        activeTheme &&
+        !this.editor &&
+        (point.kind === "gold" || point.kind === "wood")
+      ) {
+        this.themes!.draw(
+          c,
+          activeTheme.props[point.kind === "gold" ? "resource" : "obstacle"],
+          p.x,
+          p.y,
+          49 * z,
+        );
+      }
       this.diamond(p.x, p.y, 18 * z, 9 * z, "#173b36aa", color);
       c.strokeStyle = color;
       c.lineWidth = 2 * z;
@@ -371,7 +442,9 @@ export class Renderer {
         c.textAlign = "start";
       }
     }
-    const night = this.editor ? 0 : daylight(s?.time ?? 0).night;
+    if (s instanceof RushArena) this.arenaGround(s);
+    const night =
+      this.editor || s instanceof RushArena ? 0 : daylight(s?.time ?? 0).night;
     if (night > 0) {
       c.fillStyle = `rgba(15, 24, 68, ${night * 0.3})`;
       c.fillRect(0, 0, this.width, this.height);
@@ -397,7 +470,7 @@ export class Renderer {
         p.y > this.height + 100
       )
         continue;
-      this.entity(e, p, z);
+      this.entity(e, p, s instanceof RushArena ? Math.max(z, 0.85) : z);
       if (night > 0 && e.building && e.build === 0) {
         c.save();
         c.globalAlpha = night * 0.8;
@@ -417,7 +490,7 @@ export class Renderer {
       }
     }
     for (const particle of this.particles) {
-      particle.life -= 0.025;
+      particle.life -= this.effectStep;
       const p = this.project(particle.x, particle.y);
       c.globalAlpha = Math.max(0, particle.life);
       c.strokeStyle = particle.color;
@@ -436,6 +509,21 @@ export class Renderer {
           8 * z * (1 - particle.life),
           particle.color,
         );
+        if (activeTheme && this.quality !== "Low") {
+          for (let k = 0; k < 7; k++) {
+            const angle = (k * Math.PI * 2) / 7,
+              r = (1 - particle.life) * 23 * z;
+            c.beginPath();
+            c.arc(
+              q.x + Math.cos(angle) * r,
+              q.y - 12 * z + Math.sin(angle) * r * 0.65,
+              Math.max(0.5, 2.5 * particle.life * z),
+              0,
+              Math.PI * 2,
+            );
+            c.fill();
+          }
+        }
       } else {
         c.lineWidth = 2 * z;
         c.beginPath();
@@ -453,6 +541,34 @@ export class Renderer {
       c.globalAlpha = 1;
     }
     this.particles = this.particles.filter((p) => p.life > 0);
+    if (activeTheme) {
+      this.ghosts = this.ghosts.filter(
+        (g) => (s?.time ?? 0) - g.time >= 0 && (s?.time ?? 0) - g.time < 0.7,
+      );
+      for (const ghost of this.ghosts) {
+        const age = (s?.time ?? 0) - ghost.time,
+          p = this.project(ghost.x, ghost.y),
+          sprite =
+            activeTheme.exact[ghost.kind] ??
+            (buildings[ghost.kind]
+              ? activeTheme.props[propRole(ghost.kind)]
+              : activeTheme.units[unitRole(ghost.kind)]);
+        if (sprite)
+          this.themes!.draw(
+            c,
+            sprite,
+            p.x,
+            p.y,
+            buildings[ghost.kind] ? 75 * z : 43 * z,
+            {
+              x: 0,
+              y: this.reducedMotion ? 0 : age * 9 * z,
+              rotation: this.reducedMotion ? 0 : age * 0.4,
+              alpha: 1 - age / 0.7,
+            },
+          );
+      }
+    }
     if (this.placement) {
       const p = this.project(this.camera.x, this.camera.y);
       c.strokeStyle = "#f2d48a";
@@ -461,6 +577,148 @@ export class Renderer {
       c.setLineDash([]);
     }
     this.texture?.refresh();
+  }
+  resourceSite(point: MapData["points"][number], p: Point, z: number) {
+    const c = this.ctx!,
+      gold = point.kind === "gold",
+      empty = point.remaining === 0,
+      color = gold ? "#ffd25e" : "#97eb8f";
+    const owner = this.themes?.active
+      ? this.themes.faction(point.owner)
+      : {
+          color:
+            point.owner < 0
+              ? "#f2e7c3"
+              : point.owner === 0
+                ? "#65d7f4"
+                : "#ffad7d",
+          emblem: point.owner === 0 ? "diamond" : "triangle",
+        };
+    c.save();
+    this.diamond(
+      p.x,
+      p.y,
+      30 * z,
+      15 * z,
+      empty ? "#263838" : gold ? "#6c5929" : "#325d3a",
+      empty ? "#829088" : color,
+    );
+    const fraction = (point.remaining ?? 1) / (point.capacity ?? 1);
+    const stage = empty
+      ? "empty"
+      : fraction > 0.66
+        ? "full"
+        : fraction > 0.25
+          ? "half"
+          : "sparse";
+    const exactResource = this.themes?.active?.resources[point.kind]?.[stage];
+    if (exactResource) this.themes!.draw(c, exactResource, p.x, p.y, 68 * z);
+    if (!empty) {
+      const sprite = exactResource
+        ? undefined
+        : this.themes?.active?.props[gold ? "resource" : "obstacle"];
+      if (sprite) this.themes!.draw(c, sprite, p.x, p.y, 53 * z);
+      // Stable resource silhouettes remain distinct even when a starter pack shares prop roles.
+      if (gold) {
+        for (const [dx, dy] of [
+          [-16, 0],
+          [-7, -5],
+          [5, -1],
+          [16, 3],
+        ])
+          this.diamond(
+            p.x + dx * z,
+            p.y + dy * z,
+            6 * z,
+            5 * z,
+            "#e6b834",
+            "#fff0a1",
+          );
+        c.strokeStyle = "#d4e4ed";
+        c.lineWidth = 3 * z;
+        c.beginPath();
+        c.moveTo(p.x - 18 * z, p.y - 12 * z);
+        c.lineTo(p.x - 8 * z, p.y - 28 * z);
+        c.stroke();
+        c.strokeStyle = "#f4be61";
+        c.beginPath();
+        c.moveTo(p.x - 16 * z, p.y - 30 * z);
+        c.lineTo(p.x, p.y - 21 * z);
+        c.stroke();
+      } else {
+        for (let i = 0; i < 3; i++) {
+          const x = p.x + (i - 1) * 10 * z,
+            y = p.y + (i % 2) * 4 * z;
+          c.fillStyle = "#805033";
+          c.fillRect(x - 5 * z, y - 10 * z, 12 * z, 14 * z);
+          c.fillStyle = "#d6ad70";
+          c.beginPath();
+          c.ellipse(x + 1 * z, y - 10 * z, 6 * z, 3 * z, 0, 0, Math.PI * 2);
+          c.fill();
+          c.strokeStyle = "#8a653e";
+          c.lineWidth = z;
+          c.beginPath();
+          c.ellipse(x + 1 * z, y - 10 * z, 3 * z, 1.5 * z, 0, 0, Math.PI * 2);
+          c.stroke();
+        }
+      }
+    }
+    const title = empty
+      ? gold
+        ? "EMPTY MINE"
+        : "CLEARED GROVE"
+      : gold
+        ? "GOLD MINE"
+        : "TIMBER GROVE";
+    c.font = `bold ${10 * z}px system-ui`;
+    c.textAlign = "center";
+    c.fillStyle = "#10232bef";
+    c.fillRect(p.x - 49 * z, p.y - 64 * z, 98 * z, 18 * z);
+    c.fillStyle = empty ? "#b6c3bf" : color;
+    c.fillText(title, p.x, p.y - 52 * z);
+    c.fillStyle = "#12252cf2";
+    c.fillRect(p.x - 42 * z, p.y + 19 * z, 84 * z, 26 * z);
+    c.fillStyle = "#2d4444";
+    c.fillRect(p.x - 37 * z, p.y + 22 * z, 74 * z, 4 * z);
+    c.fillStyle = empty ? "#86968e" : color;
+    c.fillRect(
+      p.x - 37 * z,
+      p.y + 22 * z,
+      74 *
+        z *
+        Math.max(
+          0,
+          Math.min(1, (point.remaining ?? 0) / (point.capacity ?? 1)),
+        ),
+      4 * z,
+    );
+    c.font = `${9 * z}px system-ui`;
+    c.fillStyle = "#f6f5de";
+    c.fillText(
+      empty
+        ? "Depleted"
+        : `${Math.ceil(point.remaining ?? 0)} left · ${point.owner < 0 ? "Unclaimed" : point.owner === 0 ? "Harvesting" : "Rival"}`,
+      p.x,
+      p.y + 38 * z,
+    );
+    c.fillStyle = owner.color;
+    this.themes?.badge(c, p.x + 27 * z, p.y - 35 * z, owner.emblem, 4 * z);
+    if (point.progress > 0) {
+      c.strokeStyle = "#ffffff";
+      c.lineWidth = 3 * z;
+      c.beginPath();
+      c.ellipse(
+        p.x,
+        p.y,
+        34 * z,
+        18 * z,
+        0,
+        -Math.PI / 2,
+        -Math.PI / 2 + (Math.PI * 2 * point.progress) / 6,
+      );
+      c.stroke();
+    }
+    c.restore();
   }
   tree(x: number, y: number, z: number, color: string, variation: number) {
     const c = this.ctx!;
@@ -484,6 +742,19 @@ export class Renderer {
     }
   }
   entity(e: Entity, p: Point, z: number) {
+    if (
+      this.themes?.entity(
+        this.ctx!,
+        e,
+        p.x,
+        p.y,
+        z,
+        this.world?.time ?? 0,
+        this.selected.includes(e.id),
+        this.reducedMotion,
+      )
+    )
+      return;
     const c = this.ctx!,
       selected = this.selected.includes(e.id),
       friend = e.team === 0;
@@ -714,7 +985,164 @@ export class Renderer {
       abilities: [],
     }));
   }
+  arenaGround(arena: RushArena) {
+    const c = this.ctx!;
+    const ring = (center: Point, radius: number) => {
+      c.beginPath();
+      for (let i = 0; i <= 80; i++) {
+        const a = (i / 80) * Math.PI * 2;
+        const p = this.project(
+          center.x + Math.cos(a) * radius,
+          center.y + Math.sin(a) * radius,
+        );
+        if (i === 0) c.moveTo(p.x, p.y);
+        else c.lineTo(p.x, p.y);
+      }
+      c.closePath();
+    };
+    c.save();
+    // Even-odd fill makes the safe area transparent over the illustrated scenery.
+    c.beginPath();
+    c.rect(0, 0, this.width, this.height);
+    for (let i = 0; i <= 80; i++) {
+      const a = (i / 80) * Math.PI * 2,
+        p = this.project(
+          12 + Math.cos(a) * arena.radius,
+          12 + Math.sin(a) * arena.radius,
+        );
+      if (i === 0) c.moveTo(p.x, p.y);
+      else c.lineTo(p.x, p.y);
+    }
+    c.closePath();
+    c.fillStyle = "#50103768";
+    c.fill("evenodd");
+    ring(arena.center, arena.radius);
+    c.strokeStyle = "#5cf4f4";
+    c.lineWidth = 3;
+    c.shadowBlur = this.reducedMotion ? 0 : 16;
+    c.shadowColor = "#5cf4f4";
+    c.stroke();
+    c.shadowBlur = 0;
+    for (const h of arena.hazards) {
+      ring(h, h.radius);
+      c.fillStyle = "#ff493b65";
+      c.fill();
+      c.strokeStyle = "#ffe2b2";
+      c.lineWidth = 2;
+      c.stroke();
+      const p = this.project(h.x, h.y);
+      c.textAlign = "center";
+      c.font = "bold 14px sans-serif";
+      c.fillStyle = "#fff";
+      c.fillText(
+        `STRIKE ${Math.max(0, h.at - arena.time).toFixed(1)}s`,
+        p.x,
+        p.y - 25,
+      );
+    }
+    for (const supply of arena.supplies) {
+      const p = this.project(supply.x, supply.y);
+      const color =
+        supply.kind === "heal"
+          ? "#70ffaa"
+          : supply.kind === "escort"
+            ? "#ffdb60"
+            : "#d69aff";
+      const pickup =
+        this.themes?.active?.pickups[
+          supply.kind === "heal"
+            ? "health"
+            : supply.kind === "escort"
+              ? "crate"
+              : "ammo"
+        ];
+      const sprite = pickup ? undefined : this.themes?.active?.props.resource;
+      if (pickup) {
+        const bob = this.reducedMotion
+          ? 0
+          : Math.sin(arena.time * 4 + supply.id) * 2;
+        c.drawImage(pickup, p.x - 15, p.y - 30 + bob, 30, 30);
+      }
+      if (sprite) this.themes!.draw(c, sprite, p.x, p.y, 37 * this.zoom);
+      this.diamond(p.x, p.y, 16 * this.zoom, 8 * this.zoom, "#0b172bdd", color);
+      c.textAlign = "center";
+      c.font = "bold 11px sans-serif";
+      const label =
+        supply.kind === "heal"
+          ? "+ HEAL"
+          : supply.kind === "escort"
+            ? "+ ESCORT"
+            : "+ ENERGY";
+      c.fillStyle = "#0b172bed";
+      c.fillRect(p.x - 35, p.y - 34, 70, 19);
+      c.fillStyle = color;
+      c.fillText(label, p.x, p.y - 20);
+    }
+    const hero = arena.hero(0);
+    if (hero && dist(hero, arena.center) > arena.radius) {
+      c.strokeStyle = "#ff554b";
+      c.lineWidth = 9;
+      c.strokeRect(4, 4, this.width - 8, this.height - 8);
+      c.font = "bold 17px sans-serif";
+      c.textAlign = "center";
+      c.fillStyle = "#fff";
+      c.fillText(
+        "STORM DAMAGE — MOVE INSIDE THE BRIGHT RING",
+        this.width / 2,
+        this.height * 0.24,
+      );
+    }
+    c.restore();
+  }
   drawBackdrop() {
+    if (this.themes?.active) {
+      const c = this.ctx!,
+        image = this.themes.active.environment,
+        scale = Math.max(
+          this.width / image.naturalWidth,
+          this.height / image.naturalHeight,
+        );
+      c.drawImage(
+        image,
+        (this.width - image.naturalWidth * scale) / 2,
+        (this.height - image.naturalHeight * scale) / 2,
+        image.naturalWidth * scale,
+        image.naturalHeight * scale,
+      );
+      c.fillStyle = "#06172566";
+      c.fillRect(0, 0, this.width, this.height);
+      if (this.width > 850) {
+        this.themes.draw(
+          c,
+          this.themes.active.props.hq,
+          this.width * 0.76,
+          this.height * 0.48,
+          205,
+        );
+        this.themes.draw(
+          c,
+          this.themes.active.units.commander,
+          this.width * 0.69,
+          this.height * 0.71,
+          120,
+        );
+        this.themes.draw(
+          c,
+          this.themes.active.units.heavy,
+          this.width * 0.84,
+          this.height * 0.73,
+          116,
+        );
+        this.themes.draw(
+          c,
+          this.themes.active.units.ranged,
+          this.width * 0.77,
+          this.height * 0.79,
+          101,
+        );
+      }
+      return;
+    }
     const n = 26;
     const b = biomes.grassland;
     this.camera = { x: 13, y: 13 };
@@ -777,6 +1205,28 @@ export class Renderer {
       );
     }
   }
+  themeBiome(map: MapData) {
+    const biome = biomes[map.settings.biome],
+      id = this.themes?.active?.manifest.id;
+    if (!id || this.editor) return biome;
+    const materials: Record<string, string[]> = {
+      space: ["#596b7a", "#687d8e", "#4a5b68", "#344957"],
+      mythic: ["#729359", "#87a766", "#547649", "#446b75"],
+      "old-time": ["#b39772", "#c6ab84", "#80765c", "#526f75"],
+      christmas: ["#b9d2d6", "#d2e2e3", "#90afb5", "#6a9faa"],
+      halloween: ["#736184", "#877298", "#574764", "#494066"],
+    };
+    const colors = materials[id];
+    return colors
+      ? {
+          ...biome,
+          ground: colors[0],
+          light: colors[1],
+          forest: colors[2],
+          water: colors[3],
+        }
+      : biome;
+  }
   minimap(canvas: HTMLCanvasElement) {
     const c = canvas.getContext("2d")!,
       map = this.world?.map ?? this.editor;
@@ -817,9 +1267,21 @@ export class Renderer {
           !this.world?.visible[0][index(map, e.x, e.y)])
       )
         continue;
-      c.fillStyle = e.team === 0 ? "#82edff" : "#ffae80";
+      c.fillStyle = this.themes?.active
+        ? this.themes.faction(e.team).color
+        : e.team === 0
+          ? "#82edff"
+          : "#ffae80";
       const size = e.building ? 4 : 2;
       c.fillRect(e.x * k - size / 2, e.y * k - size / 2, size, size);
+      if (this.themes?.active)
+        this.themes.badge(
+          c,
+          e.x * k,
+          e.y * k,
+          this.themes.faction(e.team).emblem,
+          size * 0.65,
+        );
     }
     c.strokeStyle = "#e9efd6";
     c.strokeRect(

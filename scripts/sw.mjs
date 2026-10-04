@@ -20,7 +20,16 @@ const hash = createHash("sha256");
 hash.update(await readFile("scripts/sw.mjs"));
 for (const f of files) hash.update(await readFile(f));
 const version = hash.digest("hex").slice(0, 12);
-const paths = files.map((p) => "/frontier-command/" + p.slice(5));
+// Large art/music packs are cached on demand by ThemeManager. The shell and manifests
+// remain small so updates do not require downloading every world before activation.
+const paths = files
+  .filter(
+    (p) =>
+      !p.includes("/themes/") ||
+      p.endsWith("/catalog.json") ||
+      p.endsWith("/theme.json"),
+  )
+  .map((p) => "/frontier-command/" + p.slice(5));
 paths.push("/frontier-command/");
 await writeFile(
   "dist/sw.js",
