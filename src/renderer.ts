@@ -1181,8 +1181,18 @@ export class Renderer {
         p.y - 25,
       );
     }
+    if (arena.time < 3) {
+      const marker = this.themes?.arenaMarker("spawn");
+      if (marker)
+        for (const spawn of arena.map.spawns) {
+          const p = this.project(spawn.x, spawn.y);
+          this.themes!.draw(c, marker, p.x, p.y, 45 * this.zoom);
+        }
+    }
     for (const supply of arena.supplies) {
       const p = this.project(supply.x, supply.y);
+      const marker = this.themes?.arenaMarker("drop");
+      if (marker) this.themes!.draw(c, marker, p.x, p.y, 45 * this.zoom);
       const color =
         supply.kind === "heal"
           ? "#70ffaa"

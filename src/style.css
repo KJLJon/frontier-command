@@ -1299,3 +1299,25 @@ body.has-update #ui {
     margin: 0 auto 2px;
   }
 }
+
+.audio-toggle {
+  min-width: 30px;
+  min-height: 30px;
+  padding: 4px;
+  font-size: 14px;
+}
+.arena-result-art {
+  width: 100px;
+  height: 100px;
+  object-fit: contain;
+  display: block;
+  margin: 0 auto 12px;
+}
+@media (max-width: 700px) {
+  .theme-controls select[name="battleTheme"] {
+    max-width: 102px;
+  }
+  .theme-controls select[name="battleStyle"] {
+    max-width: 72px;
+  }
+}

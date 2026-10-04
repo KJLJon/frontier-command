@@ -367,6 +367,8 @@ export class ThemeManager {
       image.src = blobUrl;
       await image.decode();
       return image;
+    } catch (error) {
+      throw Error(new URL(url).pathname + ": " + String(error));
     } finally {
       URL.revokeObjectURL(blobUrl);
     }
@@ -621,6 +623,22 @@ export class ThemeManager {
         }
       : undefined;
   }
+  arenaMarker(name: string) {
+    const frame = this.active?.extra?.arena?.markers?.[name];
+    return frame ? this.frame(frame) : undefined;
+  }
+  arenaResult(won: boolean) {
+    return this.arenaMarker(won ? "winner" : "elimination")?.canvas.toDataURL(
+      "image/png",
+    );
+  }
+  tile(biome: string, category: string) {
+    const theme = this.active;
+    const aliases = theme?.extra?.terrain?.[theme.style]?.aliases as unknown as
+      | Record<string, string>
+      | undefined;
+    return theme?.terrain.get((aliases?.[biome] ?? biome) + ":" + category);
+  }
   overlay(kind: string, state: string) {
     const frame = this.active?.extra?.buildingOverlays?.[kind]?.[state];
     return frame?.file ? this.frame(frame) : undefined;
@@ -659,18 +677,24 @@ export class ThemeManager {
           for (const frame of frames) add(frame, true);
     for (const states of Object.values(extra.buildingOverlays ?? {}))
       for (const frame of Object.values(states)) add(frame, true);
+    for (const frame of Object.values(extra.arena?.markers ?? {}))
+      add(frame, true);
+    for (const frame of Object.values(extra.arena?.pickups ?? {}))
+      add(frame, true);
     for (const effect of Object.values(extra.effects ?? {}))
       for (const frame of effect.frames) add(frame, true);
     for (const [biome, categories] of Object.entries(
       extra.terrain?.[theme.style] ?? {},
     ))
-      for (const [category, frame] of Object.entries(categories))
+      for (const [category, frame] of Object.entries(categories)) {
+        if (!frame.file) continue;
         jobs.push(async () => {
           theme.terrain.set(
             biome + ":" + category,
             await this.image(url(frame.file)),
           );
         });
+      }
     for (const [category, entry] of Object.entries(
       extra.audio?.categories ?? {},
     )) {
@@ -698,7 +722,9 @@ export class ThemeManager {
       );
       results.forEach((result) => {
         if (result.status === "rejected")
-          theme.warnings.push("Optional presentation asset");
+          theme.warnings.push(
+            "Optional presentation asset: " + String(result.reason),
+          );
       });
       if (theme === this.active) this.bytes.clear();
     }

@@ -628,7 +628,7 @@ function settingsMenu() {
     .querySelector("#settings-form")!
     .insertAdjacentHTML(
       "beforeend",
-      '<div class="offline-themes"><button type="button" id="download-themes">Download all worlds for offline play</button><p id="download-status" role="status">Selected themes are cached automatically. All worlds need about 120 MB.</p></div>',
+      '<div class="offline-themes"><button type="button" id="download-themes">Download all worlds for offline play</button><p id="download-status" role="status">Selected worlds are cached automatically. Downloading every world and style includes the full animation and audio pack.</p></div>',
     );
   document.querySelector<HTMLButtonElement>("#download-themes")!.onclick =
     async (e) => {
@@ -758,7 +758,7 @@ function gameUI() {
   updateHUD();
   const controls = document.createElement("div");
   controls.className = "theme-controls";
-  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" }, sticker: { name: "Sticker" } }, settings.style)}<span data-theme-status>${escape(themes.status)}</span>`;
+  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" }, sticker: { name: "Sticker" } }, settings.style)}<button class="audio-toggle" type="button" data-action="mute" aria-label="${settings.mute ? "Unmute audio" : "Mute audio"}" title="${settings.mute ? "Audio muted" : "Audio on"}">${settings.mute ? "🔇" : "🔊"}</button><span data-theme-status>${escape(themes.status)}</span>`;
   ui.append(controls);
   controls.onchange = async () => {
     const id = controls.querySelector<HTMLSelectElement>(
@@ -988,7 +988,7 @@ async function finish() {
       won
         ? "Your commander outlasted the rival squads."
         : "Try a different route, commander, or upgrade.",
-      `<div class="card-grid"><article class="card"><h3>${clock(arena.time)}</h3><p>Survival time</p></article><article class="card"><h3>${arena.stats.kills}</h3><p>Enemies defeated</p></article><article class="card"><h3>${arena.collected[0]}</h3><p>Supplies collected</p></article><article class="card"><h3>${arena.upgrades}</h3><p>Upgrades chosen</p></article></div><div class="footer-actions">${button("Retry arena", "arena-retry", "primary")}${button("New arena", "arena")}${button(suspendedBattle ? "Return to RTS battle" : "Main menu", "arena-return")}</div>`,
+      `${themes.arenaResult(won) ? `<img class="arena-result-art" src="${themes.arenaResult(won)}" alt="${won ? "Winner" : "Eliminated"}">` : ""}<div class="card-grid"><article class="card"><h3>${clock(arena.time)}</h3><p>Survival time</p></article><article class="card"><h3>${arena.stats.kills}</h3><p>Enemies defeated</p></article><article class="card"><h3>${arena.collected[0]}</h3><p>Supplies collected</p></article><article class="card"><h3>${arena.upgrades}</h3><p>Upgrades chosen</p></article></div><div class="footer-actions">${button("Retry arena", "arena-retry", "primary")}${button("New arena", "arena")}${button(suspendedBattle ? "Return to RTS battle" : "Main menu", "arena-return")}</div>`,
     );
     return;
   }
@@ -1579,6 +1579,18 @@ ui.addEventListener("click", async (e) => {
     } catch {
       toast("Seed: " + value);
     }
+  }
+  if (action === "mute") {
+    settings.mute = !settings.mute;
+    applySettings();
+    await write("settings", "main", settings);
+    el.textContent = settings.mute ? "🔇" : "🔊";
+    el.setAttribute(
+      "aria-label",
+      settings.mute ? "Unmute audio" : "Mute audio",
+    );
+    el.title = settings.mute ? "Audio muted" : "Audio on";
+    return;
   }
   if (action === "pause") {
     sim?.setPause();

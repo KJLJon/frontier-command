@@ -129,6 +129,10 @@ export class AudioSystem {
       );
       source.connect(gain);
       gain.connect(c.destination);
+      source.onended = () => {
+        source.disconnect();
+        gain.disconnect();
+      };
       source.start();
       const old = this.musicSource,
         oldGain = this.musicGain;
