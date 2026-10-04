@@ -1,6 +1,6 @@
 # Frontier Command
 
-A playable offline fantasy RTS vertical slice. Lead a visible commander, capture an economy, raise a settlement, and command an army across an isometric frontier.
+A playable offline RTS and Rush Arena vertical slice with six visual themes. Lead a visible commander, capture an economy, raise a settlement, and command an army across an isometric frontier.
 
 ![Battlefield](docs/battle.png)
 
@@ -19,7 +19,7 @@ Open the displayed address. Load once online, then the production PWA can reload
 ## Included slice
 
 - **Rush Arena:** a separate single-player survival skirmish with four commander squads, a closing safe zone, finite supply caches, telegraphed strikes, upgrade choices and instant retries. Launch it from the main menu or an RTS battle; return without changing that battle.
-- Five switchable visual worlds in Toon and Realistic, themed backgrounds, exact expanded art where ready, faction shapes, and ambient/combat scores. See [theme integration](docs/THEME_INTEGRATION.md) and the [asset production contract](docs/THEME_ASSET_SPEC.md).
+- Six switchable worlds in Toon, Realistic and Sticker, complete unit/building rosters, authored movement/attack cycles, terrain materials, building states, resource activity, positional sounds and distinct ambient/combat scores. See [theme integration](docs/THEME_INTEGRATION.md) and the [asset production contract](docs/THEME_ASSET_SPEC.md).
 - Three factions with health, speed, cost, or income distinctions; three commanders with three abilities each.
 - Six unit roles with counters and healing; eleven building definitions; six prerequisite-based technologies.
 - Gold/wood capture economy, population, construction, recruitment queues, rally points, attack/move/hold/group orders.

@@ -56,12 +56,14 @@ for (const theme of catalog.themes) {
   if (manifest.gameAssets) {
     expanded.set(extra, manifest.gameAssets);
     theme.gameAssets = extra;
+    delete manifest.gameAssets;
+    manifest.gameAssetsPath = "game-assets.json";
   }
   try {
     await access(path.join(source, extra));
     const data = JSON.parse(await readFile(path.join(source, extra), "utf8"));
     if (
-      !manifest.gameAssets &&
+      !expanded.has(extra) &&
       data.schemaVersion === 1 &&
       data.units &&
       data.resourceSites

@@ -96,5 +96,6 @@
   ],
   "integrationGuide": "INTEGRATION-HANDOFF.md",
   "productionPreview": "production-preview.html",
-  "snapshot": "1d76e608a18f5dda"
+  "snapshot": "13b0ca5fdd60ee0b",
+  "upstreamSnapshot": "1d76e608a18f5dda"
 }
