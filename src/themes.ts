@@ -210,6 +210,8 @@ function crop(
       trimmed.height * ratio,
     );
   }
+  canvas.width = canvas.height = 0;
+  if (output !== trimmed) trimmed.width = trimmed.height = 0;
   return {
     canvas: output,
     anchorX: (rect.width * pivot[0] - left + 1) * ratio,
@@ -384,6 +386,8 @@ export class ThemeManager {
           ),
           frame.pivot,
         );
+      atlas.src = "";
+      props.src = "";
       const icons: Record<string, string> = {},
         audio: Record<string, ArrayBuffer> = {},
         warnings: string[] = [];
@@ -430,11 +434,21 @@ export class ThemeManager {
             throw Error("Unknown expanded roster schema");
           const loadFrame = async (frame: ExactFrame) => {
             const image = await this.image(url(frame.file));
-            return crop(
-              image,
-              assetFrame(image.naturalWidth, image.naturalHeight, frame, 1, 1),
-              frame.pivot,
-            );
+            try {
+              return crop(
+                image,
+                assetFrame(
+                  image.naturalWidth,
+                  image.naturalHeight,
+                  frame,
+                  1,
+                  1,
+                ),
+                frame.pivot,
+              );
+            } finally {
+              image.src = "";
+            }
           };
           // Optional entries fail independently; the established role artwork remains available.
           const tasks: (() => Promise<void>)[] = [];

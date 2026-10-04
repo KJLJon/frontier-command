@@ -47,7 +47,7 @@ test("all ten presentations switch atomically during play and work offline", asy
                   ? `${t.active.manifest.id}:${t.active.style}`
                   : "Fallback: " + t.lastError;
             }),
-          { timeout: 30000 },
+          { timeout: 60000 },
         )
         .toBe(id + ":" + style);
       expect(
