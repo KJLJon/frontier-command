@@ -149,7 +149,7 @@ function crop(
   const canvas = document.createElement("canvas");
   canvas.width = rect.width;
   canvas.height = rect.height;
-  const c = canvas.getContext("2d")!;
+  const c = canvas.getContext("2d", { willReadFrequently: true })!;
   c.drawImage(
     image,
     rect.x,
@@ -192,10 +192,28 @@ function crop(
       right - left + 1,
       bottom - top + 1,
     );
+  // Runtime sprites never draw above 108 logical pixels. Bound texture memory while
+  // retaining more than 3x that detail and the exact ground pivot.
+  const ratio = Math.min(1, 384 / Math.max(trimmed.width, trimmed.height));
+  let output = trimmed;
+  if (ratio < 1) {
+    output = document.createElement("canvas");
+    output.width = Math.ceil(trimmed.width * ratio);
+    output.height = Math.ceil(trimmed.height * ratio);
+    const context = output.getContext("2d")!;
+    context.imageSmoothingQuality = "high";
+    context.drawImage(
+      trimmed,
+      0,
+      0,
+      trimmed.width * ratio,
+      trimmed.height * ratio,
+    );
+  }
   return {
-    canvas: trimmed,
-    anchorX: rect.width * pivot[0] - left + 1,
-    anchorY: rect.height * pivot[1] - top + 1,
+    canvas: output,
+    anchorX: (rect.width * pivot[0] - left + 1) * ratio,
+    anchorY: (rect.height * pivot[1] - top + 1) * ratio,
     width: rect.width,
     height: rect.height,
   };
@@ -211,24 +229,42 @@ export class ThemeManager {
   private motions = new Map<number, { kind: string; time: number }>();
   private bytes = new Map<string, Promise<ArrayBuffer>>();
   onChange?: () => void;
+  private async cacheOperation<T>(operation: Promise<T>): Promise<T> {
+    let timer: ReturnType<typeof setTimeout> | undefined;
+    try {
+      return await Promise.race([
+        operation,
+        new Promise<never>((_, reject) => {
+          timer = setTimeout(() => reject(Error("Theme cache busy")), 2000);
+        }),
+      ]);
+    } finally {
+      clearTimeout(timer);
+    }
+  }
   private async fetchBytes(url: string) {
     let cache: Cache | undefined;
     try {
-      cache = await caches.open("frontier-theme-assets:v1");
-      const cached = await cache.match(url);
-      if (cached) return await cached.arrayBuffer();
+      cache = await this.cacheOperation(
+        caches.open("frontier-theme-assets:v1"),
+      );
+      const cached = await this.cacheOperation(cache.match(url));
+      if (cached) return await this.cacheOperation(cached.arrayBuffer());
     } catch {
       this.cacheFailed = true;
     }
     const response = await fetch(url, { signal: AbortSignal.timeout(15000) });
     if (!response.ok)
       throw Error("Asset unavailable: " + new URL(url).pathname);
+    const bytes = await response.arrayBuffer();
     try {
-      await cache?.put(url, response.clone());
+      await this.cacheOperation(
+        cache?.put(url, new Response(bytes)) ?? Promise.resolve(),
+      );
     } catch {
       this.cacheFailed = true;
     }
-    return await response.arrayBuffer();
+    return bytes;
   }
   async data(url: string) {
     let existing = this.bytes.get(url);

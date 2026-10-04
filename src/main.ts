@@ -1192,9 +1192,15 @@ renderer.onFrame = (dt) => {
       renderer.follow = !(sim instanceof RushArena);
     }
   }
-  accumulator += dt * sim.settings.speed;
+  if (sim.paused) accumulator = 0;
+  else accumulator += dt * sim.settings.speed;
   let steps = 0;
-  while (accumulator >= 0.1 && steps < 12) {
+  while (
+    accumulator >= 0.1 &&
+    steps < 12 &&
+    !sim.paused &&
+    sim.winner === null
+  ) {
     sim.step(0.1);
     accumulator -= 0.1;
     steps++;

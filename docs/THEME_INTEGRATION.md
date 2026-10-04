@@ -34,3 +34,11 @@ Characters remain static poses with procedural movement/recoil/spawn/defeat pres
 6. Build, run simulation tests, and verify desktop/mobile presentation, missing-file fallback, all enabled styles, offline switching, mute/volume, reduced motion and large armies. Inspect crops at actual game size.
 
 Audio unlocks on interaction, decodes through Web Audio, loops on sample-frame bounds, and crossfades ambient/combat/theme changes. Stereo frame counts are not divided by channel count. Effects use a 12-voice cap and category throttling; reduced motion suppresses nonessential effects. Full themed sound is original synthesized audio, not recorded orchestration.
+
+## Runtime safeguards
+
+Runtime cutouts retain their source pivot and aspect ratio while being capped at 384 pixels on their longest edge. Canvas presentation runs at 30 fps on High and 20 fps on Low; simulation and input continue independently. Tactical and upgrade pauses stop simulation ticks and event replay. Small mobile screens reserve room for all three ability buttons and strategy action buttons.
+
+Cache operations have a two-second deadline before network fallback, so slow browser storage cannot indefinitely block a theme change. Offline availability remains dependent on successful prior caching. Theme asset source files are never resized or modified.
+
+Verification after the canonical-folder migration: the production build and expanded asset validation pass, all 32 simulation tests pass, and four desktop/mobile Arena checks pass, including returning to the exact prior strategy state. The live in-app preview also starts an Arena and renders Space and Mythic. Repeated Windows headless image exports stalled during the theme gallery run; functional theme switching checks are tracked separately from live visual proof.

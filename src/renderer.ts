@@ -26,6 +26,7 @@ export class Renderer {
   ghosts: { kind: string; team: number; x: number; y: number; time: number }[] =
     [];
   effectStep = 0.025;
+  drawAccumulator = 0;
   fps = 60;
   particles: {
     x: number;
@@ -120,12 +121,18 @@ export class Renderer {
           );
         },
         update(_t: number, delta: number) {
-          self.fps = self.game.loop.actualFps;
-          self.effectStep = self.world?.paused
-            ? 0
-            : Math.min(delta / 1000, 0.1) / 0.65;
-          self.onFrame?.(Math.min(delta / 1000, 0.1));
-          self.draw();
+          const dt = Math.min(delta / 1000, 0.1);
+          self.onFrame?.(dt);
+          self.drawAccumulator += dt;
+          const frame = self.quality === "Low" ? 1 / 20 : 1 / 30;
+          self.fps = Math.min(self.game.loop.actualFps, 1 / frame);
+          if (self.drawAccumulator >= frame) {
+            self.effectStep = self.world?.paused
+              ? 0
+              : self.drawAccumulator / 0.65;
+            self.drawAccumulator %= frame;
+            self.draw();
+          }
         },
       },
     });

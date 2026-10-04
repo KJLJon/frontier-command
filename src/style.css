@@ -1287,3 +1287,15 @@ body.has-update #ui {
     bottom: 140px;
   }
 }
+
+@media (max-width: 600px) {
+  .ability {
+    height: 64px;
+    padding: 5px 3px;
+  }
+  .ability .theme-icon {
+    width: 12px;
+    height: 12px;
+    margin: 0 auto 2px;
+  }
+}
