@@ -205,6 +205,7 @@ export class ThemeManager {
   catalog?: Catalog;
   status = "Loading presentation…";
   loading = false;
+  lastError = "";
   private sequence = 0;
   private cacheFailed = false;
   private motions = new Map<number, { kind: string; time: number }>();
@@ -466,6 +467,7 @@ export class ThemeManager {
       this.onChange?.();
       return true;
     } catch (error) {
+      this.lastError = String(error);
       if (sequence !== this.sequence) return false;
       this.loading = false;
       this.status = this.active

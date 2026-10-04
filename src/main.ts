@@ -1648,6 +1648,7 @@ async function pwa() {
     import.meta.env.BASE_URL + "sw.js",
     { scope: import.meta.env.BASE_URL },
   );
+  if (!registration) return;
   let applying = false;
   const show = () => {
     if (registration.waiting) {
@@ -1693,7 +1694,9 @@ async function boot() {
     const errors = campaigns.flatMap(validateCampaign);
     if (errors.length) throw Error(errors.join("; "));
     setView("menu");
-    await pwa();
+    void pwa().catch((error) =>
+      console.warn("Offline installation unavailable", error),
+    );
     void themes.load(settings.theme, settings.style);
   } catch (e) {
     ui.innerHTML = `<div class="screen"><div class="sheet"><h2>Could not prepare the frontier</h2><p>${escape(String(e))}</p><p>Allow browser storage and reload. Existing saved data has been preserved.</p></div></div>`;
