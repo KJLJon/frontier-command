@@ -34,6 +34,7 @@ export type Settings = MapSettings & {
   speed: number;
   teams: number[];
   aiOnly?: boolean;
+  preparation?: number;
   campaignId?: string;
   mission?: Mission;
   bonus?: string;
@@ -304,6 +305,36 @@ export class Simulation {
         .map((e) => index(this.map, e.x, e.y)),
     );
   }
+  get preparationRemaining() {
+    return Math.max(
+      0,
+      (this.settings.mission || this.settings.aiOnly
+        ? 0
+        : (this.settings.preparation ?? 0)) - this.time,
+    );
+  }
+  buildProblem(team: number, kind: string, point: Point) {
+    const d = buildings[kind];
+    if (!d) return "Unknown building.";
+    if (d.requires && !this.has(team, d.requires))
+      return `Requires ${buildings[d.requires].name}.`;
+    if (!passable(this.map, point.x, point.y))
+      return "Choose clear ground; water and rocks block building.";
+    if (
+      this.entities.some((e) => e.building && e.hp > 0 && dist(e, point) < 1.7)
+    )
+      return "Leave more space beside existing buildings.";
+    if (
+      !this.entities.some(
+        (e) => e.team === team && e.hp > 0 && dist(e, point) < 9,
+      )
+    )
+      return "Build near your base or your squad.";
+    const p = this.players[team];
+    if (!p || p.gold < d.gold || p.wood < d.wood)
+      return "Not enough resources.";
+    return undefined;
+  }
   execute(o: Order) {
     const p = this.players[o.team];
     if (!p || !p.alive) return;
@@ -315,21 +346,8 @@ export class Simulation {
     if (o.type === "Build") {
       const d = buildings[o.kind ?? ""];
       if (!d) return;
-      if (d.requires && !this.has(o.team, d.requires))
-        return this.reject(`Requires ${buildings[d.requires].name}.`, o.team);
-      if (
-        !passable(this.map, x, y) ||
-        this.entities.some(
-          (e) => e.building && e.hp > 0 && dist(e, { x, y }) < 1.7,
-        ) ||
-        !this.entities.some(
-          (e) => e.team === o.team && e.hp > 0 && dist(e, { x, y }) < 9,
-        )
-      )
-        return this.reject(
-          "Build on open ground within 9 tiles of your army.",
-          o.team,
-        );
+      const problem = this.buildProblem(o.team, o.kind!, { x, y });
+      if (problem) return this.reject(problem, o.team);
       if (!this.pay(o.team, d.gold, d.wood))
         return this.reject("Not enough resources.", o.team);
       this.spawn(
@@ -702,7 +720,10 @@ export class Simulation {
             continue;
           const dd = dist(v, e);
           if (
-            dd < Math.max(range, 5) &&
+            dd <
+              (e.team === 0 && !this.players[0].ai && e.order === "Guard"
+                ? range
+                : Math.max(range, 5)) &&
             dd < nearest &&
             (e.team < 0 || this.visible[e.team][index(this.map, v.x, v.y)])
           ) {
@@ -732,6 +753,7 @@ export class Simulation {
         !e.building &&
         !(e.steer && e.steer.remaining > 0) &&
         e.order !== "Hold" &&
+        !(e.team === 0 && !this.players[0].ai && e.order === "Guard") &&
         e.team !== -1 &&
         this.tick % 15 === e.id % 15
       ) {
@@ -1069,7 +1091,16 @@ export class Simulation {
         visibleEnemy.find((e) => e.kind === "keep") ??
         p.memory.find((e) => e.kind === "keep");
       const destinations = this.map.points
-        .filter((q) => q.kind !== "camp" && q.remaining !== 0 && q.owner !== t)
+        .filter(
+          (q) =>
+            q.kind !== "camp" &&
+            q.remaining !== 0 &&
+            q.owner !== t &&
+            (this.preparationRemaining === 0 ||
+              !this.map.spawns.some(
+                (spawn, team) => !this.friendly(team, t) && dist(q, spawn) < 10,
+              )),
+        )
         .sort((a, b) => dist(a, base) - dist(b, base));
       const capture = destinations[0];
       const attackSize =
@@ -1081,7 +1112,7 @@ export class Simulation {
               ? 14
               : 8;
       let goal: Point | undefined;
-      if (army.length >= attackSize) {
+      if (army.length >= attackSize && this.preparationRemaining === 0) {
         goal =
           knownKeep ?? this.map.spawns.find((_, i) => !this.friendly(i, t));
         p.plan = "Attack enemy headquarters";
@@ -1093,7 +1124,10 @@ export class Simulation {
             destinations.find((v) => v.kind === "relic") ?? capture ?? goal;
       } else {
         goal = capture;
-        p.plan = "Capture territory and recruit";
+        p.plan =
+          this.preparationRemaining > 0
+            ? "Prepare defenses; no opening raid"
+            : "Capture territory and recruit";
       }
       const threatened = this.entities.find(
         (e) =>

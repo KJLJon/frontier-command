@@ -397,3 +397,73 @@ test("day-night lighting is cyclic, bounded and follows saved simulation time", 
     daylight(s.time),
   );
 });
+
+// These checks exercise the beginner flow without a renderer.
+import { buildingChoices, recruitmentProblem, nextStep } from "../src/advisor";
+test("building catalog orders prerequisites first and explains missing resources", () => {
+  const s = new Simulation({ ...settings, aiOnly: false });
+  const kinds = buildingChoices(s).map((c) => c.kind);
+  assert.ok(kinds.indexOf("barracks") < kinds.indexOf("blacksmith"));
+  assert.ok(kinds.indexOf("blacksmith") < kinds.indexOf("workshop"));
+  assert.ok(kinds.indexOf("blacksmith") < kinds.indexOf("arcane"));
+  s.players[0].gold = 0;
+  s.players[0].wood = 0;
+  assert.match(
+    buildingChoices(s).find((c) => c.kind === "barracks")!.need,
+    /gold.*wood/,
+  );
+  assert.match(recruitmentProblem(s, "swordsman"), /Barracks/);
+});
+test("guided opening progresses through construction, training and emergency retreat", () => {
+  const s = new Simulation({ ...settings, aiOnly: false }),
+    p = s.map.spawns[0];
+  assert.match(nextStep(s).title, /1\. Build/);
+  const b = s.spawn("barracks", 0, p.x + 3, p.y, true, true);
+  assert.match(nextStep(s).title, /ready in/);
+  b.build = 0;
+  assert.match(nextStep(s).title, /2\. Train/);
+  s.stats.recruited = 3;
+  assert.match(nextStep(s).title, /Watchtower/);
+  const hero = s.entities.find((e) => e.team === 0 && e.kind === "warlord")!;
+  hero.hp = hero.maxHp * 0.2;
+  assert.equal(nextStep(s).action, "guide:retreat");
+});
+test("opening preparation prevents offensive AI raids but still permits base defense", () => {
+  const s = new Simulation({ ...settings, aiOnly: false, preparation: 180 }),
+    base = s.map.spawns[1];
+  s.players[1].personality = "Adaptive";
+  for (let i = 0; i < 14; i++) s.spawn("swordsman", 1, base.x + 2, base.y + 2);
+  s.time = 1;
+  s.players[1].nextAI = 0;
+  s.ai();
+  assert.equal(s.players[1].plan, "Prepare defenses; no opening raid");
+  s.time = 181;
+  s.players[1].nextAI = 0;
+  s.ai();
+  assert.equal(s.players[1].plan, "Attack enemy headquarters");
+  const restored = new Simulation({
+    ...settings,
+    aiOnly: false,
+    preparation: 180,
+  });
+  assert.equal(restored.preparationRemaining, 180);
+  assert.equal(
+    new Simulation({ ...settings, preparation: 180 }).preparationRemaining,
+    0,
+  );
+});
+test("guarding player troops stay home until given an explicit pursuit order", () => {
+  const s = new Simulation({ ...settings, aiOnly: false });
+  s.entities = s.entities.filter((e) => e.building);
+  s.map.tiles.fill(0);
+  s.players.forEach((p) => (p.ai = false));
+  const a = s.spawn("swordsman", 0, 10.5, 10.5),
+    b = s.spawn("swordsman", 1, 13.5, 10.5);
+  b.order = "Hold";
+  const start = { x: a.x, y: a.y };
+  for (let i = 0; i < 20; i++) s.step(0.05);
+  assert.deepEqual({ x: a.x, y: a.y }, start);
+  s.execute({ type: "Attack", team: 0, ids: [a.id], target: b.id });
+  for (let i = 0; i < 30; i++) s.step(0.05);
+  assert.ok(a.x > start.x);
+});

@@ -1,4 +1,10 @@
 import "./style.css";
+import {
+  buildingChoices,
+  costShortfall,
+  recruitmentProblem,
+  nextStep,
+} from "./advisor";
 import { RushArena, arenaUpgrades, type ArenaUpgrade } from "./arena";
 import { daylight } from "./daylight";
 import { ThemeManager, themeNames, type ThemeStyle } from "./themes";
@@ -58,6 +64,7 @@ themes.onChange = () => {
     .querySelectorAll<HTMLElement>("[data-theme-status]")
     .forEach((el) => (el.textContent = themes.status));
   decorateCommands();
+  paintCatalog();
   if (view === "game") updateHUD();
 };
 function decorateCommands() {
@@ -201,6 +208,7 @@ function screen(title: string, subtitle: string, body: string, wide = false) {
   ui.innerHTML = `<div class="screen"><section class="sheet ${wide ? "wide" : ""}"><div class="screen-header"><div><div class="eyebrow">Frontier Command</div><h2>${title}</h2><div class="muted">${subtitle}</div></div>${button("Back", "back", "small")}</div>${body}</section></div>`;
 }
 function setView(v: string) {
+  finishPlanning();
   view = v;
   panel = "";
   renderer.editor = v === "editor" ? editor : undefined;
@@ -249,8 +257,9 @@ let setup: Settings = {
   ...defaults,
   faction: "ironhold",
   commander: "warlord",
-  difficulty: "Normal",
-  personality: "Adaptive",
+  difficulty: "Easy",
+  preparation: 180,
+  personality: "Economic",
   mode: "Conquest",
   scale: "Standard",
   starting: 350,
@@ -263,6 +272,43 @@ function skirmish() {
     "Choose your frontier",
     "A shared seed creates the same battlefield. Every rival uses the same economy.",
     `<form id="setup"><div class="form-grid">${select("faction", "Your faction", factions, setup.faction)}${select("commander", "Commander", commanders, setup.commander)}${select("scale", "Match scale", Object.keys(scales), setup.scale)}${select("size", "Map size", ["24", "28", "36", "48", "56"], " " + setup.size).replace(`value="${setup.size}"`, `value="${setup.size}"`)}${input("seed", "Map seed", setup.seed)}${select("biome", "Biome", biomes, setup.biome)}${select("players", "Players (you + AI)", ["2", "3", "4", "5", "6"], String(setup.players))}${select("difficulty", "AI difficulty", ["Easy", "Normal", "Hard", "Brutal"], setup.difficulty)}${select("personality", "AI personality", personalities, setup.personality)}${select("mode", "Victory condition", ["Conquest", "Domination", "Relic Hunt", "Survival"], setup.mode)}${select("preset", "Map preset", ["Competitive", "Balanced", "Wild", "Chaotic"], setup.preset)}${input("starting", "Starting gold & wood", setup.starting, "number", 'min="100" max="3000" step="50"')}${input("population", "Population ceiling", setup.population, "number", 'min="20" max="250"')}${select("speed", "Game speed", ["0.75", "1", "1.5", "2"], String(setup.speed))}${select("teamMode", "Teams", ["Free for all", "You vs coalition", "Two alliances"], "Free for all")}</div><details><summary>Map generation controls</summary><div class="form-grid">${input("resources", "Resource abundance", setup.resources, "range", 'min="0.5" max="2" step="0.1"')}${input("roughness", "Terrain roughness", setup.roughness, "range", 'min="0" max="1" step="0.05"')}${input("water", "Water", setup.water, "range", 'min="0" max="0.4" step="0.02"')}${input("camps", "Neutral camps", setup.camps, "number", 'min="0" max="12"')}${input("objectives", "Relic density", setup.objectives, "number", 'min="1" max="7"')}${input("weirdness", "Weirdness", setup.weirdness, "range", 'min="0" max="1" step="0.1"')}</div></details><div class="footer-actions"><div class="muted" id="setup-description">Standard · about 15–20 minutes<br>WASD to move · Space to pause</div><div class="row">${button("Copy seed", "copy-seed", "small")}<button type="submit" class="primary">Begin battle</button></div></div></form>`,
+  );
+  const setupGrid = document.querySelector("#setup > .form-grid")!;
+  const advanced = document.createElement("details");
+  advanced.innerHTML =
+    '<summary>More match options</summary><div class="form-grid"></div>';
+  for (const name of [
+    "size",
+    "seed",
+    "biome",
+    "players",
+    "personality",
+    "mode",
+    "preset",
+    "starting",
+    "population",
+    "speed",
+    "teamMode",
+  ]) {
+    const field = setupGrid.querySelector(`[name="${name}"]`)?.closest("label");
+    if (field) advanced.querySelector(".form-grid")!.append(field);
+  }
+  advanced.querySelector(".form-grid")!.insertAdjacentHTML(
+    "afterbegin",
+    select(
+      "preparation",
+      "Opening breathing room",
+      {
+        "180": { name: "3-minute build-up" },
+        "0": { name: "Immediate action" },
+      },
+      String(setup.preparation ?? 180),
+    ),
+  );
+  setupGrid.after(advanced);
+  setupGrid.insertAdjacentHTML(
+    "beforeend",
+    '<p class="setup-help">Start on Easy: build your base before enemy raids begin. Tap to move; building and troop choices pause the battle.</p>',
   );
   const form = document.querySelector<HTMLFormElement>("#setup")!;
   (form.elements.namedItem("size") as HTMLSelectElement).value = String(
@@ -306,6 +352,7 @@ function skirmish() {
     const data = Object.fromEntries(new FormData(form));
     const numerical = [
       "size",
+      "preparation",
       "players",
       "starting",
       "population",
@@ -426,7 +473,7 @@ function start(s: Settings, map?: MapData) {
   setView("game");
   toast(
     s.mission?.story ??
-      "Capture gold and wood banners. Build a barracks and recruit your army.",
+      "Start with the next-step guide. Nearby resources collect automatically.",
   );
   void save("autosave", false);
 }
@@ -724,11 +771,121 @@ async function load(name: string) {
     toast(String(e));
   }
 }
+let planningWorld: Simulation | undefined;
+function beginPlanning() {
+  if (!sim || sim instanceof RushArena) return;
+  if (!sim.paused) {
+    planningWorld = sim;
+    sim.paused = true;
+  }
+  keys.clear();
+}
+function finishPlanning() {
+  if (planningWorld) planningWorld.paused = false;
+  planningWorld = undefined;
+  buildKind = "";
+  renderer.placement = undefined;
+  renderer.placementPoint = undefined;
+  document.querySelector("#placement-controls")?.replaceChildren();
+}
+function closePlanning() {
+  finishPlanning();
+  panel = "";
+  document.querySelector("#panel-root")?.replaceChildren();
+  updateHUD();
+}
+function homeCamera() {
+  const base = sim?.entities.find(
+    (e) => e.team === 0 && e.kind === "keep" && e.hp > 0,
+  );
+  if (base) {
+    renderer.center(base);
+    renderer.follow = false;
+  }
+}
+function chooseBuilding(kind: string) {
+  if (!sim) return;
+  const d = buildings[kind];
+  if (
+    sim.entities.some(
+      (e) => e.team === 0 && e.kind === kind && e.hp > 0 && e.build > 0,
+    )
+  ) {
+    toast(`${d.name} is already being built.`);
+    return;
+  }
+  if (d.requires && !sim.has(0, d.requires)) {
+    toast(`Build ${buildings[d.requires].name} first.`);
+    return;
+  }
+  const need = costShortfall(sim, d.gold, d.wood);
+  if (need) {
+    toast(need);
+    return;
+  }
+  beginPlanning();
+  homeCamera();
+  buildKind = kind;
+  renderer.placement = kind;
+  renderer.placementPoint = undefined;
+  panel = "";
+  document.querySelector("#panel-root")!.replaceChildren();
+  document.querySelector("#placement-controls")!.innerHTML =
+    `<div class="planning-strip"><strong>⌂ ${d.name}</strong><span>Battle paused · Tap clear ground near home. Green = valid.</span>${button("Cancel", "cancel-build", "small")}</div>`;
+  updateHUD();
+}
+renderer.placementAllowed = (p) => !!sim && !sim.buildProblem(0, buildKind, p);
+function executeManaged(order: Omit<Order, "team">) {
+  if (!sim) return false;
+  const before = sim.events.length;
+  const result = sim.execute({ ...order, team: 0 });
+  const notice = sim.events.slice(before).find((e) => e.type === "notice");
+  if (notice?.text) toast(notice.text);
+  if (result === false) return false;
+  audio.effect("ui-confirm");
+  return true;
+}
+function paintCatalog() {
+  document
+    .querySelectorAll<HTMLCanvasElement>("canvas[data-preview]")
+    .forEach((canvas) => {
+      const kind = canvas.dataset.preview!,
+        context = canvas.getContext("2d")!;
+      const sprite = themes.active?.exact[kind];
+      context.clearRect(0, 0, canvas.width, canvas.height);
+      if (sprite) {
+        const scale =
+          Math.min(
+            canvas.width / sprite.canvas.width,
+            canvas.height / sprite.canvas.height,
+          ) * 0.92;
+        const width = sprite.canvas.width * scale,
+          height = sprite.canvas.height * scale;
+        context.imageSmoothingQuality = "high";
+        context.drawImage(
+          sprite.canvas,
+          (canvas.width - width) / 2,
+          (canvas.height - height) / 2,
+          width,
+          height,
+        );
+      } else {
+        context.font = "42px system-ui";
+        context.textAlign = "center";
+        context.fillStyle = "#e7c57b";
+        context.fillText(buildings[kind] ? "⌂" : "⚔", canvas.width / 2, 58);
+      }
+    });
+}
+const preview = (kind: string) =>
+  `<canvas aria-hidden="true" width="96" height="96" data-preview="${kind}"></canvas>`;
+const price = (gold: number, wood: number) =>
+  `<span class="catalog-price"><span title="Gold">● ${gold}</span><span title="Wood">▰ ${wood}</span></span>`;
 function gameUI() {
   if (!sim) return;
   const p = sim.players[0],
     hero = sim.entities.find((e) => e.team === 0 && commanders[e.kind]);
-  ui.innerHTML = `<div class="hud-top"><div class="resource-bar"><div class="resource gold" id="gold">0<span>Gold</span></div><div class="resource wood" id="wood">0<span>Wood</span></div><div class="resource" id="population">0<span>Population</span></div><div class="resource" id="time">0:00<span>${sim.settings.scale}</span></div></div><div class="hud-actions">${button("Pause", "pause", "small")}${button("Menu", "match-menu", "small")}</div></div><div class="hud-objective"><strong id="mode-title">${sim.settings.mode} · ${factions[p.faction].mark} ${factions[p.faction].name}</strong><p id="objective"></p><p id="score" style="color:var(--gold);margin-top:6px"></p></div><div class="minimap-wrap"><canvas id="minimap" width="150" height="150" aria-label="Battlefield minimap"></canvas><div class="minimap-caption"><span>${escape(sim.settings.seed)}</span><span>◆ / ▲</span></div></div><div class="selection" id="selection">Commander selected</div><div class="hint" id="hint">WASD move · Q / E / R abilities · Right-click orders · Space tactical pause</div><div class="side-actions">${button("Build <kbd>B</kbd>", "panel:build")}${button("Recruit <kbd>N</kbd>", "panel:recruit")}${button("Research <kbd>T</kbd>", "panel:research")}</div><div class="bottom-hud"><div class="commander-card"><strong>${commanders[p.commander].name}</strong><div class="bar"><i id="hero-bar" style="width:100%"></i></div><small class="muted" id="hero-health">${hero?.hp} health</small></div><div class="ability-row">${commanders[p.commander].abilities.map((a, i) => `<button class="ability" data-action="ability:${i}" id="ability-${i}"><b>${["Q", "E", "R"][i]}</b>${a}</button>`).join("")}</div><div class="orders">${button("Commander", "commander")}${button("Army", "army")}${button("Attack-move", "attackmove")}${button("Hold", "hold")}${button("− / +", "zoom")}</div></div><div class="mobile-pad"><button data-dir="up" aria-label="Move up">▲</button><button data-dir="left" aria-label="Move left">◀</button><span class="center">◆</span><button data-dir="right" aria-label="Move right">▶</button><button data-dir="down" aria-label="Move down">▼</button></div><div id="panel-root"></div><div id="pause-root"></div>`;
+  ui.innerHTML = `<div class="hud-top"><div class="resource-bar"><div class="resource gold" id="gold">0<span>Gold</span></div><div class="resource wood" id="wood">0<span>Wood</span></div><div class="resource" id="population">0<span>Population</span></div><div class="resource" id="time">0:00<span>${sim.settings.scale}</span></div></div><div class="hud-actions">${button("Pause", "pause", "small")}${button("Menu", "match-menu", "small")}</div></div><div class="hud-objective"><strong id="mode-title">${sim.settings.mode} · ${factions[p.faction].mark} ${factions[p.faction].name}</strong><p id="objective"></p><div id="guide-footer"></div><p id="score" style="color:var(--gold);margin-top:6px"></p></div><div class="minimap-wrap"><canvas id="minimap" width="150" height="150" aria-label="Battlefield minimap"></canvas><div class="minimap-caption"><span>${escape(sim.settings.seed)}</span><span>◆ / ▲</span></div></div><div class="selection" id="selection">Commander selected</div><div class="hint" id="hint">WASD move · Q / E / R abilities · Right-click orders · Space tactical pause</div><div class="side-actions">${button("Build <kbd>B</kbd>", "panel:build")}${button("Recruit <kbd>N</kbd>", "panel:recruit")}</div><div class="bottom-hud"><div class="commander-card"><strong>${commanders[p.commander].name}</strong><div class="bar"><i id="hero-bar" style="width:100%"></i></div><small class="muted" id="hero-health">${hero?.hp} health</small></div><div class="orders">${button("Commander", "commander")}${button("Army", "army")}${button('<span aria-hidden="true">⌂</span> Home', "home")}</div><details class="command-tools"><summary>More</summary><div class="command-drawer"><div class="ability-row">${commanders[p.commander].abilities.map((a, i) => `<button class="ability" data-action="ability:${i}" id="ability-${i}"><b>${["Q", "E", "R"][i]}</b>${a}</button>`).join("")}</div>${button("Attack-move", "attackmove")}${button("Hold", "hold")}${button("Research", "panel:research")}${button("− / +", "zoom")}</div></details></div><div class="mobile-pad"><button data-dir="up" aria-label="Move up">▲</button><button data-dir="left" aria-label="Move left">◀</button><span class="center">◆</span><button data-dir="right" aria-label="Move right">▶</button><button data-dir="down" aria-label="Move down">▼</button></div><div id="placement-controls"></div><div id="panel-root"></div><div id="pause-root"></div>`;
   document.querySelector<HTMLCanvasElement>("#minimap")!.onclick = (e) => {
     const rect = (e.target as HTMLCanvasElement).getBoundingClientRect();
     renderer.center({
@@ -747,9 +904,12 @@ function gameUI() {
     };
     b.onpointerup = () => keys.delete(key);
     b.onpointercancel = () => keys.delete(key);
+    b.onlostpointercapture = () => keys.delete(key);
   });
   if (sim instanceof RushArena) {
     document.querySelector(".side-actions")?.remove();
+    document.querySelector("#guide-footer")?.remove();
+    document.querySelector('[data-action="panel:research"]')?.remove();
     document.querySelector(".minimap-wrap")?.remove();
     document.querySelector("#hint")!.textContent =
       "Move your commander · Escort follows · Collect caches · Avoid red strikes";
@@ -776,7 +936,15 @@ function updateHUD() {
     "time",
     `${clock(sim.time)}<span>${daylight(sim.time).phase} · ${sim.settings.scale}</span>`,
   );
-  update("objective", escape(sim.objective));
+  if (sim instanceof RushArena) update("objective", escape(sim.objective));
+  else {
+    const step = nextStep(sim);
+    update("objective", `<strong>${escape(step.title)}</strong>`);
+    update(
+      "guide-footer",
+      `<small>${escape(step.hint)}</small>${button(step.label, step.action, "small")}<span class="opening-clock">${sim.preparationRemaining > 0 ? "🛡 No opening raids · " + clock(sim.preparationRemaining) : "Tap ground to move · Drag to explore"}</span>`,
+    );
+  }
   update(
     "score",
     sim.settings.mode === "Survival"
@@ -793,7 +961,7 @@ function updateHUD() {
     const name = document.querySelector(".commander-card strong");
     if (name)
       name.textContent = themes.name(hero.kind)
-        ? themes.name(hero.kind) + " · " + commanders[hero.kind].name
+        ? themes.name(hero.kind)
         : commanders[hero.kind].name;
     const bar = document.querySelector<HTMLElement>("#hero-bar");
     if (bar) bar.style.width = Math.max(0, (hero.hp / hero.maxHp) * 100) + "%";
@@ -825,7 +993,9 @@ function updateHUD() {
   if (!(sim instanceof RushArena && sim.pendingUpgrade))
     update(
       "pause-root",
-      sim.paused && !(sim instanceof RushArena && sim.pendingUpgrade)
+      sim.paused &&
+        !planningWorld &&
+        !(sim instanceof RushArena && sim.pendingUpgrade)
         ? `<div class="paused-label"><strong>Tactical pause</strong><p>${sim.commands.length} queued orders · inspect, plan, then resume</p></div>`
         : "",
     );
@@ -864,33 +1034,54 @@ function showPanel(kind: string) {
     toast("Arena upgrades replace base construction.");
     return;
   }
+  if (!sim) return;
   if (panel === kind) {
-    panel = "";
-    document.querySelector("#panel-root")!.innerHTML = "";
+    closePlanning();
     return;
   }
+  if (kind !== "debug") beginPlanning();
   panel = kind;
   const root = document.querySelector("#panel-root")!;
   let body = "";
-  if (kind === "build")
-    body = `<p class="muted">Choose a structure, then tap open ground near your army.</p><div class="catalog">${Object.entries(
-      buildings,
-    )
-      .filter(([k]) => k !== "keep")
-      .map(
-        ([k, d]) =>
-          `<button data-action="build:${k}"><strong>${d.name}</strong><span>${d.gold} gold · ${d.wood} wood</span><small>${d.description}${d.requires ? " Requires " + buildings[d.requires].name + "." : ""}</small></button>`,
+  if (kind === "build") {
+    const cards = buildingChoices(sim).map(
+      ({ kind: k, definition: d, missing, need, pending, unlocks, built }) => {
+        let first = missing;
+        while (
+          first &&
+          buildings[first].requires &&
+          !sim!.has(0, buildings[first].requires!)
+        )
+          first = buildings[first].requires;
+        const problem = missing
+          ? `Requires ${buildings[missing].name}`
+          : pending
+            ? `Building · ${Math.ceil(pending.build)}s`
+            : need;
+        return `<div class="catalog-card"><button data-action="build:${k}" ${problem ? "disabled" : ""}>${preview(k)}<strong>${d.name}${built ? " ✓" : ""}</strong>${price(d.gold, d.wood)}<small>${d.description}</small><small class="unlocks">${unlocks.length ? "Unlocks: " + unlocks.slice(0, 3).join(", ") : "Base protection"}</small>${problem ? `<small class="catalog-status">${problem}</small>` : ""}</button>${first ? button(`Build ${buildings[first].name} first`, `build:${first}`, "small prerequisite") : ""}</div>`;
+      },
+    );
+    body = `<p class="planning-note">⏸ Battle paused. Choose a building, then tap clear ground near home.</p><div class="catalog">${cards.slice(0, 3).join("")}</div><details class="more-catalog"><summary>All buildings · ${cards.length}</summary><div class="catalog">${cards.slice(3).join("")}</div></details>`;
+  }
+  if (kind === "recruit") {
+    const cards = Object.entries(units)
+      .sort(
+        ([a], [b]) =>
+          Number(!!recruitmentProblem(sim!, a)) -
+          Number(!!recruitmentProblem(sim!, b)),
       )
-      .join("")}</div>`;
-  if (kind === "recruit")
-    body = `<p class="muted">Requires a completed production building. Queues support five units.</p><div class="catalog">${Object.entries(
-      units,
-    )
-      .map(
-        ([k, d]) =>
-          `<button data-action="recruit:${k}"><strong>${d.name}</strong><span>${Math.ceil(d.gold * factions[sim!.players[0].faction].cost)} gold · ${Math.ceil(d.wood * factions[sim!.players[0].faction].cost)} wood</span><small>${buildings[d.building].name} · ${d.pop} population · ${d.time}s</small></button>`,
-      )
-      .join("")}</div>`;
+      .map(([k, d]) => {
+        const problem = recruitmentProblem(sim!, k),
+          cost = factions[sim!.players[0].faction].cost;
+        const missing = !sim!.has(0, d.building)
+          ? d.building
+          : problem.includes("House")
+            ? "house"
+            : "";
+        return `<div class="catalog-card"><button data-action="recruit:${k}" ${problem ? "disabled" : ""}>${preview(k)}<strong>${d.name}</strong>${price(Math.ceil(d.gold * cost), Math.ceil(d.wood * cost))}<small>${d.pop} space · ${d.time}s · ${buildings[d.building].name}</small>${problem ? `<small class="catalog-status">${problem}</small>` : "<small>Train → joins your army automatically</small>"}</button>${missing ? button(`Build ${buildings[missing].name} first`, `build:${missing}`, "small prerequisite") : ""}</div>`;
+      });
+    body = `<p class="planning-note">⏸ Battle paused. Choose a troop to train, then keep exploring.</p><div class="catalog">${cards.slice(0, 2).join("")}</div><details class="more-catalog"><summary>More troops</summary><div class="catalog">${cards.slice(2).join("")}</div></details>`;
+  }
   if (kind === "research")
     body = `<p class="muted">Research resets each battle. Prerequisites form each branch.</p><div class="catalog">${Object.entries(
       technologies,
@@ -902,7 +1093,9 @@ function showPanel(kind: string) {
       .join("")}</div>`;
   if (kind === "debug")
     body = `<div class="row">${button("Reveal map", "debug:reveal", "small")}${button("+1000 resources", "debug:resources", "small")}${button("Spawn troop", "debug:spawn", "small")}${button("Kill selected", "debug:kill", "small")}${button("Cycle speed", "debug:speed", "small")}${button("Change team", "debug:team", "small")}</div><pre class="debug" id="debug-state"></pre>`;
-  root.innerHTML = `<section class="panel"><div class="panel-header"><h3>${kind === "build" ? "Raise your settlement" : kind === "recruit" ? "Muster the army" : kind === "research" ? "Knowledge of war" : "Development tools"}</h3>${button("×", "close-panel", "small")}</div>${body}</section>`;
+  root.innerHTML = `<section class="panel"><div class="panel-header"><h3>${kind === "build" ? "Raise your settlement" : kind === "recruit" ? "Muster the army" : kind === "research" ? "Knowledge of war" : "Development tools"}</h3>${button("Back to battle", "close-panel", "small")}</div>${body}</section>`;
+  paintCatalog();
+  updateHUD();
 }
 function updateDebug() {
   const el = document.querySelector("#debug-state");
@@ -944,6 +1137,7 @@ function selectIds(ids: number[]) {
   updateHUD();
 }
 function matchMenu() {
+  closePlanning();
   if (!sim) return;
   if (sim instanceof RushArena) {
     view = "match-menu";
@@ -1038,14 +1232,14 @@ window.addEventListener("keydown", (e) => {
   keys.add(k);
   if (e.repeat) return;
   if (k === " ") {
-    sim?.setPause();
+    if (planningWorld) closePlanning();
+    else sim?.setPause();
     updateHUD();
   }
   if (k === "escape") {
-    if (buildKind) {
-      buildKind = "";
-      renderer.placement = undefined;
-      toast("Placement cancelled.");
+    if (buildKind || panel) {
+      closePlanning();
+      toast("Back to battle.");
     } else matchMenu();
   }
   if (k === "q" || k === "e" || k === "r")
@@ -1094,13 +1288,20 @@ renderer.onTap = (p, button, shift) => {
   }
   if (view !== "game" || !sim) return;
   if (buildKind) {
-    issue({ type: "Build", kind: buildKind, x: p.x, y: p.y });
-    if (!shift) {
-      buildKind = "";
-      renderer.placement = undefined;
+    if (button === 2) {
+      closePlanning();
+      toast("Placement cancelled.");
+      return;
     }
+    renderer.placementPoint = p;
+    const kind = buildKind;
+    if (!executeManaged({ type: "Build", kind, x: p.x, y: p.y })) return;
+    if (!shift) closePlanning();
+    else updateHUD();
+    toast(`${buildings[kind].name} started. You can keep exploring.`);
     return;
   }
+  if (panel && panel !== "debug") return;
   const hit = sim.entities
     .filter(
       (e) =>
@@ -1192,7 +1393,7 @@ renderer.onFrame = (dt) => {
       dx++;
       dy--;
     }
-    if (e && (dx || dy)) {
+    if (e && (dx || dy) && !planningWorld) {
       sim.issue({ type: "Move", team: 0, ids: [e.id], dx, dy });
       renderer.follow = !(sim instanceof RushArena);
     }
@@ -1580,7 +1781,8 @@ ui.addEventListener("click", async (e) => {
     return;
   }
   if (action === "pause") {
-    sim?.setPause();
+    if (planningWorld) closePlanning();
+    else sim?.setPause();
     updateHUD();
   }
   if (action === "match-menu") matchMenu();
@@ -1592,28 +1794,45 @@ ui.addEventListener("click", async (e) => {
   }
   if (action === "replay" && sim) start(sim.settings);
   if (verb === "panel") showPanel(id);
-  if (action === "close-panel") {
-    panel = "";
-    document.querySelector("#panel-root")!.innerHTML = "";
+  if (action === "close-panel" || action === "cancel-build") closePlanning();
+  if (verb === "build") chooseBuilding(id);
+  if (
+    verb === "recruit" &&
+    executeManaged({ type: "Recruit", kind: id, ids: selection })
+  ) {
+    closePlanning();
+    toast(`${units[id].name} training. Explore or train another.`);
   }
-  if (verb === "build") {
-    buildKind = id;
-    renderer.placement = id;
-    panel = "";
-    document.querySelector("#panel-root")!.innerHTML = "";
-    toast(`Place ${buildings[id].name} on open ground. Esc cancels.`);
+  if (verb === "research" && executeManaged({ type: "Research", kind: id })) {
+    closePlanning();
+    toast("Research complete.");
   }
-  if (verb === "recruit") issue({ type: "Recruit", kind: id, ids: selection });
-  if (verb === "research") {
-    issue({ type: "Research", kind: id });
-    if (!sim?.paused)
-      setTimeout(() => {
-        panel = "";
-        showPanel("research");
-      }, 150);
+  if (action === "home") homeCamera();
+  if (verb === "guide" && sim) {
+    if (id === "recruit") showPanel("recruit");
+    else if (id === "scout" || id === "retreat") {
+      closePlanning();
+      selectIds(
+        sim.entities
+          .filter((e) => e.team === 0 && !e.building && e.hp > 0)
+          .map((e) => e.id),
+      );
+      mode = "AttackMove";
+      renderer.follow = true;
+      const base = sim.entities.find(
+        (e) => e.team === 0 && e.kind === "keep" && e.hp > 0,
+      );
+      if (id === "retreat" && base)
+        issue({ type: "Move", ids: selection, x: base.x + 2, y: base.y });
+      else
+        toast(
+          "Squad selected. Tap a resource or open ground to explore together.",
+        );
+    } else showPanel("build");
   }
   if (verb === "ability") issue({ type: "UseAbility", slot: Number(id) });
   if (action === "commander" && sim) {
+    mode = "Move";
     selectIds(
       sim.entities
         .filter((e) => e.team === 0 && commanders[e.kind])
@@ -1621,12 +1840,14 @@ ui.addEventListener("click", async (e) => {
     );
     renderer.follow = true;
   }
-  if (action === "army" && sim)
+  if (action === "army" && sim) {
+    mode = "AttackMove";
     selectIds(
       sim.entities
         .filter((e) => e.team === 0 && !e.building && e.hp > 0)
         .map((e) => e.id),
     );
+  }
   if (action === "attackmove") {
     mode = mode === "AttackMove" ? "Move" : "AttackMove";
     toast(

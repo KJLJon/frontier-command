@@ -198,6 +198,8 @@ export class Renderer {
   dragged = false;
   follow = true;
   placement?: string;
+  placementPoint?: Point;
+  placementAllowed?: (p: Point) => boolean;
   constructor() {
     const self = this;
     this.game = new Phaser.Game({
@@ -227,12 +229,15 @@ export class Renderer {
             self.dragged = false;
           });
           this.input.on("pointermove", (p: Phaser.Input.Pointer) => {
+            if (self.placement) self.placementPoint = self.unproject(p.x, p.y);
             if (!p.isDown || !self.pointerStart) return;
             const start = self.pointerStart;
             if (Math.hypot(p.x - start.x, p.y - start.y) > 8)
               self.dragged = true;
             if (
-              (start.button === 1 || p.event instanceof TouchEvent) &&
+              (start.button === 1 ||
+                start.button === 2 ||
+                p.event instanceof TouchEvent) &&
               self.dragged
             ) {
               const dx = p.x - p.prevPosition.x,
@@ -855,13 +860,21 @@ export class Renderer {
       }
     }
     if (this.placement) {
-      const p = this.project(this.camera.x, this.camera.y);
-      c.strokeStyle = "#f2d48a";
+      const point = this.placementPoint ?? this.camera,
+        p = this.project(point.x, point.y);
+      const valid = this.placementAllowed?.(point) ?? true,
+        color = valid ? "#80f3aa" : "#ff747f";
+      c.save();
+      c.globalAlpha = 0.55;
+      const sprite = this.themes?.active?.exact[this.placement];
+      if (sprite) this.themes?.draw(c, sprite, p.x, p.y, 90 * z);
+      c.restore();
       c.setLineDash([5, 5]);
-      this.diamond(p.x, p.y, 26 * z, 13 * z, "#e5cd7622", "#e5cd76");
+      this.diamond(p.x, p.y, 30 * z, 15 * z, color + "33", color);
       c.setLineDash([]);
     }
   }
+
   resourceLife(kind: string, p: Point, z: number, color: string) {
     const c = this.ctx!,
       time = this.world?.time ?? 0;

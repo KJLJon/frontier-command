@@ -1317,3 +1317,446 @@ body[data-theme="street-kids"] .commander-card strong {
     backdrop-filter: none;
   }
 }
+/* A small guide and three primary orders keep the battlefield readable. */
+.setup-help {
+  grid-column: 1/-1;
+  color: var(--muted);
+  font-size: 14px;
+  line-height: 1.5;
+}
+#selection,
+#hint,
+.hud-objective:not(.arena-objective) #mode-title {
+  position: absolute !important;
+  width: 1px !important;
+  height: 1px !important;
+  overflow: hidden;
+  clip-path: inset(50%);
+  white-space: nowrap;
+}
+.hud-objective {
+  pointer-events: auto !important;
+  width: 320px;
+  top: 78px;
+  left: 16px;
+  padding: 12px 14px;
+  border-radius: 14px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+}
+.hud-objective p {
+  margin: 0;
+  font-size: 14px;
+}
+#guide-footer {
+  display: grid;
+  gap: 8px;
+  margin-top: 6px;
+}
+#guide-footer small {
+  font-size: 12px;
+  line-height: 1.4;
+  color: var(--muted);
+}
+#guide-footer button {
+  justify-self: start;
+  min-height: 40px;
+}
+.opening-clock {
+  font-size: 11px;
+  color: var(--gold);
+}
+#score:empty {
+  display: none;
+}
+.bottom-hud {
+  width: auto;
+  max-width: 640px;
+  gap: 12px;
+  align-items: center;
+  padding: 10px 12px;
+}
+.commander-card {
+  min-width: 115px;
+  width: 125px;
+}
+.commander-card strong {
+  font-size: 14px;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  display: block;
+}
+.bottom-hud .orders {
+  display: flex;
+  gap: 6px;
+  flex-wrap: nowrap;
+}
+.orders button {
+  min-height: 46px;
+  padding: 8px 10px;
+  font-size: 12px;
+}
+.orders button span {
+  font-size: 18px;
+  display: block;
+}
+.command-tools {
+  position: relative;
+}
+.command-tools summary {
+  list-style: none;
+  cursor: pointer;
+  padding: 12px 8px;
+  border: 1px solid var(--line);
+  border-radius: 8px;
+  font-size: 12px;
+  min-height: 44px;
+  box-sizing: border-box;
+}
+.command-drawer {
+  position: absolute;
+  bottom: 60px;
+  right: 0;
+  width: 300px;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  padding: 12px;
+  background: var(--panel);
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  box-shadow: 0 8px 30px #0008;
+}
+.command-drawer .ability-row {
+  grid-column: 1/-1;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+}
+.command-drawer .ability {
+  width: auto;
+  min-height: 60px;
+  font-size: 11px;
+}
+.side-actions {
+  bottom: 100px;
+  right: 16px;
+  display: flex;
+  gap: 8px;
+}
+.side-actions button {
+  min-height: 48px;
+  padding: 10px 16px;
+}
+.planning-strip {
+  position: absolute;
+  top: 150px;
+  left: 50%;
+  transform: translateX(-50%);
+  max-width: 600px;
+  width: calc(100% - 32px);
+  display: grid;
+  grid-template-columns: 1fr auto;
+  gap: 8px;
+  align-items: center;
+  padding: 12px 16px;
+  background: var(--panel);
+  border: 2px solid var(--gold);
+  border-radius: 14px;
+  box-sizing: border-box;
+  pointer-events: auto;
+}
+.planning-strip span {
+  grid-column: 1;
+  grid-row: 2;
+  font-size: 12px;
+  color: var(--muted);
+}
+.planning-strip button {
+  grid-column: 2;
+  grid-row: 1/3;
+}
+.panel {
+  width: 440px;
+  max-width: calc(100vw - 32px);
+  top: 120px;
+  bottom: 105px;
+  right: 16px;
+  padding: 16px;
+  border-radius: 14px;
+}
+.panel-header h3 {
+  font-size: 18px;
+}
+.panel-header button {
+  min-height: 40px;
+}
+.planning-note {
+  font-size: 12px;
+  color: var(--muted);
+  line-height: 1.5;
+  margin: 10px 0;
+}
+.catalog {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+}
+.catalog-card {
+  border: 1px solid var(--line);
+  border-radius: 12px;
+  overflow: hidden;
+}
+.catalog-card > button {
+  border: 0;
+  border-radius: 0;
+  width: 100%;
+  display: grid;
+  grid-template-columns: 76px 1fr;
+  gap: 5px 10px;
+  text-align: left;
+  padding: 10px;
+  min-height: 106px;
+}
+.catalog-card canvas {
+  width: 76px;
+  height: 76px;
+  grid-column: 1;
+  grid-row: 1/6;
+  align-self: center;
+}
+.catalog-card strong,
+.catalog-card small,
+.catalog-card .catalog-price {
+  grid-column: 2;
+}
+.catalog-card strong {
+  font-size: 15px;
+}
+.catalog-card small {
+  font-size: 11px;
+  line-height: 1.4;
+}
+.catalog-price {
+  display: flex;
+  gap: 12px;
+  font-size: 12px !important;
+}
+.catalog-price span {
+  color: var(--gold);
+  font-size: 12px;
+}
+.catalog-price span + span {
+  color: #a9deb1;
+}
+.catalog-status {
+  color: #ffad91 !important;
+}
+.catalog-card button:disabled {
+  opacity: 0.7;
+}
+.catalog-card .prerequisite {
+  width: 100%;
+  min-height: 36px;
+  border-radius: 0;
+  border-top: 1px solid var(--line);
+  font-size: 12px;
+  color: var(--gold);
+}
+.more-catalog {
+  margin-top: 12px;
+}
+.more-catalog summary {
+  cursor: pointer;
+  min-height: 44px;
+  display: flex;
+  align-items: center;
+  color: var(--gold);
+  font-size: 13px;
+}
+.paused-label {
+  left: auto;
+  right: 16px;
+  top: 80px;
+  transform: none;
+  width: auto;
+  padding: 10px 16px;
+  border-radius: 12px;
+}
+.paused-label strong {
+  font-size: 18px;
+}
+.paused-label p {
+  font-size: 11px;
+  margin: 4px 0;
+}
+@media (max-width: 700px) {
+  .hud-objective {
+    left: 8px;
+    top: 70px;
+    width: 250px;
+    padding: 8px 10px;
+  }
+  .hud-objective p {
+    font-size: 12px;
+  }
+  #guide-footer {
+    gap: 5px;
+    margin-top: 4px;
+  }
+  #guide-footer small {
+    font-size: 11px;
+  }
+  #guide-footer button {
+    min-height: 36px;
+    font-size: 11px;
+    padding: 6px 10px;
+  }
+  .opening-clock {
+    font-size: 10px;
+  }
+  .bottom-hud {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    width: auto;
+    transform: none;
+    max-width: none;
+    padding: 8px;
+    gap: 6px;
+    display: flex;
+  }
+  .commander-card {
+    width: 90px;
+    min-width: 90px;
+  }
+  .commander-card strong {
+    font-size: 11px;
+  }
+  .commander-card small {
+    font-size: 10px;
+  }
+  .orders {
+    flex: 1;
+    justify-content: center;
+  }
+  .orders button {
+    min-height: 46px;
+    font-size: 10px;
+    padding: 5px 7px;
+  }
+  .orders button span {
+    font-size: 16px;
+  }
+  .command-tools summary {
+    font-size: 10px;
+    padding: 12px 5px;
+  }
+  .command-drawer {
+    width: 280px;
+  }
+  .side-actions {
+    bottom: 174px;
+    right: 8px;
+    left: auto;
+    flex-direction: column;
+    gap: 6px;
+  }
+  .side-actions button {
+    width: 82px;
+    min-height: 44px;
+    font-size: 12px;
+    padding: 8px;
+  }
+  .side-actions kbd {
+    display: none;
+  }
+  .mobile-pad {
+    left: 8px;
+    bottom: 94px;
+    transform: none;
+  }
+  .minimap-wrap {
+    bottom: 92px;
+    right: 8px;
+  }
+  .panel {
+    top: 72px;
+    bottom: 94px;
+    left: 8px;
+    right: 8px;
+    width: auto;
+    max-width: none;
+    padding: 12px;
+    z-index: 6;
+  }
+  .panel-header h3 {
+    font-size: 16px;
+  }
+  .catalog-card > button {
+    grid-template-columns: 66px 1fr;
+    padding: 8px;
+  }
+  .catalog-card canvas {
+    width: 66px;
+    height: 66px;
+  }
+  .planning-strip {
+    top: 200px;
+    width: calc(100% - 16px);
+    padding: 10px;
+    z-index: 5;
+  }
+  .paused-label {
+    top: 220px;
+    right: 8px;
+    padding: 8px 10px;
+  }
+  .paused-label strong {
+    font-size: 14px;
+  }
+}
+
+@media (max-width: 700px) {
+  .bottom-hud {
+    flex-wrap: nowrap;
+  }
+  .bottom-hud .orders {
+    width: auto;
+    flex-shrink: 1;
+  }
+  .side-actions {
+    bottom: 210px;
+  }
+  .paused-label {
+    top: 72px;
+    width: 85px;
+    box-sizing: border-box;
+    text-align: center;
+  }
+  .paused-label p {
+    display: none;
+  }
+}
+
+.command-tools {
+  border: 0;
+  padding: 0;
+  margin: 0;
+  background: none;
+}
+.catalog .catalog-price {
+  display: flex;
+  gap: 12px;
+  margin: 0;
+}
+.catalog .catalog-price span {
+  margin: 0;
+  white-space: nowrap;
+}
+.orders .theme-icon {
+  display: block;
+  margin: 0 auto 3px;
+  width: 20px;
+  height: 20px;
+}
