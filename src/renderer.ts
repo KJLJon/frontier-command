@@ -39,6 +39,55 @@ export class Renderer {
   private backdropTint = "";
   private groundTiles = new Map<string, HTMLCanvasElement>();
   private groundTheme?: object;
+  private playgroundObstacle?: HTMLCanvasElement;
+  private playgroundBlocks(x: number, y: number, z: number) {
+    if (!this.playgroundObstacle) {
+      const canvas = document.createElement("canvas");
+      canvas.width = 96;
+      canvas.height = 96;
+      const c = canvas.getContext("2d")!;
+      const block = (x: number, y: number, color: string) => {
+        c.fillStyle = color;
+        c.strokeStyle = "#fff8df";
+        c.lineWidth = 2;
+        c.beginPath();
+        c.moveTo(x, y - 20);
+        c.lineTo(x + 15, y - 12);
+        c.lineTo(x, y - 4);
+        c.lineTo(x - 15, y - 12);
+        c.closePath();
+        c.fill();
+        c.stroke();
+        c.beginPath();
+        c.moveTo(x - 15, y - 12);
+        c.lineTo(x, y - 4);
+        c.lineTo(x, y + 12);
+        c.lineTo(x - 15, y + 4);
+        c.closePath();
+        c.fill();
+        c.stroke();
+        c.beginPath();
+        c.moveTo(x, y - 4);
+        c.lineTo(x + 15, y - 12);
+        c.lineTo(x + 15, y + 4);
+        c.lineTo(x, y + 12);
+        c.closePath();
+        c.fill();
+        c.stroke();
+      };
+      block(28, 61, "#ee6ea8");
+      block(62, 65, "#48cde7");
+      block(45, 42, "#ffdf5f");
+      this.playgroundObstacle = canvas;
+    }
+    this.ctx!.drawImage(
+      this.playgroundObstacle,
+      x - 24 * z,
+      y - 40 * z,
+      48 * z,
+      48 * z,
+    );
+  }
   private groundTile(
     color: string,
     category: string,
@@ -428,7 +477,10 @@ export class Renderer {
     if (activeTheme && !this.editor && this.world instanceof RushArena)
       this.environment(activeTheme.environment, "#0a18254d");
     else if (activeTheme && !this.editor) {
-      c.fillStyle = this.themeBiome(map).forest;
+      c.fillStyle =
+        activeTheme.manifest.id === "street-kids"
+          ? "#68b8a5"
+          : activeTheme.manifest.palette.background;
       c.fillRect(0, 0, this.width, this.height);
     }
     const s = this.world;
@@ -458,7 +510,9 @@ export class Renderer {
         const explored = this.editor || this.reveal || s?.explored[0][i],
           visible = this.editor || this.reveal || s?.visible[0][i];
         const fill = !explored
-          ? (activeTheme?.manifest.palette.background ?? "#1b3438")
+          ? activeTheme?.manifest.id === "street-kids"
+            ? "#68b8a5"
+            : (activeTheme?.manifest.palette.background ?? "#1b3438")
           : t === 3
             ? b.water
             : t === 4
@@ -487,11 +541,19 @@ export class Renderer {
         if (explored) {
           if (t === 1) {
             const sprite = activeTheme?.props.obstacle;
-            if (sprite && !this.editor)
+            if (activeTheme?.manifest.id === "street-kids" && !this.editor)
+              this.playgroundBlocks(p.x, p.y, z);
+            else if (sprite && !this.editor)
               this.themes!.draw(c, sprite, p.x, p.y, 40 * z);
             else this.tree(p.x, p.y, z, b.forest, (x + y) % 3);
           }
-          if (t === 4) {
+          if (
+            t === 4 &&
+            activeTheme?.manifest.id === "street-kids" &&
+            !this.editor
+          )
+            this.playgroundBlocks(p.x, p.y, z);
+          else if (t === 4) {
             this.diamond(p.x, p.y - 4 * z, 14 * z, 10 * z, b.light);
             this.polygon(
               [
