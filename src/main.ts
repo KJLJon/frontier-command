@@ -712,18 +712,20 @@ function help() {
   screen(
     "The commander’s field guide",
     "Claim resources, build an army, and fight alongside it.",
-    `<div class="card-grid"><article class="card"><h3>Lead from the front</h3><p>WASD moves your commander. Q, E, and R activate abilities. Tap a destination to move selected units. Units automatically fight nearby enemies.</p></article><article class="card"><h3>Give orders</h3><p>Tap friendly units to select. Shift-tap adds to selection. Drag a box to select troops. Right-click orders movement or attacks. Use Army to select all troops.</p></article><article class="card"><h3>Build your foothold</h3><p>Stand near gold and wood banners for six seconds to capture them. Open Build, choose a structure, and tap open ground near your forces. Houses add population.</p></article><article class="card"><h3>Win the counter battle</h3><p>Spears counter cavalry. Cavalry punishes archers. Archers pressure infantry. Catapults excel against buildings. Dawnweavers heal your army.</p></article><article class="card"><h3>Plan under pressure</h3><p>Space pauses the battle. Issue orders and choose construction or research, then resume. Hard allows three pauses; Brutal disables pause.</p></article><article class="card"><h3>Scout and reposition</h3><p>Drag with the middle mouse or drag on touch to pan. Scroll or use ± to zoom. Tap the minimap to jump. Home or Commander follows your hero.</p></article></div><p class="muted" style="margin-top:18px">B: Build · N: Recruit · T: Research · F: Army · H: Hold · Esc: Menu · F2: Debug. On phones, use the directional pad and on-screen orders. Control groups: Ctrl+1–5 saves, 1–5 selects.</p><p class="muted">Conquest: destroy rival keeps. Domination / Relic Hunt: reach 1,000 influence. Survival: defend through 12 waves. If a battle exceeds its escalation window, territory and surviving forces decide the winner.</p>`,
+    `<div class="card-grid"><article class="card"><h3>Lead from the front</h3><p>WASD moves your commander. Q, E, and R activate abilities. Tap a destination to move selected units. Guarding troops fight in range; Army sends the squad together with attack-move orders.</p></article><article class="card"><h3>Give orders</h3><p>Tap friendly units to select. Shift-tap adds to selection. Drag a box to select troops. Right-click orders movement or attacks. Use Army to select all troops.</p></article><article class="card"><h3>Build your foothold</h3><p>Stand near gold and wood banners for six seconds to capture them. Build pauses the battle. Choose a picture card, then tap clear ground near home. Green placement is valid; red placement explains the problem. Houses add population.</p></article><article class="card"><h3>Win the counter battle</h3><p>Spears counter cavalry. Cavalry punishes archers. Archers pressure infantry. Catapults excel against buildings. Dawnweavers heal your army.</p></article><article class="card"><h3>Plan under pressure</h3><p>Build, Recruit, and Research pause while you choose; Back to battle resumes. A pause you set yourself stays paused. Space gives a tactical pause: Hard allows three; Brutal disables manual pause. New skirmishes offer three minutes before opening raids.</p></article><article class="card"><h3>Scout and reposition</h3><p>Drag with the right or middle mouse, or drag on touch to pan. Tap Commander to follow your hero, Army to explore together, or Home to view your base. Abilities and zoom are under More.</p></article></div><p class="muted" style="margin-top:18px">B: Build · N: Recruit · T: Research · F: Army · H: Hold · Esc: Menu · F2: Debug. On phones, use the directional pad and on-screen orders. Control groups: Ctrl+1–5 saves, 1–5 selects.</p><p class="muted">Conquest: destroy rival keeps. Domination / Relic Hunt: reach 1,000 influence. Survival: defend through 12 waves. If a battle exceeds its escalation window, territory and surviving forces decide the winner.</p>`,
   );
 }
 async function save(name = "manual", notify = true) {
   if (!sim || sim instanceof RushArena) return;
   try {
+    const snapshot = JSON.parse(sim.serialize());
+    if (planningWorld === sim) snapshot.paused = false;
     await write("saves", name, {
       title:
         sim.settings.mission?.title ??
         `${sim.settings.mode} · ${sim.settings.seed}`,
       time: new Date().toISOString(),
-      world: sim.serialize(),
+      world: JSON.stringify(snapshot),
     });
     if (notify) toast("Battle saved.");
     return true;

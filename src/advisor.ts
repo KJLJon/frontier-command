@@ -152,7 +152,13 @@ export function nextStep(s: Simulation) {
     };
   return {
     title: "4. Explore together",
-    hint: "Tap a glowing resource to capture it. Income is automatic.",
+    hint: s.settings.mission
+      ? s.objective
+      : s.settings.mode === "Survival"
+        ? "Defend home through 12 waves. Capture supplies between attacks."
+        : ["Domination", "Relic Hunt"].includes(s.settings.mode)
+          ? "Capture glowing sites to score points. Reach 1,000 to win."
+          : "Capture resources, grow your squad, then attack enemy headquarters.",
     label: "Select squad",
     action: "guide:scout",
   };
