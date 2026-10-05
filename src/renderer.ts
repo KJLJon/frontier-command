@@ -509,6 +509,9 @@ export class Renderer {
           t = map.tiles[i];
         const explored = this.editor || this.reveal || s?.explored[0][i],
           visible = this.editor || this.reveal || s?.visible[0][i];
+        // The surrounding fill already represents unexplored fog. Avoid hundreds
+        // of identical offscreen/hidden tile blits on phones.
+        if (!explored && !(s instanceof RushArena)) continue;
         const fill = !explored
           ? activeTheme?.manifest.id === "street-kids"
             ? "#68b8a5"
