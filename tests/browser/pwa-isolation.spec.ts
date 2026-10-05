@@ -1,3 +1,4 @@
+import http from "node:http";
 import { test, expect } from "@playwright/test";
 import { readFile, writeFile, unlink } from "node:fs/promises";
 
@@ -187,5 +188,68 @@ test("reconnecting downloads an update without reloading an active battle", asyn
   } finally {
     await context.setOffline(false);
     await unlink(file);
+  }
+});
+
+test("an update refreshes HTTP-cached HTML before activation", async ({
+  page,
+}) => {
+  const worker = await readFile("dist/sw.js", "utf8");
+  let revision = 1;
+  const server = http.createServer((request, response) => {
+    const isWorker = request.url?.startsWith("/frontier-command/sw.js");
+    response.writeHead(200, {
+      "Content-Type": isWorker ? "application/javascript" : "text/html",
+      "Cache-Control": isWorker ? "no-store" : "public, max-age=3600",
+    });
+    response.end(
+      isWorker
+        ? worker.replace(
+            /const CACHE='[^']+'/,
+            `const CACHE='frontier-command:http-fixture-${revision}'`,
+          )
+        : `<!doctype html><body>Shell revision ${revision}</body>`,
+    );
+  });
+  await new Promise<void>((resolve) => server.listen(0, "127.0.0.1", resolve));
+  const address = server.address() as { port: number };
+  try {
+    await page.goto(`http://127.0.0.1:${address.port}/frontier-command/`);
+    await page.evaluate(async () => {
+      await navigator.serviceWorker.register("sw.js", {
+        updateViaCache: "none",
+      });
+      await navigator.serviceWorker.ready;
+    });
+    await page.reload();
+    await expect(page.locator("body")).toHaveText("Shell revision 1");
+    revision = 2;
+    await page.evaluate(async () =>
+      (await navigator.serviceWorker.getRegistration())!.update(),
+    );
+    await expect
+      .poll(() =>
+        page.evaluate(
+          async () =>
+            (await navigator.serviceWorker.getRegistration())?.waiting?.state,
+        ),
+      )
+      .toBe("installed");
+    await page.evaluate(async () => {
+      const registration = (await navigator.serviceWorker.getRegistration())!;
+      await new Promise<void>((resolve) => {
+        navigator.serviceWorker.addEventListener(
+          "controllerchange",
+          () => resolve(),
+          { once: true },
+        );
+        registration.waiting!.postMessage({ type: "APPLY_UPDATE" });
+      });
+    });
+    await page.reload();
+    await expect(page.locator("body")).toHaveText("Shell revision 2");
+  } finally {
+    server.closeAllConnections();
+    await new Promise<void>((resolve) => server.close(() => resolve()));
   }
 });
