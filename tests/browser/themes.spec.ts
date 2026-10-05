@@ -8,7 +8,7 @@ const worlds = [
   "halloween",
   "street-kids",
 ];
-test("all eighteen presentations switch atomically during play and work offline", async ({
+test("all eighteen presentations apply through settings and work offline", async ({
   page,
   context,
 }, info) => {
@@ -41,8 +41,13 @@ test("all eighteen presentations switch atomically during play and work offline"
   await page.getByRole("button", { name: "Pause", exact: true }).click();
   for (const id of worlds)
     for (const style of ["toon", "realistic", "sticker"]) {
-      await page.getByLabel("World", { exact: true }).selectOption(id);
-      await page.getByLabel("Style", { exact: true }).selectOption(style);
+      await page.getByRole("button", { name: "Menu", exact: true }).click();
+      await page.getByRole("button", { name: "Settings", exact: true }).click();
+      await page.getByLabel("World theme", { exact: true }).selectOption(id);
+      await page.getByLabel("Art style", { exact: true }).selectOption(style);
+      await page
+        .getByRole("button", { name: "Save settings", exact: true })
+        .click();
       await expect
         .poll(
           () =>
@@ -57,6 +62,8 @@ test("all eighteen presentations switch atomically during play and work offline"
           { timeout: 60000 },
         )
         .toBe(id + ":" + style);
+      await page.getByRole("button", { name: "Back", exact: true }).click();
+      await expect(page.locator(".theme-controls")).toHaveCount(0);
       expect(
         await page.evaluate(
           () =>
@@ -77,7 +84,10 @@ test("all eighteen presentations switch atomically during play and work offline"
           width: (node as HTMLCanvasElement).width,
           height: (node as HTMLCanvasElement).height,
           displayWidth: node.getBoundingClientRect().width,
-          density: Math.min(2, window.devicePixelRatio || 1),
+          density: Math.min(
+            matchMedia("(pointer: coarse)").matches ? 1.25 : 2,
+            window.devicePixelRatio || 1,
+          ),
         }));
       expect(canvas.width).toBeGreaterThan(300);
       expect(canvas.height).toBeGreaterThan(300);
@@ -93,7 +103,12 @@ test("all eighteen presentations switch atomically during play and work offline"
     .toBeGreaterThan(before);
   await context.setOffline(true);
   for (const id of worlds) {
-    await page.getByLabel("World", { exact: true }).selectOption(id);
+    await page.getByRole("button", { name: "Menu", exact: true }).click();
+    await page.getByRole("button", { name: "Settings", exact: true }).click();
+    await page.getByLabel("World theme", { exact: true }).selectOption(id);
+    await page
+      .getByRole("button", { name: "Save settings", exact: true })
+      .click();
     await expect
       .poll(
         () =>
@@ -107,6 +122,7 @@ test("all eighteen presentations switch atomically during play and work offline"
         { timeout: 60000 },
       )
       .toBe(id);
+    await page.getByRole("button", { name: "Back", exact: true }).click();
     expect(
       await page.evaluate(() => {
         const active = (window as any).frontier.themes.active;

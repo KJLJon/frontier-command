@@ -13,35 +13,6 @@
   --line: #8db8ac35;
   --scale: 1;
 }
-.theme-controls {
-  position: absolute;
-  right: 18px;
-  top: 82px;
-  display: flex;
-  gap: 6px;
-  align-items: end;
-  padding: 6px 8px;
-  border: 1px solid var(--line);
-  background: var(--panel);
-  border-radius: 8px;
-  max-width: 380px;
-  pointer-events: auto;
-}
-.theme-controls label {
-  font-size: 10px;
-  margin: 0;
-  display: grid;
-  gap: 2px;
-}
-.theme-controls select {
-  font-size: 11px;
-  padding: 5px;
-  max-width: 165px;
-  min-height: 30px;
-}
-.theme-controls [data-theme-status] {
-  display: none;
-}
 .theme-status {
   font-size: 12px;
   color: var(--muted);
@@ -56,16 +27,6 @@
   pointer-events: none;
 }
 @media (max-width: 700px) {
-  .theme-controls {
-    top: 76px;
-    right: 8px;
-    max-width: 235px;
-    padding: 4px;
-  }
-  .theme-controls select {
-    max-width: 119px;
-    font-size: 10px;
-  }
   .theme-icon {
     width: 16px;
     height: 16px;
@@ -1325,11 +1286,34 @@ body.has-update #ui {
   display: block;
   margin: 0 auto 12px;
 }
-@media (max-width: 700px) {
-  .theme-controls select[name="battleTheme"] {
-    max-width: 102px;
-  }
-  .theme-controls select[name="battleStyle"] {
-    max-width: 72px;
+
+/* A playful playground shell matches Street Kids' chalk and sticker terrain. */
+body[data-theme="street-kids"] {
+  --panel: #34325aef;
+  --line: #95e8df70;
+  --muted: #e0ddf5;
+}
+body[data-theme="street-kids"] button {
+  background: #6656a0;
+  border-radius: 12px;
+  border-color: #ae9dde;
+}
+body[data-theme="street-kids"] button:hover {
+  background: #8566bd;
+  border-color: #ffe45c;
+}
+body[data-theme="street-kids"] button.primary {
+  background: #ffe45c;
+  color: #302447;
+}
+body[data-theme="street-kids"] .serif,
+body[data-theme="street-kids"] h1,
+body[data-theme="street-kids"] h2,
+body[data-theme="street-kids"] .commander-card strong {
+  font-family: "Trebuchet MS", system-ui, sans-serif;
+}
+@media (pointer: coarse) {
+  .screen {
+    backdrop-filter: none;
   }
 }

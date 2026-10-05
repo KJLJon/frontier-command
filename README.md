@@ -19,7 +19,7 @@ Open the displayed address. Load once online, then the production PWA can reload
 ## Included slice
 
 - **Rush Arena:** a separate single-player survival skirmish with four commander squads, a closing safe zone, finite supply caches, telegraphed strikes, upgrade choices and instant retries. Launch it from the main menu or an RTS battle; return without changing that battle.
-- Six switchable worlds in Toon, Realistic and Sticker, complete unit/building rosters, authored movement/attack cycles, terrain materials, building states, resource activity, positional sounds and distinct ambient/combat scores. See [theme integration](docs/THEME_INTEGRATION.md) and the [asset production contract](docs/THEME_ASSET_SPEC.md).
+- Six worlds selected in Settings in Toon, Realistic and Sticker, complete unit/building rosters, authored movement/attack cycles, terrain materials, building states, resource activity, positional sounds and distinct ambient/combat scores. See [theme integration](docs/THEME_INTEGRATION.md) and the [asset production contract](docs/THEME_ASSET_SPEC.md).
 - Three factions with health, speed, cost, or income distinctions; three commanders with three abilities each.
 - Six unit roles with counters and healing; eleven building definitions; six prerequisite-based technologies.
 - Gold/wood capture economy, population, construction, recruitment queues, rally points, attack/move/hold/group orders.
@@ -80,3 +80,5 @@ This is a working vertical slice, not a finished commercial RTS. Visuals are sty
 Quick/Standard/Epic tune map size, income, population, survival schedule and the escalation cutoff. Actual victory can occur much sooner with an aggressive strategy; an 18-minute Standard target is not a guaranteed duration. The highest-value improvements are observed human playtests for Standard pacing, shared flow-field movement/spatial indexing for large armies, richer commander attack animations, and more mission-specific authored layouts. Phone usability was checked in Chromium emulation; real-device/Safari testing is still needed.
 
 See [ARCHITECTURE](docs/ARCHITECTURE.md), [LEVEL_EDITOR](docs/LEVEL_EDITOR.md), [VERIFICATION](docs/VERIFICATION.md) and [ASSETS](ASSETS.md).
+
+Battlefield presentation uses a continuous themed terrain surface; scenic illustrations are reserved for menus and Rush Arena. Street Kids uses chalk playground paving and a colorful interface. Ground materials and scenic images are cached at display size. Desktop rendering supports up to 2× display density; coarse-pointer phones use up to 1.25× with lightweight image filtering, and Low effects uses 1×.

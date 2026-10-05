@@ -756,19 +756,6 @@ function gameUI() {
     document.querySelector(".hud-objective")?.classList.add("arena-objective");
   }
   updateHUD();
-  const controls = document.createElement("div");
-  controls.className = "theme-controls";
-  controls.innerHTML = `${select("battleTheme", "World", themeNames, settings.theme)}${select("battleStyle", "Style", { toon: { name: "Toon" }, realistic: { name: "Realistic" }, sticker: { name: "Sticker" } }, settings.style)}<button class="audio-toggle" type="button" data-action="mute" aria-label="${settings.mute ? "Unmute audio" : "Mute audio"}" title="${settings.mute ? "Audio muted" : "Audio on"}">${settings.mute ? "🔇" : "🔊"}</button><span data-theme-status>${escape(themes.status)}</span>`;
-  ui.append(controls);
-  controls.onchange = async () => {
-    const id = controls.querySelector<HTMLSelectElement>(
-      '[name="battleTheme"]',
-    )!.value;
-    const style = controls.querySelector<HTMLSelectElement>(
-      '[name="battleStyle"]',
-    )!.value as ThemeStyle;
-    if (!(await changeTheme(id, style))) toast(themes.status);
-  };
   decorateCommands();
 }
 function updateHUD() {

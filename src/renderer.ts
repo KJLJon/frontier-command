@@ -34,6 +34,99 @@ export class Renderer {
   reveal = false;
   reducedMotion = false;
   quality = "High";
+  private backdrop?: HTMLCanvasElement;
+  private backdropImage?: HTMLImageElement;
+  private backdropTint = "";
+  private groundTiles = new Map<string, HTMLCanvasElement>();
+  private groundTheme?: object;
+  private groundTile(
+    color: string,
+    category: string,
+    texture?: HTMLImageElement,
+  ) {
+    if (this.groundTheme !== this.themes?.active) {
+      this.groundTiles.clear();
+      this.groundTheme = this.themes?.active;
+    }
+    const key = `${color}:${category}:${texture?.src ?? ""}`;
+    let tile = this.groundTiles.get(key);
+    if (!tile) {
+      tile = document.createElement("canvas");
+      tile.width = 96;
+      tile.height = 48;
+      const c = tile.getContext("2d")!;
+      c.beginPath();
+      c.moveTo(48, 0);
+      c.lineTo(96, 24);
+      c.lineTo(48, 48);
+      c.lineTo(0, 24);
+      c.closePath();
+      c.clip();
+      c.fillStyle = color;
+      c.fillRect(0, 0, 96, 48);
+      if (texture) {
+        c.globalAlpha = 0.22;
+        c.drawImage(texture, 0, 0, 96, 48);
+        c.globalAlpha = 1;
+      }
+      if (
+        this.themes?.active?.manifest.id === "street-kids" &&
+        category === "open"
+      ) {
+        // Chalk marks and confetti give the playground its own ground material.
+        c.strokeStyle = "#fff8cf70";
+        c.lineWidth = 2;
+        c.strokeRect(32, 12, 16, 12);
+        c.strokeRect(48, 24, 16, 12);
+        c.fillStyle = "#ff6cad85";
+        c.fillRect(22, 23, 5, 3);
+        c.fillStyle = "#5be1ea90";
+        c.fillRect(68, 20, 5, 3);
+      }
+      this.groundTiles.set(key, tile);
+    }
+    return tile;
+  }
+  private get density() {
+    // Phones have much smaller physical pixels and tighter fill-rate budgets.
+    const limit =
+      this.quality === "Low"
+        ? 1
+        : matchMedia("(pointer: coarse)").matches
+          ? 1.25
+          : 2;
+    return Math.min(limit, window.devicePixelRatio || 1);
+  }
+  private environment(image: HTMLImageElement, tint: string) {
+    if (
+      !this.backdrop ||
+      this.backdropImage !== image ||
+      this.backdropTint !== tint
+    ) {
+      const canvas = document.createElement("canvas");
+      canvas.width = this.texture!.canvas.width;
+      canvas.height = this.texture!.canvas.height;
+      const context = canvas.getContext("2d")!;
+      const scale = Math.max(
+        canvas.width / image.naturalWidth,
+        canvas.height / image.naturalHeight,
+      );
+      context.imageSmoothingQuality = "high";
+      context.drawImage(
+        image,
+        (canvas.width - image.naturalWidth * scale) / 2,
+        (canvas.height - image.naturalHeight * scale) / 2,
+        image.naturalWidth * scale,
+        image.naturalHeight * scale,
+      );
+      context.fillStyle = tint;
+      context.fillRect(0, 0, canvas.width, canvas.height);
+      this.backdrop = canvas;
+      this.backdropImage = image;
+      this.backdropTint = tint;
+    }
+    this.ctx!.drawImage(this.backdrop, 0, 0, this.width, this.height);
+  }
   themes?: ThemeManager;
   ghosts: { kind: string; team: number; x: number; y: number; time: number }[] =
     [];
@@ -159,7 +252,8 @@ export class Renderer {
     this.texture?.destroy();
     // Draw directly at display density: a CSS-sized intermediate framebuffer
     // otherwise loses sprite detail before the browser stretches it on HiDPI screens.
-    const density = Math.min(2, window.devicePixelRatio || 1);
+    const density = this.density;
+    this.backdrop = undefined;
     this.texture = this.scene.textures.createCanvas(
       "world",
       Math.ceil(this.width * density),
@@ -167,7 +261,9 @@ export class Renderer {
     )!;
     this.ctx = this.texture.context;
     this.ctx.setTransform(density, 0, 0, density, 0, 0);
-    this.ctx.imageSmoothingQuality = "high";
+    this.ctx.imageSmoothingQuality = matchMedia("(pointer: coarse)").matches
+      ? "low"
+      : "high";
     const canvas = this.texture.canvas;
     canvas.dataset.worldSurface = "true";
     Object.assign(canvas.style, {
@@ -311,6 +407,10 @@ export class Renderer {
   draw() {
     const c = this.ctx;
     if (!c) return;
+    if (this.texture?.canvas.width !== Math.ceil(this.width * this.density)) {
+      this.resize();
+      return;
+    }
     c.clearRect(0, 0, this.width, this.height);
     const gradient = c.createLinearGradient(0, 0, 0, this.height);
     gradient.addColorStop(0, "#173844");
@@ -320,24 +420,15 @@ export class Renderer {
     const map = this.editor ?? this.world?.map;
     if (!map) {
       this.drawBackdrop();
-      this.texture?.refresh();
       return;
     }
     const activeTheme = this.themes?.active;
-    if (activeTheme && !this.editor) {
-      const image = activeTheme.environment,
-        scale = Math.max(
-          this.width / image.naturalWidth,
-          this.height / image.naturalHeight,
-        );
-      c.drawImage(
-        image,
-        (this.width - image.naturalWidth * scale) / 2,
-        (this.height - image.naturalHeight * scale) / 2,
-        image.naturalWidth * scale,
-        image.naturalHeight * scale,
-      );
-      c.fillStyle = "#0a18254d";
+    // Authored scenic images belong to the arena/menu. Strategy terrain forms
+    // one continuous themed world instead of a board pasted over a photograph.
+    if (activeTheme && !this.editor && this.world instanceof RushArena)
+      this.environment(activeTheme.environment, "#0a18254d");
+    else if (activeTheme && !this.editor) {
+      c.fillStyle = this.themeBiome(map).forest;
       c.fillRect(0, 0, this.width, this.height);
     }
     const s = this.world;
@@ -367,44 +458,33 @@ export class Renderer {
         const explored = this.editor || this.reveal || s?.explored[0][i],
           visible = this.editor || this.reveal || s?.visible[0][i];
         const fill = !explored
-          ? "#1b3438"
+          ? (activeTheme?.manifest.palette.background ?? "#1b3438")
           : t === 3
             ? b.water
             : t === 4
-              ? "#69766d"
+              ? b.forest
               : t === 1
                 ? b.forest
                 : t === 2
-                  ? "#858761"
+                  ? b.water
                   : (x * 13 + y * 7) % 5 === 0
                     ? b.light
                     : b.ground;
-        this.diamond(
-          p.x,
-          p.y,
-          24 * z,
-          12 * z,
-          s instanceof RushArena ? "#10233012" : fill,
-          s instanceof RushArena ? "#a6edff0b" : "#0000000c",
-        );
-        if (explored) {
-          const category = ["open", "forest", "marsh", "water", "rock"][t];
-          const tile = activeTheme?.terrain.get(
-            map.settings.biome + ":" + category,
+        const category = ["open", "forest", "marsh", "water", "rock"][t];
+        if (!(s instanceof RushArena)) {
+          const texture =
+            explored && !this.editor
+              ? activeTheme?.terrain.get(map.settings.biome + ":" + category)
+              : undefined;
+          c.drawImage(
+            this.groundTile(fill, explored ? category : "fog", texture),
+            p.x - 24 * z,
+            p.y - 12 * z,
+            48 * z,
+            24 * z,
           );
-          if (tile && !this.editor && !(s instanceof RushArena)) {
-            c.save();
-            c.beginPath();
-            c.moveTo(p.x, p.y - 12 * z);
-            c.lineTo(p.x + 24 * z, p.y);
-            c.lineTo(p.x, p.y + 12 * z);
-            c.lineTo(p.x - 24 * z, p.y);
-            c.closePath();
-            c.clip();
-            c.globalAlpha = 0.55;
-            c.drawImage(tile, p.x - 24 * z, p.y - 12 * z, 48 * z, 24 * z);
-            c.restore();
-          }
+        }
+        if (explored) {
           if (t === 1) {
             const sprite = activeTheme?.props.obstacle;
             if (sprite && !this.editor)
@@ -412,14 +492,14 @@ export class Renderer {
             else this.tree(p.x, p.y, z, b.forest, (x + y) % 3);
           }
           if (t === 4) {
-            this.diamond(p.x, p.y - 4 * z, 14 * z, 10 * z, "#91a19a");
+            this.diamond(p.x, p.y - 4 * z, 14 * z, 10 * z, b.light);
             this.polygon(
               [
                 { x: p.x - 14 * z, y: p.y - 4 * z },
                 { x: p.x, y: p.y - 23 * z },
                 { x: p.x + 14 * z, y: p.y - 4 * z },
               ],
-              "#778e84",
+              b.forest,
             );
           }
           if (t === 3 && this.quality !== "Low") {
@@ -716,7 +796,6 @@ export class Renderer {
       this.diamond(p.x, p.y, 26 * z, 13 * z, "#e5cd7622", "#e5cd76");
       c.setLineDash([]);
     }
-    this.texture?.refresh();
   }
   resourceLife(kind: string, p: Point, z: number, color: string) {
     const c = this.ctx!,
@@ -1278,21 +1357,8 @@ export class Renderer {
   }
   drawBackdrop() {
     if (this.themes?.active) {
-      const c = this.ctx!,
-        image = this.themes.active.environment,
-        scale = Math.max(
-          this.width / image.naturalWidth,
-          this.height / image.naturalHeight,
-        );
-      c.drawImage(
-        image,
-        (this.width - image.naturalWidth * scale) / 2,
-        (this.height - image.naturalHeight * scale) / 2,
-        image.naturalWidth * scale,
-        image.naturalHeight * scale,
-      );
-      c.fillStyle = "#06172566";
-      c.fillRect(0, 0, this.width, this.height);
+      const c = this.ctx!;
+      this.environment(this.themes.active.environment, "#06172566");
       if (this.width > 850) {
         this.themes.draw(
           c,
@@ -1397,6 +1463,7 @@ export class Renderer {
       "old-time": ["#b39772", "#c6ab84", "#80765c", "#526f75"],
       christmas: ["#b9d2d6", "#d2e2e3", "#90afb5", "#6a9faa"],
       halloween: ["#736184", "#877298", "#574764", "#494066"],
+      "street-kids": ["#f7cb78", "#fbe5a3", "#64bba4", "#61c5e2"],
     };
     const colors = materials[id];
     return colors
@@ -1415,7 +1482,7 @@ export class Renderer {
     if (!map) return;
     const n = map.settings.size,
       k = canvas.width / n,
-      b = biomes[map.settings.biome];
+      b = this.themeBiome(map);
     c.fillStyle = "#142c35";
     c.fillRect(0, 0, canvas.width, canvas.height);
     for (let y = 0; y < n; y++)

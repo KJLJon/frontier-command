@@ -93,8 +93,17 @@ test("Street Kids sticker art and arena combat music persist without changing ru
   await page.getByRole("button", { name: "Rush Arena", exact: true }).click();
   await page.getByRole("button", { name: "Start Rush Arena" }).click();
   await page.getByRole("button", { name: "Pause", exact: true }).click();
-  await page.getByLabel("World", { exact: true }).selectOption("street-kids");
-  await page.getByLabel("Style", { exact: true }).selectOption("sticker");
+  await page.getByRole("button", { name: "Menu", exact: true }).click();
+  await page
+    .getByRole("button", { name: "World settings", exact: true })
+    .click();
+  await page
+    .getByLabel("World theme", { exact: true })
+    .selectOption("street-kids");
+  await page.getByLabel("Art style", { exact: true }).selectOption("sticker");
+  await page
+    .getByRole("button", { name: "Save settings", exact: true })
+    .click();
   await expect
     .poll(
       () =>
@@ -105,6 +114,7 @@ test("Street Kids sticker art and arena combat music persist without changing ru
       { timeout: 60000 },
     )
     .toBe("street-kids:sticker");
+  await page.getByRole("button", { name: "Back", exact: true }).click();
   await expect
     .poll(
       () =>
