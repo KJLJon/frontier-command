@@ -110,6 +110,9 @@ test("PWA manifest, scoped worker, offline reload, and offline new match", async
     return r.scope;
   });
   expect(scope).toContain("/frontier-command/");
+  await expect(
+    page.getByRole("button", { name: "Update & Restart" }),
+  ).toBeHidden();
   const manifest = await page.request.get("manifest.webmanifest");
   expect((await manifest.json()).scope).toBe("/frontier-command/");
   await page.reload();

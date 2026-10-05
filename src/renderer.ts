@@ -155,14 +155,34 @@ export class Renderer {
     this.width = this.scene.scale.width;
     this.height = this.scene.scale.height;
     this.image?.destroy();
+    this.texture?.canvas.remove();
     this.texture?.destroy();
+    // Draw directly at display density: a CSS-sized intermediate framebuffer
+    // otherwise loses sprite detail before the browser stretches it on HiDPI screens.
+    const density = Math.min(2, window.devicePixelRatio || 1);
     this.texture = this.scene.textures.createCanvas(
       "world",
-      this.width,
-      this.height,
+      Math.ceil(this.width * density),
+      Math.ceil(this.height * density),
     )!;
     this.ctx = this.texture.context;
-    this.image = this.scene.add.image(0, 0, "world").setOrigin(0);
+    this.ctx.setTransform(density, 0, 0, density, 0, 0);
+    this.ctx.imageSmoothingQuality = "high";
+    const canvas = this.texture.canvas;
+    canvas.dataset.worldSurface = "true";
+    Object.assign(canvas.style, {
+      position: "absolute",
+      inset: "0",
+      pointerEvents: "none",
+      width: `${this.width}px`,
+      height: `${this.height}px`,
+    });
+    this.game.canvas.before(canvas);
+    // Phaser's transparent canvas continues to handle pointer input above it.
+    this.image = this.scene.add
+      .image(0, 0, "world")
+      .setOrigin(0)
+      .setVisible(false);
   }
   project(x: number, y: number) {
     return {

@@ -1723,10 +1723,11 @@ async function pwa() {
     location.reload();
   };
   const show = () => {
-    if (registration.waiting) {
-      document.querySelector<HTMLElement>("#update")!.hidden = false;
-      document.body.classList.add("has-update");
-    }
+    const available =
+      registration.waiting?.state === "installed" &&
+      registration.active?.state === "activated";
+    document.querySelector<HTMLElement>("#update")!.hidden = !available;
+    document.body.classList.toggle("has-update", available);
   };
   show();
   registration.addEventListener("updatefound", () =>
@@ -1780,7 +1781,10 @@ async function pwa() {
     document.querySelector<HTMLElement>("#update")!.hidden = true;
     document.body.classList.remove("has-update");
   });
-  navigator.serviceWorker.addEventListener("controllerchange", restart);
+  navigator.serviceWorker.addEventListener("controllerchange", () => {
+    show();
+    restart();
+  });
 }
 async function boot() {
   try {

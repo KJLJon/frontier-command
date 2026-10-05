@@ -72,13 +72,18 @@ test("all eighteen presentations switch atomically during play and work offline"
       // Switching/offline behavior is independent of Chromium's compositor
       // capture path. Visual proof is saved from the live in-app preview.
       const canvas = await page
-        .locator("#battlefield canvas")
+        .locator("#battlefield canvas[data-world-surface]")
         .evaluate((node) => ({
           width: (node as HTMLCanvasElement).width,
           height: (node as HTMLCanvasElement).height,
+          displayWidth: node.getBoundingClientRect().width,
+          density: Math.min(2, window.devicePixelRatio || 1),
         }));
       expect(canvas.width).toBeGreaterThan(300);
       expect(canvas.height).toBeGreaterThan(300);
+      expect(canvas.width).toBe(
+        Math.ceil(canvas.displayWidth * canvas.density),
+      );
       console.info("Theme switched:", id, style);
     }
   await page.getByRole("button", { name: "Pause", exact: true }).click();
