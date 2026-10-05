@@ -1696,8 +1696,25 @@ async function pwa() {
   if (!("serviceWorker" in navigator) || import.meta.env.DEV) return;
   const registration = await navigator.serviceWorker.register(
     import.meta.env.BASE_URL + "sw.js",
-    { scope: import.meta.env.BASE_URL },
+    { scope: import.meta.env.BASE_URL, updateViaCache: "none" },
   );
+  let checking = false;
+  const check = async () => {
+    if (checking || !navigator.onLine || document.hidden) return;
+    checking = true;
+    try {
+      await registration.update();
+    } catch {
+      /* Keep the installed game while offline. */
+    } finally {
+      checking = false;
+    }
+  };
+  window.addEventListener("online", () => void check());
+  document.addEventListener("visibilitychange", () => {
+    if (!document.hidden) void check();
+  });
+  setInterval(() => void check(), 5 * 60 * 1000);
   let applying = false;
   let retryUpdate: ReturnType<typeof setInterval> | undefined;
   const restart = () => {
@@ -1741,7 +1758,8 @@ async function pwa() {
         // Leave the old controlled page after committing the battle. The recovery page
         // loads outside the worker's scope and can finish installation without stale HTML.
         location.replace(
-          "/frontier-command-recovery/?restart=1&return=" +
+          import.meta.env.BASE_URL +
+            "recover.html?restart=1&return=" +
             encodeURIComponent(location.pathname + location.search),
         );
       };

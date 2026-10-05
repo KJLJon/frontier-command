@@ -63,7 +63,7 @@ Unit/simulation tests cover combat, economy, recruitment, upgrades, pause, gener
 
 ## GitHub Pages
 
-Create or use the repository **kjljon/frontier-command**, push this project at repository root to `main`, and select **GitHub Actions** under Settings → Pages. `.github/workflows/pages.yml` installs, tests, builds, runs browser checks, and deploys `dist`. The canonical address is `https://kjljon.github.io/frontier-command/`. The source, manifest, generated worker, asset references and navigation all use that base path. This package includes the deployment configuration; it has not been published to the user's GitHub account from this environment.
+Create or use the repository **kjljon/frontier-command**, push this project at repository root to `main`, and select **GitHub Actions** under Settings → Pages. `.github/workflows/pages.yml` installs, tests, builds, runs browser checks, and deploys `dist`. The canonical address is `https://kjljon.github.io/frontier-command/`. The source, manifest, generated worker, asset references and navigation all use that base path. Pull requests run checks without deploying; successful main builds publish the committed imported theme snapshot. CI does not read or regenerate the external asset-generator repository. New browser storage uses the `frontier-command` namespace. Online checks download a waiting shell on reconnect, visibility changes and five-minute intervals. See [offline/update details](docs/PWA_AND_OFFLINE.md).
 
 ## Extend the game
 

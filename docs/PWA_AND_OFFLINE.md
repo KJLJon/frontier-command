@@ -1,28 +1,49 @@
-# Offline and updates
+# Offline, storage isolation and GitHub Pages updates
 
-Vite builds at `/frontier-command/`. The manifest's identity, start URL and scope are that exact subdirectory; icons are relative. `main.ts` registers `BASE_URL + sw.js` with `scope: BASE_URL`. Production only; development has no worker.
+The canonical hosted address is https://kjljon.github.io/frontier-command/. Vite, the manifest identity/start URL/scope, assets and production service worker all use `/frontier-command/`. Development does not register a worker.
 
-`scripts/sw.mjs` walks the completed `dist` output, hashes both assets and worker generator, and writes a cache-first worker. It precaches HTML, bundled JavaScript (including campaign definitions), CSS, icons and manifest. Procedural graphics/audio are in the bundle, require no third-party requests, and work offline after Web Audio's first user gesture. There are no remotely loaded fonts or CDN libraries.
+## Isolated browser storage
 
-Cache names are `frontier-command:<build hash>`. Fetch handling only accepts same-origin GETs beneath the app prefix. Cached asset lookup ignores `Vary` because every served asset is same-origin public immutable application content; navigation ignores query strings and falls back to the cached index. Uncached non-navigation content uses the network. The worker never handles sibling GitHub Pages applications.
+Every new persistent store uses the `frontier-command` namespace:
 
-## Lifecycle
+- IndexedDB `frontier-command:storage`, version 2: saves, maps, profile and settings. Its existing name is preserved, so saved battles and preferences need no migration.
+- IndexedDB `frontier-command:theme-art`, version 1: independently committed art, audio and theme metadata. Keys are same-origin `/frontier-command/themes/` URLs with imported snapshot versions.
+- Cache Storage `frontier-command:<build hash>`: the small offline shell. Activation removes only this app's cache prefix and keeps one prior shell. Asset fallback searches only this app's caches, never global caches owned by other PWAs.
+- Manifest identity and worker scope: `/frontier-command/`.
 
-1. Installation downloads every shell asset with `cache.addAll`. Failure prevents installation and leaves the working active worker intact.
-2. A newer installed worker waits. There is no automatic `skipWaiting`.
-3. UI displays a dismissible **Update available** banner, outside the game's controls. It never forces a running match to reload. First-ever activation does not reload.
-4. **Update & Restart** awaits an IndexedDB autosave of the current world. If saving fails, activation is withheld and the player sees an error. A successful save posts `APPLY_UPDATE` to the waiting worker.
-5. The worker calls `skipWaiting`, claims the client on activation, and the consenting page reloads on `controllerchange`. The player can choose Continue to resume the autosave.
-6. Cleanup removes only Frontier Command caches and retains one prior version. It never opens/deletes IndexedDB. Browser storage eviction remains outside app control.
+There are no game settings in unprefixed localStorage/sessionStorage. Same-origin sibling PWAs retain their databases, settings, cache contents and worker registrations. The worker handles only same-origin GETs inside the Frontier Command directory.
 
-## Storage
+Older local releases used `frontier-theme-art`. If it already exists, the loader reads matching Frontier theme entries and copies them on demand into the namespaced database. It never creates, writes or deletes that old database. This preserves downloaded art for offline upgrades. Browsers without database enumeration redownload art when online.
 
-IndexedDB `frontier-command:storage`, version 2, has saves/maps/profile/settings object stores. Save snapshot schema 2 includes map, settings, entities, economy, queues, commands, fog history, mission triggers and results state. Schema 1 migration preserves values and fills new defaults; unknown versions are refused without deleting them. Storage failures are shown and existing data preserved. Campaign missions in profile use namespaced IDs. Settings and expedition state are persisted independently.
+Storage is per origin: localhost saves/preferences do not automatically appear on kjljon.github.io. Browser eviction/private browsing can remove data. Export important authored maps; save synchronization is not implemented.
 
-Manual save currently uses one replaceable slot; autosave is separate. Map saves are named and can be cloned. Cloud synchronization and export/import of game saves are future features; map JSON export already works offline. Private browsing/OS eviction can remove data, so important authored maps should be exported.
+## Offline operation
 
-## Verify locally
+Installation downloads the complete small shell: HTML, bundled game/campaign code, CSS, icons, manifest, recovery page, catalog and six compact theme manifests. Failure leaves the previous worker intact. No required CDN fonts or runtime third-party requests are used.
 
-Run `pnpm build`, then `node scripts/serve.mjs` or the Playwright production server. Load `/frontier-command/`, wait for worker activation, reload once, switch DevTools to Offline, reload again, start a battle, save it, open a campaign/editor/settings and return through Continue. `pnpm test:browser` includes real Chromium network-offline tests. Inspect Application → Manifest/Service Workers for exact scope and icons.
+Required theme art is stored before activation; optional animation, terrain, effects and audio stream afterward. The theme database is separate from the shell. Versioned art requests bypass shell caching. Load the desired presentation once online, or use **Settings > Download all worlds** for the entire referenced pack. Completion awaits successful storage writes. An unavailable theme retains a working presentation/fallback.
 
-For update testing: keep the old page open, build a new version, call registration.update() or reopen online, observe the banner, continue playing without reload, choose Update & Restart, then resume autosave. Never delete caches/saves as a workaround for a migration bug.
+## Online update lifecycle
+
+1. Register `sw.js` with `updateViaCache: none` on launch. Check again on reconnect, when the page becomes visible, and every five minutes while online and visible. Suppress overlapping checks; offline failures do not interrupt play.
+2. A changed worker downloads the new shell before becoming installed. A background download does not replace the running match.
+3. A dismissible **Update available** banner offers **Update & Restart**. The worker waits for that explicit request.
+4. Save the strategy battle first. Withhold activation if saving fails. Arena runs remain unsaved.
+5. Request activation and retry idle-worker failures. If activation stalls, use the static `/frontier-command/recover.html?restart=1` page, preserving the original game URL. It exists on GitHub Pages without a custom route. Recovery uses fresh HTML online with a cached offline fallback and preserves IndexedDB data.
+6. Recover/register the canonical worker and return to the game. If another open Frontier tab blocks completion, recovery offers a retry action. Continue resumes the strategy autosave. Updates never clear other PWA storage or registrations.
+
+New theme snapshots load versioned required art when selected after restart, followed by optional assets. Shell updates do not force a full-world redownload; Download all worlds is the explicit option for complete themed offline coverage.
+
+The standalone server retains the older `/frontier-command-recovery/` alias for legacy local recovery tests. Production updates use the static in-project recovery file.
+
+## CI and deployment
+
+`.github/workflows/pages.yml` uses Node 24 and locked pnpm. Main pushes and manual runs check source, run simulation tests, validate the imported snapshot, build Vite assets and the offline worker, and run desktop/mobile browser tests. Only a successful artifact is deployed through GitHub Pages Actions. Pull requests run checks without publishing or receiving deployment permissions.
+
+CI builds committed `public/themes`. It does not read the ignored external `theme-assets` authoring repository or generate unfinished sheets. When the generator completes a batch, import it into the game, validate it, and commit the game-owned snapshot; the next main push publishes it.
+
+Pages source must be **GitHub Actions**. The artifact includes runtime art/audio, needs no backend, and remains below Pages' 1 GB site limit.
+
+## Verification
+
+Browser regressions cover offline reload/new matches, saved settings/battles, all eighteen presentations offline, ignored-worker recovery, later updates waiting for approval, legacy art-cache migration, a foreign PWA's cache poisoning attempt/storage retention, and reconnect-triggered downloads without reloading a battle. These use actual service workers, IndexedDB and Cache Storage.

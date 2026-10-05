@@ -1,3 +1,4 @@
+import { STORAGE_DATABASE } from "./app-identity";
 import { achievements } from "./content";
 import { Simulation } from "./simulation";
 export type Profile = {
@@ -25,7 +26,7 @@ export const freshProfile = (): Profile => ({
 let db: IDBDatabase;
 export async function initStorage() {
   return new Promise<void>((resolve, reject) => {
-    const r = indexedDB.open("frontier-command:storage", 2);
+    const r = indexedDB.open(STORAGE_DATABASE, 2);
     r.onupgradeneeded = () => {
       for (const store of ["saves", "maps", "profile", "settings"])
         if (!r.result.objectStoreNames.contains(store))
