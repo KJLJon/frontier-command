@@ -467,3 +467,19 @@ test("guarding player troops stay home until given an explicit pursuit order", (
   for (let i = 0; i < 30; i++) s.step(0.05);
   assert.ok(a.x > start.x);
 });
+
+test("survival waves respect the optional opening preparation window", () => {
+  const s = new Simulation({
+    ...settings,
+    aiOnly: false,
+    preparation: 180,
+    mode: "Survival",
+  });
+  s.players.forEach((p) => (p.ai = false));
+  s.time = 150;
+  s.step();
+  assert.equal(s.wave, 0);
+  s.time = 240;
+  s.step();
+  assert.equal(s.wave, 1);
+});

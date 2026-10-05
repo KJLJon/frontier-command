@@ -305,13 +305,13 @@ export class Simulation {
         .map((e) => index(this.map, e.x, e.y)),
     );
   }
+  get preparationDuration() {
+    return this.settings.mission || this.settings.aiOnly
+      ? 0
+      : (this.settings.preparation ?? 0);
+  }
   get preparationRemaining() {
-    return Math.max(
-      0,
-      (this.settings.mission || this.settings.aiOnly
-        ? 0
-        : (this.settings.preparation ?? 0)) - this.time,
-    );
+    return Math.max(0, this.preparationDuration - this.time);
   }
   buildProblem(team: number, kind: string, point: Point) {
     const d = buildings[kind];
@@ -877,8 +877,9 @@ export class Simulation {
       } else point.progress = Math.max(0, point.progress - dt * 0.5);
     }
     if (this.settings.mode === "Survival") {
-      const waveLength = (scale.minutes * 60) / 13;
-      if (this.wave < 12 && this.time > (this.wave + 1) * waveLength) {
+      const waveLength = (scale.minutes * 60) / 13,
+        waveTime = this.time - this.preparationDuration;
+      if (this.wave < 12 && waveTime > (this.wave + 1) * waveLength) {
         this.wave++;
         const base = this.map.spawns[0],
           spawn = this.map.spawns[1];
@@ -910,7 +911,7 @@ export class Simulation {
           text: `Wave ${this.wave} of 12 approaches!`,
         });
       }
-      if (this.wave === 12 && this.time > 13 * waveLength) this.finish(0);
+      if (this.wave === 12 && waveTime > 13 * waveLength) this.finish(0);
     }
     for (const camp of this.map.points.filter(
       (p) => p.kind === "camp" && p.owner === -1,
