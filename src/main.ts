@@ -471,10 +471,7 @@ function start(s: Settings, map?: MapData) {
   audio.start();
   audio.state = "peace";
   setView("game");
-  toast(
-    s.mission?.story ??
-      "Start with the next-step guide. Nearby resources collect automatically.",
-  );
+  if (s.mission?.story) toast(s.mission.story);
   void save("autosave", false);
 }
 function campaignMenu() {
@@ -992,6 +989,18 @@ function updateHUD() {
         : `${selected.length} units selected · ${mode === "AttackMove" ? "Attack-move" : "Move"} orders`
       : "No units selected. Tap a unit or choose Army.",
   );
+  for (const action of ["commander", "army"]) {
+    const troops = sim.entities.filter(
+      (e) => e.team === 0 && !e.building && e.hp > 0,
+    );
+    const active =
+      action === "commander"
+        ? selected.length === 1 && !!commanders[selected[0].kind]
+        : troops.length > 1 && troops.every((e) => selection.includes(e.id));
+    document
+      .querySelector(`[data-action="${action}"]`)
+      ?.setAttribute("aria-pressed", String(active));
+  }
   if (!(sim instanceof RushArena && sim.pendingUpgrade))
     update(
       "pause-root",
@@ -1315,6 +1324,7 @@ renderer.onTap = (p, button, shift) => {
     )
     .sort((a, b) => dist(a, p) - dist(b, p))[0];
   if (button === 0 && hit?.team === 0) {
+    if (!hit.building) mode = commanders[hit.kind] ? "Move" : "AttackMove";
     selectIds(shift ? [...new Set([...selection, hit.id])] : [hit.id]);
     return;
   }

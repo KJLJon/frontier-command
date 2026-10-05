@@ -1760,3 +1760,8 @@ body[data-theme="street-kids"] .commander-card strong {
   width: 20px;
   height: 20px;
 }
+
+.orders button[aria-pressed="true"] {
+  border-color: var(--gold);
+  background: color-mix(in srgb, var(--panel) 75%, var(--gold));
+}
