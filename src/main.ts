@@ -938,7 +938,10 @@ function updateHUD() {
   if (sim instanceof RushArena) update("objective", escape(sim.objective));
   else {
     const step = nextStep(sim);
-    update("objective", `<strong>${escape(step.title)}</strong>`);
+    update(
+      "objective",
+      `<strong>${escape(sim.settings.mission ? sim.objective : step.title)}</strong>`,
+    );
     update(
       "guide-footer",
       `<small>${escape(step.hint)}</small>${button(step.label, step.action, "small")}<span class="opening-clock">${sim.preparationRemaining > 0 ? "🛡 No opening raids · " + clock(sim.preparationRemaining) : "Tap ground to move · Drag to explore"}</span>`,
